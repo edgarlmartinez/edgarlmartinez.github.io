@@ -1,0 +1,16 @@
+# Public AI model builds (public datasets only).
+# Each project has its own public GitHub repository. Never list or link
+# models fine-tuned on BIDMC data, and never commit patient data or keys.
+#
+# Example:
+#  - title: Lisfranc injury detection on foot radiographs (public-data baseline)
+#    repo: https://github.com/edgarlmartinez/lisfranc-ai-baseline
+#    dataset: Name of the public dataset
+#    dataset_url: https://...
+#    license: Dataset license (e.g. CC BY 4.0)
+#    model: e.g. ResNet-50 / YOLOv8 keypoints
+#    status: Baseline on public data. Institutional validation in progress.
+#    year: 2026
+#    tags: [Foot and ankle, Radiographs, Detection]
+
+projects: []

@@ -10,6 +10,7 @@ export const cv = load('cv.yaml');
 const privatePath = path.join(dataDir, 'private.yaml');
 if (fs.existsSync(privatePath)) cv.private = load('private.yaml');
 export const site = load('site.yaml');
+export const aiProjects = fs.existsSync(path.join(dataDir, 'ai-projects.yaml')) ? (load('ai-projects.yaml')?.projects || []) : [];
 export const lectures = fs.existsSync(path.join(dataDir, 'lectures.yaml')) ? load('lectures.yaml') : { lectures: [] };
 
 // "MM/YYYY" -> sortable number. "Present" sorts last.
