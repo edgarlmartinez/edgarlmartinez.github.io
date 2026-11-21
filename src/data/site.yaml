@@ -33,11 +33,11 @@ interests:
 # Links shown in the contact section. Leave a value empty to hide it.
 links:
   email: emarti16@bidmc.harvard.edu
-  bidmc_profile: ""
-  harvard_catalyst: ""
+  bidmc_profile: "https://findadoc.bidmc.org/details/5745/edgar-martinez_salazar-radiology-diagnostic_radiology-boston-milton-needham-plymouth"
+  harvard_catalyst: "https://connects.catalyst.harvard.edu/Profiles/display/Person/142880"
   pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Martinez-Salazar+EL%5BAuthor%5D&sort=date"
-  google_scholar: ""
-  orcid: ""
+  google_scholar: "https://scholar.google.com/citations?user=Q3w02PAAAAAJ&hl=en"
+  orcid: "https://orcid.org/0000-0002-8141-4277"
   linkedin: ""
   x: ""
 
