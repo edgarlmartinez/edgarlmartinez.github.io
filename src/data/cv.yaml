@@ -151,9 +151,10 @@ major_administrative_leadership:
       end: Present
       title: Interim Musculoskeletal Radiology Section Chief
       institution: Beth Israel Deaconess Medical Center, Boston, MA
-    - start: 2026   # check: dates; section- or department-level
-      title: Development of the MSK Radiology junior faculty track
-      role: "Oversaw development of a post-fellowship pathway in which graduating fellows join the section as junior faculty under direct supervision"
+    - start: 07/2026
+      end: Present
+      title: Implementation of the MSK Radiology junior faculty track
+      role: "Supporting implementation of a post-fellowship pathway in which graduating fellows join the section as junior faculty under direct supervision"
       institution: Department of Radiology, Beth Israel Deaconess Medical Center, Boston, MA
     - start: 2026   # check: start date and wording
       end: Present

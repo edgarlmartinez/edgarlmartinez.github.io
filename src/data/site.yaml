@@ -3,6 +3,9 @@
 
 display_name: Edgar L. Martinez Salazar, MD
 short_name: Leo Martinez, MD
+# Professional photo: put the image in public/ (e.g. public/photo.jpg) and
+# write its file name here. Leave empty to hide.
+photo: ""
 headline: Musculoskeletal Radiologist
 affiliation: Beth Israel Deaconess Medical Center · Harvard Medical School
 
@@ -32,7 +35,7 @@ links:
   email: emarti16@bidmc.harvard.edu
   bidmc_profile: ""
   harvard_catalyst: ""
-  pubmed: ""
+  pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Martinez-Salazar+EL%5BAuthor%5D&sort=date"
   google_scholar: ""
   orcid: ""
   linkedin: ""
