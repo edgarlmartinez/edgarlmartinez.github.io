@@ -5,7 +5,7 @@ display_name: Edgar L. Martinez Salazar, MD
 short_name: Leo Martinez, MD
 # Professional photo: put the image in public/ (e.g. public/photo.jpg) and
 # write its file name here. Leave empty to hide.
-photo: ""
+photo: photo.jpg
 headline: Musculoskeletal Radiologist
 affiliation: Beth Israel Deaconess Medical Center · Harvard Medical School
 
