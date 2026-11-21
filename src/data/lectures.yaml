@@ -1,0 +1,39 @@
+# Lecture library for residents and fellows.
+#
+# The slides themselves are NOT stored in this public repository. They stay
+# in Google Slides. For each lecture: open it in Google Slides > Share >
+# under "General access" choose "Restricted" > add the residents/fellows
+# (or a Google Group) as Viewers > Copy link, and paste the link below.
+# Only invited people can open it, even though this list is public.
+#
+# Tip: put all lectures in one Google Drive folder shared with your trainees.
+# Anything you add to that folder is shared automatically; paste its link in
+# `folder_link` and the page shows an "Open the full library" button.
+#
+# Leave `link` empty to show the lecture as "coming soon".
+
+folder_link: ""
+
+note: >-
+  Slides open in Google Slides and are shared only with invited residents and
+  fellows. If you need access, email Dr. Martinez Salazar. Please do not
+  redistribute.
+
+lectures:
+  - title: "MRI Wrist: What the Surgeon Needs to Know"
+    date: 11/2026
+    audience: Hand Surgery Fellowship
+    topics: [Wrist, MRI]
+    link: ""
+  - title: Elbow and Wrist Pathology
+    date: 01/2026
+    audience: Radiology residents
+    description: Includes an interactive musculoskeletal ultrasound component.
+    topics: [Elbow, Wrist, Ultrasound]
+    link: ""
+  - title: "Musculoskeletal Radiology: Hips and US-guided Interventions"
+    date: 11/2024
+    audience: Radiology residents
+    description: Lecture and hands-on workshop.
+    topics: [Hip, Ultrasound, Interventions]
+    link: ""

@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, lectures, newest } from '../lib/cv.js';
+const list = newest((lectures.lectures || []).map((l) => ({ ...l, start: l.date })));
+---
+<Base title={`Lectures · ${site.display_name}`} description="Lecture library for radiology residents and fellows.">
+  <section class="section wrap">
+    <h1>Lecture library</h1>
+    <p class="pub-meta" style="max-width:680px">For residents and fellows. {lectures.note}</p>
+    {lectures.folder_link && <p><a class="btn btn-outline" href={lectures.folder_link} target="_blank" rel="noopener">Open the full library ↗</a></p>}
+    <div class="cards" style="margin-top:24px">
+      {list.map((l) => (
+        <div class="card">
+          <div class="meta">{l.date} · {l.audience}</div>
+          <h3 style="margin-top:6px">{l.title}</h3>
+          {l.description && <p class="meta" style="margin:0 0 10px">{l.description}</p>}
+          {l.topics && <ul class="tags" style="margin-bottom:14px">{l.topics.map((t) => <li>{t}</li>)}</ul>}
+          {l.link
+            ? <a class="btn btn-outline" href={l.link} target="_blank" rel="noopener">Open slides ↗</a>
+            : <span class="meta">Slides coming soon</span>}
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
