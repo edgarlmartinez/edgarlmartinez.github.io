@@ -1,0 +1,48 @@
+# Website-only content (the CV itself lives in cv.yaml).
+# DRAFT text below: please review and edit in your own voice.
+
+display_name: Edgar L. Martinez Salazar, MD
+short_name: Leo Martinez, MD
+headline: Musculoskeletal Radiologist
+affiliation: Beth Israel Deaconess Medical Center · Harvard Medical School
+
+bio: >-
+  I am a musculoskeletal radiologist at Beth Israel Deaconess Medical Center
+  and Instructor of Radiology at Harvard Medical School, where I serve as
+  Interim Section Chief of Musculoskeletal Radiology and as the section's
+  Quality Assurance and Education Officer. I trained in medicine at the
+  Universidad de Antioquia in Colombia, completed a postdoctoral research
+  fellowship in musculoskeletal radiology at Massachusetts General Hospital,
+  diagnostic radiology residency at UMass Chan Medical School-Baystate
+  Medical Center, and a musculoskeletal radiology fellowship at BIDMC.
+
+# Short topics shown as tags on the home page.
+interests:
+  - Musculoskeletal MRI
+  - Sports and joint injuries
+  - Hip preservation imaging
+  - Musculoskeletal ultrasound and US-guided interventions
+  - Bone and soft tissue tumors
+  - Body composition and metabolic imaging
+  - AI in musculoskeletal imaging
+  - Radiology education and mentorship
+
+# Links shown in the contact section. Leave a value empty to hide it.
+links:
+  email: emarti16@bidmc.harvard.edu
+  bidmc_profile: ""
+  harvard_catalyst: ""
+  pubmed: ""
+  google_scholar: ""
+  orcid: ""
+  linkedin: ""
+  x: ""
+
+# When true, the printable CV also shows the fields under `private:` in
+# cv.yaml (home address, phone). Keep false for the public website.
+show_private_on_print: false
+
+teaching_blurb: >-
+  I supervise musculoskeletal radiology fellows in the ACGME-accredited
+  program at BIDMC, teach radiology residents, and mentor medical students,
+  residents and research fellows on their academic projects.

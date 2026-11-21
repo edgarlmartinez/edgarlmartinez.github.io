@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import PubItem from '../components/PubItem.astro';
+import { cv, site, newest, isCurrent, year, allPublications, has } from '../lib/cv.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentRoles = newest(cv.faculty_academic_appointments).filter(isCurrent).map((a) => a.title);
+const pubs = allPublications();
+const featured = [...pubs].filter((p) => p.featured).sort((a, b) => b.year - a.year).slice(0, 6);
+const t = cv.teaching || {};
+const trainees = (t.mentored_trainees || []).length;
+const firstYear = Math.min(...pubs.map((p) => p.year));
+const training = [...newest(cv.postdoctoral_training), ...newest(cv.education)];
+const service = [
+  ...Object.values(cv.committee_service || {}).flat(),
+  ...Object.values(cv.major_administrative_leadership || {}).flat(),
+].filter(isCurrent);
+const links = Object.entries(site.links || {}).filter(([, v]) => v);
+const linkLabels = { email: 'Email', bidmc_profile: 'BIDMC profile', harvard_catalyst: 'Harvard Catalyst', pubmed: 'PubMed', google_scholar: 'Google Scholar', orcid: 'ORCID', linkedin: 'LinkedIn', x: 'X' };
+---
+<Base>
+  <section class="hero">
+    <div class="wrap">
+      <h1>{site.display_name}</h1>
+      <p class="headline">{site.headline}</p>
+      <p class="affil">{site.affiliation}</p>
+      <ul class="roles">{currentRoles.map((r) => <li>{r}</li>)}</ul>
+      <div class="btns">
+        <a class="btn btn-primary" href={`${base}/cv/`}>View CV</a>
+        <a class="btn btn-ghost" href={`${base}/publications/`}>Publications</a>
+        <a class="btn btn-ghost" href="#contact">Contact</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap grid-2">
+    <div>
+      <h2>About</h2>
+      <p>{site.bio}</p>
+      <h3>Clinical and research focus</h3>
+      <ul class="tags">{site.interests.map((i) => <li>{i}</li>)}</ul>
+    </div>
+    <div>
+      <h2>At a glance</h2>
+      <div class="stats">
+        <div class="stat"><b>{pubs.length}</b><span>peer-reviewed publications since {firstYear}</span></div>
+        <div class="stat"><b>{(cv.abstracts || []).length}</b><span>abstracts and exhibits at national and international meetings</span></div>
+        <div class="stat"><b>{trainees}</b><span>mentored trainees</span></div>
+      </div>
+    </div>
+  </section>
+
+  {has(service) && (
+    <section class="section wrap">
+      <h2>Leadership and service</h2>
+      <div class="cards">
+        {service.map((s) => (
+          <div class="card">
+            <h3>{s.title}</h3>
+            <div class="meta">{[s.role, s.institution].filter(Boolean).join(' · ')}</div>
+            <div class="meta">Since {year(s.start)}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section wrap">
+    <h2>Selected publications</h2>
+    <ol class="pubs" style="list-style:none;padding:0">{featured.map((p) => <PubItem p={p} />)}</ol>
+    <p><a href={`${base}/publications/`}>All {pubs.length} publications →</a></p>
+  </section>
+
+  <section class="section wrap grid-2">
+    <div>
+      <h2>Training</h2>
+      <ul class="timeline">
+        {training.map((e) => (
+          <li>
+            <div class="when">{year(e.start)} - {year(e.end)}</div>
+            <div class="what">{e.title || e.degree}{e.field && `, ${e.field}`}</div>
+            <div class="where">{e.institution}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2>Teaching and mentorship</h2>
+      <p>{site.teaching_blurb}</p>
+      <ul class="timeline">
+        {newest(t.mentored_trainees).slice(0, 4).map((m) => (
+          <li><div class="when">{year(m.start)}</div><div class="what">{String(m.trainee).replace(/\s*\(role:.*\)$/, '')}</div><div class="where">{m.outcome}</div></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section wrap" id="contact">
+    <h2>Contact</h2>
+    <p>{cv.office_address.join(', ')}</p>
+    <div class="btns">
+      {links.map(([k, v]) => (
+        <a class="btn btn-outline" href={k === 'email' ? `mailto:${v}` : v} rel="noopener">{linkLabels[k] || k}</a>
+      ))}
+    </div>
+  </section>
+</Base>

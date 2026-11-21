@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PubItem from '../components/PubItem.astro';
+import { cv, site, allPublications } from '../lib/cv.js';
+
+const pubs = allPublications().map((p, i) => ({ ...p, n: i + 1 }));
+const years = [...new Set(pubs.map((p) => p.year))].sort((a, b) => b - a);
+---
+<Base title={`Publications · ${site.display_name}`}>
+  <section class="section wrap">
+    <h1>Publications</h1>
+    <p class="pub-meta">{pubs.length} peer-reviewed publications. ** denotes a mentored trainee.</p>
+    <div class="filter"><input id="q" type="search" placeholder="Search by title, author, journal or year" aria-label="Search publications" /></div>
+    {years.map((y) => (
+      <div class="year-block">
+        <div class="year-h">{y}</div>
+        <ol class="pubs" style="list-style:none;padding:0">
+          {pubs.filter((p) => p.year === y).reverse().map((p) => <PubItem p={p} />)}
+        </ol>
+      </div>
+    ))}
+    <h2 style="margin-top:48px">Abstracts and scientific presentations</h2>
+    <ol class="pubs">{(cv.abstracts || []).map((a) => <li class="pub-meta">{a.text}</li>)}</ol>
+  </section>
+  <script is:inline>
+    const q = document.getElementById('q');
+    q.addEventListener('input', () => {
+      const v = q.value.trim().toLowerCase();
+      document.querySelectorAll('.year-block').forEach((b) => {
+        let any = false;
+        b.querySelectorAll('li[data-search]').forEach((li) => {
+          const hit = !v || li.dataset.search.includes(v);
+          li.style.display = hit ? '' : 'none';
+          any ||= hit;
+        });
+        b.style.display = any ? '' : 'none';
+      });
+    });
+  </script>
+</Base>

@@ -1,0 +1,11 @@
+---
+import { boldMe, pubLinks } from '../lib/cv.js';
+const { p, n } = Astro.props;
+---
+<li data-search={`${p.authors} ${p.title} ${p.journal} ${p.year}`.toLowerCase()}>
+  {n && <span class="pub-meta">{n}. </span>}
+  <span class="pub-title">{p.title}</span><br />
+  <span class="pub-meta" set:html={`${boldMe(p.authors)} <em>${p.journal}</em> ${p.details || ''}`} />
+  <span class="pub-links">{pubLinks(p).map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}</span>
+  {p.note && <div class="pub-note">{p.note_url ? <a href={p.note_url} target="_blank" rel="noopener">{p.note}</a> : p.note}</div>}
+</li>

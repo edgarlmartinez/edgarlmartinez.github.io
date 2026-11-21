@@ -1,0 +1,227 @@
+---
+import Base from '../layouts/Base.astro';
+import { cv, site, chrono, range, has, levels, citation, citationTail } from '../lib/cv.js';
+
+const showPrivate = site.show_private_on_print === true;
+const lines = (arr) => (arr || []).join('\n');
+const pubs = cv.publications || {};
+let n = 0; // continuous numbering across peer-reviewed lists
+const peer = [
+  ['Research Investigations', pubs.research_investigations],
+  ['Case Reports', pubs.case_reports],
+].filter(([, l]) => has(l)).map(([label, list]) => ({ label, list: list.map((p) => ({ ...p, n: ++n })) }));
+
+const teaching = cv.teaching || {};
+const teachingSections = [
+  ['Medical Student (MD) Courses and Clinical Teaching', teaching.students],
+  ['Formal Teaching of Residents, Clinical Fellows and Research Fellows', teaching.residents_fellows],
+  ['Clinical Supervisory and Training Responsibilities', teaching.clinical_supervision],
+  ['Laboratory and Other Research Supervisory and Training Responsibilities', teaching.research_supervision],
+];
+const yearOf = (iso) => { const [m, d, y] = String(cv.date_prepared).split('/'); return { m, d, y }; };
+const dp = (() => {
+  const { m, d, y } = yearOf(cv.date_prepared);
+  if (!y) return cv.date_prepared;
+  return new Date(Number(y), Number(m) - 1, Number(d)).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+})();
+---
+<Base title={`Curriculum Vitae · ${site.display_name}`} description={`Harvard Medical School format curriculum vitae of ${site.display_name}.`}>
+  <div class="cv-toolbar no-print">
+    <p>Harvard Medical School CV format. Prepared {dp}.</p>
+    <div class="btns">
+      <a class="btn btn-outline" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/cv.pdf`} download>Download PDF</a>
+      <button class="btn btn-outline" onclick="window.print()">Print</button>
+    </div>
+  </div>
+
+  <article class="hms">
+    <div class="hms-title">
+      <h1>The Faculty of Medicine of Harvard University</h1>
+      <h2>Curriculum Vitae</h2>
+    </div>
+
+    <table class="info">
+      <tr><td>Date Prepared:</td><td>{dp}</td></tr>
+      <tr><td>Name:</td><td>{cv.name}</td></tr>
+      <tr><td>Office Address:</td><td style="white-space:pre-line">{lines(cv.office_address)}</td></tr>
+      {showPrivate && cv.private?.home_address && <tr><td>Home Address:</td><td style="white-space:pre-line">{lines(cv.private.home_address)}</td></tr>}
+      {showPrivate && cv.private?.work_phone && <tr><td>Work Phone:</td><td>{cv.private.work_phone}</td></tr>}
+      <tr><td>Work Email:</td><td><a href={`mailto:${cv.work_email}`}>{cv.work_email}</a></td></tr>
+    </table>
+
+    <h2 class="part">Part I: General Information</h2>
+
+    {has(cv.education) && <>
+      <h3>Education:</h3>
+      <table>{chrono(cv.education).map((e) => <tr><td class="d">{range(e)}</td><td>{e.degree}</td><td>{e.field}</td><td>{e.institution}<br />{e.location}</td></tr>)}</table>
+    </>}
+
+    {has(cv.postdoctoral_training) && <>
+      <h3>Postdoctoral Training:</h3>
+      <table>{chrono(cv.postdoctoral_training).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}</td><td>{e.field}{e.mentor && <><br />{e.mentor}</>}</td><td>{e.institution}<br />{e.location}</td></tr>)}</table>
+    </>}
+
+    {has(cv.faculty_academic_appointments) && <>
+      <h3>Faculty Academic Appointments:</h3>
+      <table>{chrono(cv.faculty_academic_appointments).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}</td><td>{e.department}</td><td>{e.institution}</td></tr>)}</table>
+    </>}
+
+    {has(cv.hospital_appointments) && <>
+      <h3>Appointments at Hospitals/Affiliated Institutions:</h3>
+      <table>{chrono(cv.hospital_appointments).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}</td><td>{e.department}</td><td>{e.institution}</td></tr>)}</table>
+    </>}
+
+    {has(cv.other_professional_positions) && <>
+      <h3>Other Professional Positions:</h3>
+      <table>{chrono(cv.other_professional_positions).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}</td><td>{e.institution}</td><td>{e.effort}</td></tr>)}</table>
+    </>}
+
+    {has(cv.major_administrative_leadership) && <>
+      <h3>Major Administrative Leadership Positions:</h3>
+      {levels.filter(([k]) => has(cv.major_administrative_leadership[k])).map(([k, label]) => <>
+        <h4>{label}</h4>
+        <table>{chrono(cv.major_administrative_leadership[k]).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}{e.role && <><br />{e.role}</>}</td><td>{e.institution}</td></tr>)}</table>
+      </>)}
+    </>}
+
+    {has(cv.committee_service) && <>
+      <h3>Committee Service:</h3>
+      {levels.filter(([k]) => has(cv.committee_service[k])).map(([k, label]) => <>
+        <h4>{label}</h4>
+        <table>{chrono(cv.committee_service[k]).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}{e.institution && <><br />{e.institution}</>}{e.description && <><br />{e.description}</>}</td><td>{e.role}</td></tr>)}</table>
+      </>)}
+    </>}
+
+    {has(cv.professional_societies) && <>
+      <h3>Professional Societies:</h3>
+      <table>{chrono(cv.professional_societies).map((s) => <>
+        <tr><td class="d">{range(s)}</td><td colspan="2">{s.society}{s.role && <><br />{s.role}</>}</td></tr>
+        {chrono(s.positions).map((p) => <tr><td class="d">{range(p)}</td><td colspan="2">{p.role}</td></tr>)}
+      </>)}</table>
+    </>}
+
+    {has(cv.grant_review) && <>
+      <h3>Grant Review Activities:</h3>
+      <table>{chrono(cv.grant_review).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}</td><td>{e.role}</td></tr>)}</table>
+    </>}
+
+    {has(cv.editorial_activities) && <>
+      <h3>Editorial Activities:</h3>
+      {has(cv.editorial_activities.ad_hoc_reviewer) && <>
+        <h4>Ad hoc Reviewer</h4>
+        <table>{chrono(cv.editorial_activities.ad_hoc_reviewer).map((e) => <tr><td class="d">{range(e)}</td><td>{e.journal}</td></tr>)}</table>
+      </>}
+      {has(cv.editorial_activities.other_roles) && <>
+        <h4>Other Editorial Roles</h4>
+        <table>{chrono(cv.editorial_activities.other_roles).map((e) => <tr><td class="d">{range(e)}</td><td>{e.role}</td><td>{e.journal}</td></tr>)}</table>
+      </>}
+    </>}
+
+    {has(cv.honors_and_prizes) && <>
+      <h3>Honors and Prizes:</h3>
+      <table>{chrono(cv.honors_and_prizes).map((e) => <tr><td class="d">{range(e)}</td><td>{e.name}</td><td>{e.awarded_by}</td><td>{e.achievement}</td></tr>)}</table>
+    </>}
+
+    <h2 class="part">Part II: Research, Teaching, and Clinical Contributions</h2>
+
+    {has(cv.funded_unfunded_projects) && <>
+      <h3>Report of Funded and Unfunded Projects:</h3>
+      {[['current', 'Current'], ['past', 'Past']].filter(([k]) => has(cv.funded_unfunded_projects[k])).map(([k, label]) => <>
+        <h4>{label}</h4>
+        <table>{chrono(cv.funded_unfunded_projects[k]).map((e) => <>
+          <tr><td class="d">{range(e)}</td><td>{e.title}</td></tr>
+          {(e.funding || e.pi || e.role) && <tr><td class="d"></td><td>{[e.funding, e.pi && `PI: ${e.pi}`, e.role && `Role: ${e.role}`].filter(Boolean).join('. ')}</td></tr>}
+          {e.description && <tr><td class="d"></td><td>{e.description}</td></tr>}
+        </>)}</table>
+      </>)}
+    </>}
+
+    {has(cv.teaching) && <>
+      <h3>Report of Local Teaching and Training:</h3>
+      {teachingSections.filter(([, l]) => has(l)).map(([label, list]) => <>
+        <h4>{label}</h4>
+        <table>{chrono(list).map((e) => <>
+          <tr><td class="d">{range(e)}</td><td>{e.title}</td><td>{e.institution}</td></tr>
+          {e.description && <tr><td class="d"></td><td colspan="2">{e.description}</td></tr>}
+        </>)}</table>
+      </>)}
+      {has(teaching.mentored_trainees) && <>
+        <h4>Formally Mentored Trainees</h4>
+        <table>{chrono(teaching.mentored_trainees).map((e) => <>
+          <tr><td class="d">{range(e)}</td><td>{e.trainee}</td></tr>
+          <tr><td class="d"></td><td>{e.outcome}</td></tr>
+        </>)}</table>
+      </>}
+    </>}
+
+    {has(cv.invited_presentations) && <>
+      <h3>Report of Regional, National and International Invited Teaching and Presentations:</h3>
+      {levels.filter(([k]) => has(cv.invited_presentations[k])).map(([k, label]) => <>
+        <h4>{label}</h4>
+        <table>{chrono(cv.invited_presentations[k]).map((e) => <>
+          <tr><td class="d">{range(e)}</td><td>{e.title}{e.description && <><br />{e.description}</>}<br />{e.venue}</td></tr>
+        </>)}</table>
+      </>)}
+    </>}
+
+    {has(cv.clinical) && <>
+      <h3>Report of Clinical Activities and Innovations:</h3>
+      {has(cv.clinical.licensure_certification) && <>
+        <h4>Current Licensure and Certification</h4>
+        <table>{chrono(cv.clinical.licensure_certification).map((e) => <tr><td class="d">{range(e)}</td><td>{e.name}</td></tr>)}</table>
+      </>}
+      {has(cv.clinical.practice_activities) && <>
+        <h4>Practice Activities</h4>
+        <table>{cv.clinical.practice_activities.map((e) => <tr><td>{e.activity}</td><td>{e.location}</td><td>{e.level}</td></tr>)}</table>
+      </>}
+      {has(cv.clinical.innovations) && <>
+        <h4>Clinical Innovations</h4>
+        <table>{chrono(cv.clinical.innovations).map((e) => <tr><td class="d">{range(e)}</td><td><b>{e.title}</b><br />{e.description}</td></tr>)}</table>
+      </>}
+      {has(cv.clinical.multidisciplinary_conferences) && <>
+        <h4>Interdepartmental Conferences</h4>
+        <ul>{cv.clinical.multidisciplinary_conferences.map((c) => <li>{c}</li>)}</ul>
+      </>}
+    </>}
+
+    {has(cv.education_of_patients_and_community) && <>
+      <h3>Report of Education of Patients and Service to the Community:</h3>
+      <table>{chrono(cv.education_of_patients_and_community).map((e) => <tr><td class="d">{range(e)}</td><td>{e.title}{e.description && <><br />{e.description}</>}</td></tr>)}</table>
+    </>}
+
+    <h3>Report of Scholarship:</h3>
+    <p class="note">* denotes equal authorship contribution<br />** denotes mentored trainee</p>
+    {peer.length > 0 && <>
+      <h4>Peer-Reviewed Scholarship in print or other media:</h4>
+      {peer.map(({ label, list }) => <>
+        <p class="sub">{label}</p>
+        <ol start={list[0].n}>{list.map((p) => <li value={p.n}>{citation(p)} {citationTail(p)}{p.note && <> {p.note}</>}</li>)}</ol>
+      </>)}
+    </>}
+    {has(pubs.non_peer_reviewed) && <>
+      <h4>Non-peer reviewed scholarship in print or other media:</h4>
+      <ol>{pubs.non_peer_reviewed.map((p) => <li>{citation(p)} {citationTail(p)}</li>)}</ol>
+    </>}
+    {has(cv.abstracts) && <>
+      <h4>Abstracts, Poster Presentations and Exhibits Presented at Professional Meetings:</h4>
+      <ol>{cv.abstracts.map((a) => <li>{a.text}</li>)}</ol>
+    </>}
+
+    {(has(cv.other_education) || has(cv.languages)) && <>
+      <h3>Additional Information:</h3>
+      {has(cv.other_education) && <>
+        <h4>Other Education and Training Courses</h4>
+        <table>{chrono(cv.other_education).map((e) => <tr><td class="d">{range(e)}</td><td>{e.name}</td></tr>)}</table>
+      </>}
+      {has(cv.languages) && <>
+        <h4>Languages</h4>
+        <p>{cv.languages.map((l) => `${l.language} (${l.level})`).join('; ')}</p>
+      </>}
+    </>}
+
+    {cv.narrative && <>
+      <h3>Narrative Report:</h3>
+      {cv.narrative.split(/\n\s*\n/).map((para) => <p>{para}</p>)}
+    </>}
+  </article>
+</Base>

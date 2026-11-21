@@ -1,0 +1,6 @@
+# Copy to private.yaml (never committed) to include these on a locally
+# printed HMS CV. Also set show_private_on_print: true in site.yaml locally.
+home_address:
+  - Street
+  - City, State
+work_phone: ""

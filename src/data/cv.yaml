@@ -1,0 +1,759 @@
+# =====================================================================
+#  CURRICULUM VITAE: the single source of truth for the whole website.
+#
+#  Edit this file to update your CV. The home page, the online CV and
+#  the printable Harvard Medical School (HMS) format CV are all built
+#  from it. Section order and headings follow the HMS CV template.
+#
+#  Conventions
+#   - Dates are "MM/YYYY". Use end: Present for ongoing items.
+#   - Newest entries can go anywhere in a list: lists are sorted by
+#     start date when the page is built (oldest first, as HMS asks).
+#   - Home address and phone are kept out of this public file (see
+#     private.example.yaml). They are never shown on the website.
+#   - A section with an empty list is hidden automatically.
+# =====================================================================
+
+date_prepared: 11/21/2026
+
+name: Edgar Leonardo Martinez Salazar
+
+office_address:
+  - 330 Brookline Avenue
+  - Boston, MA
+
+work_email: emarti16@bidmc.harvard.edu
+
+# Home address and phone live in src/data/private.yaml, which is NOT
+# uploaded to GitHub (see .gitignore). Copy private.example.yaml to
+# private.yaml on your own computer when you need a full HMS copy.
+
+# ---------------------------------------------------------------------
+# Part I: General Information
+# ---------------------------------------------------------------------
+
+education:
+  - start: 01/2008
+    end: 07/2014
+    degree: MD
+    field: Medicine
+    institution: Universidad de Antioquia
+    location: Medellín, Colombia
+
+postdoctoral_training:
+  - start: 09/2015
+    end: 06/2018
+    title: Postdoctoral Research Fellow
+    field: Musculoskeletal Radiology
+    mentor: Martin Torriani, MD
+    institution: Harvard Medical School/Massachusetts General Hospital
+    location: Boston, MA
+  - start: 07/2018
+    end: 06/2019
+    title: Transitional Year
+    field: Internal Medicine
+    mentor: David C. Rishikof, MD
+    institution: Tufts Medical School/Metrowest Medical Center
+    location: Framingham, MA
+  - start: 07/2019
+    end: 06/2023
+    title: Radiology Resident
+    field: Diagnostic Radiology
+    mentor: Tara M. Catanzano, MD
+    institution: UMass Chan Medical School/Baystate Medical Center
+    location: Springfield, MA
+  - start: 07/2023
+    end: 06/2024
+    title: Radiology Fellow
+    field: Musculoskeletal Radiology
+    mentor: Jennifer M. Cutts, MD
+    institution: Harvard Medical School/Beth Israel Deaconess Medical Center
+    location: Boston, MA
+
+faculty_academic_appointments:
+  - start: 08/2024
+    end: Present
+    title: Instructor of Radiology
+    department: Radiology
+    institution: Harvard Medical School/Beth Israel Deaconess Medical Center
+  - start: 02/2025
+    end: Present
+    title: QA Officer of the Musculoskeletal Radiology Section
+    department: Radiology
+    institution: Harvard Medical School/Beth Israel Deaconess Medical Center
+  - start: 02/2025
+    end: Present
+    title: Education Officer of the Musculoskeletal Radiology Section
+    department: Radiology
+    institution: Harvard Medical School/Beth Israel Deaconess Medical Center
+  - start: 10/2025
+    end: Present
+    title: Interim Section Chief of Musculoskeletal Radiology
+    department: Radiology
+    institution: Harvard Medical School/Beth Israel Deaconess Medical Center
+
+hospital_appointments:
+  - start: 01/2015
+    end: 08/2015
+    title: Emergency Medicine Physician; Primary Care Physician (Social Service)
+    department: Medicine
+    institution: Ministry of Health of Colombia
+  - start: 06/2018
+    end: 06/2019
+    title: Transitional Year Resident
+    department: Medicine
+    institution: Metrowest Medical Center
+  - start: 06/2019
+    end: 06/2023
+    title: Radiology Resident
+    department: Radiology
+    institution: Baystate Medical Center
+  - start: 06/2023
+    end: 06/2024
+    title: Radiology Fellow
+    department: Radiology
+    institution: Beth Israel Deaconess Medical Center
+  - start: 08/2024
+    end: Present
+    title: Radiology Attending
+    department: Radiology
+    institution: Beth Israel Deaconess Medical Center
+
+other_professional_positions: []
+
+major_administrative_leadership:
+  local:
+    - start: 06/2020
+      end: 06/2023
+      title: Resident Education Committee
+      institution: UMass Chan Medical School, Springfield, MA
+    - start: 06/2022
+      end: 06/2023
+      title: Chief Radiology Resident
+      institution: UMass Chan Medical School, Springfield, MA
+    - start: 06/2022
+      end: 06/2023
+      title: Radiology Program Evaluation Committee
+      institution: UMass Chan Medical School, Springfield, MA
+    - start: 06/2022
+      end: 06/2023
+      title: Radiology Residency Selection Committee
+      institution: UMass Chan Medical School, Springfield, MA
+    - start: 02/2025
+      end: Present
+      title: Musculoskeletal Section Quality Assurance Officer
+      institution: Beth Israel Deaconess Medical Center, Boston, MA
+    - start: 02/2025
+      end: Present
+      title: Musculoskeletal Section Education Officer
+      institution: Beth Israel Deaconess Medical Center, Boston, MA
+    - start: 10/2025
+      end: Present
+      title: Interim Musculoskeletal Radiology Section Chief
+      institution: Beth Israel Deaconess Medical Center, Boston, MA
+    - start: 2026   # check: dates; section- or department-level
+      title: Development of the MSK Radiology junior faculty track
+      role: "Oversaw development of a post-fellowship pathway in which graduating fellows join the section as junior faculty under direct supervision"
+      institution: Department of Radiology, Beth Israel Deaconess Medical Center, Boston, MA
+    - start: 2026   # check: start date and wording
+      end: Present
+      title: Section initiative on draft reports in musculoskeletal radiology
+      role: "Initiated as Interim Section Chief; appointed Dr. Jeff Wang and Dr. Nicholas Lewis to lead the work"
+      institution: Beth Israel Deaconess Medical Center, Boston, MA
+  regional: []
+  national: []
+  international: []
+
+committee_service:
+  local:
+    - start: 09/2024
+      title: "Resident Recruitment: Application Review"
+      institution: BIDMC Radiology Residency Program
+      role: Reviewed and scored 39 applicants
+    - start: 09/2025
+      title: "Resident Recruitment: Application Review"
+      institution: BIDMC Radiology Residency Program
+      role: Reviewed and scored 50 applicants
+    - start: 11/2026
+      title: "Resident Recruitment: Interviews"
+      institution: BIDMC Diagnostic Radiology Residency Program
+      role: Interviewed 30+ candidates
+    - start: 2025   # check: year of the first cycle
+      end: Present
+      title: MSK Radiology Fellowship Selection
+      institution: Department of Radiology, BIDMC/Harvard Medical School
+      role: Interviewer (2025-2026 cycle; January 2027 session)
+  regional:
+    - start: 05/2019
+      end: 05/2020
+      title: Massachusetts Medical Society (MMS) House of Delegates
+      role: Delegate
+    - start: 05/2021
+      end: 05/2022
+      title: MMS Committee on Medical Education
+      role: Resident/Fellow representative
+  national:
+    - start: 11/2024
+      title: "ARRS 2025 Abstract Review Subcommittee: Musculoskeletal Imaging Section"
+      institution: American Roentgen Ray Society
+      role: Member (reviewed 10-20 abstracts)
+    - start: 11/2024   # check: the 10/21/2025 CV lists 11/2024 for the 2026 meeting too
+      title: "ARRS 2026 Abstract Review Subcommittee: Musculoskeletal Imaging Section"
+      institution: American Roentgen Ray Society
+      role: Member (reviewed 10-20 abstracts)
+    - start: 01/2025
+      title: ACR 2025 Annual Meeting, Washington, DC
+      institution: American College of Radiology
+      role: Abstract Reviewer
+    - start: 2026
+      end: Present
+      title: "SSR 2026-27 Hip Preservation Consensus white paper (with Dr. Sarah Bixby; manuscript in progress for Skeletal Radiology; to be presented at SSR 2027)"
+      institution: Society of Skeletal Radiology
+      role: Working group member and co-author
+  international:
+    - start: 12/2025
+      end: Present
+      title: Regional Committee for Latin America (RCLA)
+      institution: Radiological Society of North America (RSNA)
+      role: Committee Member (US representative)
+      description: Attended the June 2026 committee meeting (virtual) and the RCLA meeting at RSNA 2026, Chicago, IL (Nov 29, 2026). Continues on the 2027 roster.
+
+professional_societies:
+  - society: Radiological Society of North America (RSNA)
+    start: 04/2016
+    end: Present
+    role: Member
+  - society: National Postdoctoral Association
+    start: 09/2015
+    end: 06/2016
+    role: Member
+  - society: Massachusetts General Hospital, Postdoctoral Division Committee
+    start: 05/2017
+    end: 06/2018
+    role: Member
+  - society: Harvard Colombian Student Society
+    start: 01/2017
+    end: 01/2018
+    role: Member
+  - society: New England Association for Colombian Children
+    start: 01/2016
+    end: 01/2019
+    role: Member
+  - society: Massachusetts Medical Society (MMS)
+    start: 06/2018
+    end: Present
+    role: Member
+    positions:
+      - start: 03/2019
+        end: 03/2020
+        role: Resident and Fellow Section Governing Council
+      - start: 05/2019
+        end: 05/2020
+        role: Resident and Fellow Section Secretary and Delegate to the AMA-RFS
+      - start: 05/2020
+        end: 05/2021
+        role: Resident and Fellow Section Governing Councilor and Delegate to the AMA-RFS
+      - start: 01/2021
+        end: 01/2022
+        role: Resident/Fellow representative to the MMS Committee on Medical Education
+  - society: American College of Radiology (ACR)
+    start: 06/2019
+    end: Present
+    role: Member
+  - society: American Roentgen Ray Society (ARRS)
+    start: 06/2019
+    end: Present
+    role: Member
+  - society: Asociación Colombiana de Radiología
+    start: 01/2023
+    end: Present
+    role: Member
+  - society: Society of Skeletal Radiology (SSR)
+    start: 06/2023
+    end: Present
+    role: Member in Training
+
+grant_review: []
+
+editorial_activities:
+  ad_hoc_reviewer:
+    - journal: Journal of Computer Assisted Tomography (JCAT)
+      start: 06/2024
+    - journal: Skeletal Radiology
+      start: 07/2024
+  other_roles: []
+
+honors_and_prizes:
+  - start: 01/2008
+    name: Five-year scholarship for extraordinary achievement in the ICFES (National Scholar Examination)
+    awarded_by: Mayor's Office of San Juan Nepomuceno, Colombia
+  - start: 01/2013
+    name: "First Position in Surgery Class Recognition"
+    awarded_by: Students Affairs Office, Universidad de Antioquia, Medellín, Colombia
+  - start: 06/2015
+    name: International Student Scholarship
+    awarded_by: Universidad de Antioquia, Medellín, Colombia
+  - start: 06/2022
+    end: 06/2023
+    name: Chief Resident, Diagnostic Radiology Residency
+    awarded_by: UMass Chan Medical School-Baystate Medical Center
+  - start: 2026   # check: listed in the September/October issue
+    name: "Editors' Recognition of Reviewers' Service, 2025 reviewer year"
+    awarded_by: Journal of Computer Assisted Tomography
+  - start: 07/2025
+    end: 06/2026
+    name: Eleanor and Miles Shore Faculty Development Awards Program
+    awarded_by: Beth Israel Deaconess Medical Center, Department of Radiology
+
+# ---------------------------------------------------------------------
+# Part II: Research, Teaching and Clinical Contributions
+# ---------------------------------------------------------------------
+
+funded_unfunded_projects:
+  past:
+    - title: The pathophysiology of hypothalamic obesity after craniopharyngioma
+      pi: "Peter Manley, MD (Pediatric Neuro-oncology, Dana-Farber Cancer Institute); Amy Fleischman, MD (Pediatric Endocrinology, Boston Children's Hospital). Co-PI: Laurie Cohen, MD. Study statistician: Clement Ma, PhD"
+    - title: Dose-response relationship between gonadal steroids and bone turnover in men
+      pi: Joel S. Finkelstein, MD
+    - title: Fat mediated modulation of reproductive and endocrine function in young athletes
+      pi: Madhusmita Misra, MD
+    - title: Effects of obesity and bariatric surgery on skeletal health
+      pi: Elaine W. Yu, MD; Joel S. Finkelstein, MD
+    - title: Effects of anorexia nervosa on peak bone mass
+      pi: Anne Klibanski, MD
+    - title: Randomized placebo-controlled trial to investigate the effects of eplerenone in patients with HIV-associated abdominal fat accumulation
+      pi: Steven Grinspoon, MD
+    - title: A study to investigate gastrointestinal epithelial integrity and arterial inflammation in individuals with and without HIV
+      pi: Janet Lo, MD
+    - title: Augmenting growth hormone to ameliorate nonalcoholic fatty liver disease in adolescents
+      pi: Takara Stanley, MD
+    - title: Relative sarcopenia and cardiometabolic risk in young adults with obesity
+      pi: Melanie Schor, MD
+  current:
+    - title: Advanced MRI and AI-driven imaging to characterize musculoskeletal tumors (MSK oncology), research collaboration with Dana-Farber Cancer Institute
+      funding: Unfunded (self-initiated)
+      start: 2025
+      end: Present
+    - title: Research project on avascular necrosis (osteonecrosis), in collaboration with Dr. Munif Hatem, with research fellow Luiza Madruga and Dr. Saubhagya Dhakal
+      description: Work in progress.
+      start: 2026
+      end: Present
+    - title: "Development of an Artificial Intelligence Model for Automated Detection of Lisfranc Injuries on Foot Radiographs (retrospective study, with resident mentee Ibraheem Shaikh)"
+      funding: Unfunded
+      description: Built on public datasets; being transferred into the BIDMC network to retrain and test on institutional data.
+      start: 2026   # check: start date and model type
+      end: Present
+
+teaching:
+  # Teaching of students in courses / clinical teaching of students
+  students:
+    - start: 06/2019
+      end: 06/2023
+      title: Medical students on the radiology rotation
+      description: Mentored and evaluated medical students, discussed core radiology concepts at the workstation and supported their end-of-rotation lectures.
+      institution: UMass Chan Medical School-Baystate Medical Center, Springfield, MA
+    - start: 06/2023
+      end: 06/2024
+      title: Medical students on the radiology rotation
+      description: Mentored and evaluated medical students, discussed core radiology concepts at the workstation and supported their end-of-rotation lectures.
+      institution: Harvard Medical School-Beth Israel Deaconess Medical Center, Boston, MA
+  # Formal teaching of residents, clinical fellows and research fellows
+  residents_fellows:
+    - start: 2026   # check: start month
+      end: Present
+      title: MSK Radiology Fellowship Visiting Lecturer Series (founder and director)
+      description: Brings nationally recognized musculoskeletal radiologists and orthopedic surgeons to teach fellows on high-impact MSK topics. Speakers include Dr. Jim Wu, Dr. Sarah Bixby, Dr. Munif Hatem and Dr. William Palmer (in person, 02/2027).
+      institution: BIDMC/Harvard Medical School
+    - start: 11/2024
+      title: "Musculoskeletal Radiology: Hips and US-guided Interventions"
+      description: Lecture and hands-on workshop for radiology residents.
+      institution: BIDMC/Harvard Medical School
+    - start: 01/2026   # check: date is later than the CV it came from (10/21/2025)
+      title: Elbow and Wrist Pathology
+      description: Lecture for residents with an interactive musculoskeletal ultrasound component.
+      institution: BIDMC/Harvard Medical School
+  # Clinical supervisory and training responsibilities
+  clinical_supervision:
+    - start: 06/2022
+      end: 06/2023
+      title: PGY-1 radiology residents
+      description: Mentored and evaluated PGY-1 residents as Chief Resident.
+      institution: UMass Chan Medical School-Baystate Medical Center, Springfield, MA
+    - start: 08/2024
+      end: Present
+      title: Musculoskeletal Radiology Fellows (ACGME-accredited program)
+      description: Daily read-out and feedback, weekly lectures and mentoring on academic projects for MSK radiology fellows.
+      institution: BIDMC/Harvard Medical School
+  # Laboratory and other research supervisory and training responsibilities
+  research_supervision:
+    - start: 09/2017
+      end: 06/2018
+      title: Radiology technologists (5)
+      description: Trained technologists to perform MRI research imaging protocols.
+      institution: Massachusetts General Hospital
+    - start: 10/2017
+      end: 06/2018
+      title: Research coordinators (2)
+      description: Trained coordinators to perform MRI and CT research imaging protocols.
+      institution: Massachusetts General Hospital
+    - start: 10/2017
+      end: 06/2018
+      title: Research coordinator (1)
+      description: Trained a coordinator on administrative tasks of the Metabolic Imaging Core.
+      institution: Massachusetts General Hospital
+  # Formally mentored / supervised trainees
+  mentored_trainees:
+    - start: 09/2024
+      end: 01/2025
+      trainee: Fourth-year medical student
+      outcome: "Wrote and submitted the case report \"Ossifying Fibromyxoid Tumor: A Rare Case Involving the Paraspinal Muscles and Spinous Process\" (published in Skeletal Radiology, 2025)."
+    - start: 12/2024
+      end: 01/2025
+      trainee: PGY-3 radiology resident, BIDMC
+      outcome: "Developed the formal lecture \"A Primer on Soft Tissue Masses\" for junior residents."
+    - start: 12/2025   # check: written as 12/2025-Present, for an ISS 2025 submission
+      end: Present
+      trainee: PGY-3 diagnostic radiology resident, University of Ottawa / The Ottawa Hospital
+      outcome: Developed and wrote an education exhibit for submission to the ISS 2025 Meeting, Lisbon, Portugal.
+    - start: 06/2025
+      trainee: First-year resident
+      outcome: Research on the peroneus quartus muscle and its association with tendinopathy.
+    - start: 06/2025
+      trainee: College student (research assistant)
+      outcome: Data collection and organization for the peroneus quartus and peroneus tendon pathology study.
+    - start: 01/2026
+      end: Present
+      trainee: "Luiza Borba de Almeida Madruga, DVM, HMS Research Fellow Intern, BIDMC Radiology (role: PI and research mentor)"
+      outcome: "First author, \"Imaging-based prevalence of the peroneus quartus muscle and its association with peroneal tendon pathology: a systematic review and meta-analysis\" (Skeletal Radiol 2026)."
+    - start: 2026   # check: start date
+      trainee: "Olivia Michaels, UMass Chan Medical School student (role: research mentor)"
+      outcome: "First author, \"Charcot-Marie-Tooth disease type 1A: multimodality imaging of extensive peripheral nerve hypertrophy and cavus adductovarus foot\" (Skeletal Radiol 2026)."
+    - start: 2026
+      end: Present
+      trainee: "Saubhagya Dhakal, MD, MSK Radiology Fellow, BIDMC (role: research and clinical mentor)"
+      outcome: Two presentations accepted at the SSR 2027 Annual Meeting (a Case of the Day and a scientific podium talk).
+    - start: 2025   # check: dates of fellowship and junior faculty period
+      end: Present
+      trainee: "Boris Sokolovski, MD, former MSK Radiology Fellow, now Junior Faculty, BIDMC (role: research mentor during fellowship, then mentor and direct supervisor for his first 6 months as junior faculty)"
+      outcome: Electronic exhibit accepted at the SSR 2027 Annual Meeting.
+    - start: 2026
+      end: Present
+      trainee: "Ibraheem Shaikh, MD, Radiology Resident, BIDMC (role: research mentor)"   # check: PGY year
+      outcome: Developed an AI model for Lisfranc injury measurements on ED radiographs, now moving to internal validation at BIDMC.
+    - start: 2025
+      end: 2026
+      trainee: High school summer research students (1 in 2025, 2 in 2026)
+      outcome: Mentored each student through a 6-week summer research program.
+    - start: 08/2025
+      trainee: Research fellow
+      outcome: Research project on the assessment of educational performance and feedback for residents at BIDMC.
+
+invited_presentations:
+  local:
+    - start: 03/2018
+      title: "Lodwick Award article selection presentation"
+      description: Presented two articles to the Lodwick Award selection committee.
+      venue: Department of Radiology, Harvard Medical School/Massachusetts General Hospital, Boston, MA
+    - start: 11/2025
+      title: "MRI Wrist: What the Surgeon Needs to Know (invited lecture)"
+      venue: Hand Surgery Fellowship, BIDMC/Harvard Medical School, Boston, MA   # check: host institution
+    - start: 11/2026
+      title: "MRI Wrist: What the Surgeon Needs to Know (invited lecture)"
+      venue: Hand Surgery Fellowship, BIDMC/Harvard Medical School, Boston, MA   # check: host institution
+  regional: []
+  national: []
+  international:
+    - start: 10/2011
+      title: Natural Plasmodium knowlesi malaria infections in humans (oral presentation)
+      venue: XX Latin American Congress of Parasitology and XV Colombian Congress of Parasitology and Tropical Medicine, Bogotá, Colombia
+
+clinical:
+  licensure_certification:
+    - start: 05/2015
+      name: "Full Medical License #27163/2015, Colombia"
+    - start: 12/2014
+      name: United States Medical Licensing Examination (USMLE), Step 1
+    - start: 09/2016
+      name: USMLE Step 2 Clinical Knowledge
+    - start: 03/2017
+      name: USMLE Step 2 Clinical Skills
+    - start: 03/2017
+      name: Educational Commission for Foreign Medical Graduates (ECFMG) Certificate
+    - start: 06/2018
+      name: "Temporary Medical License #276-300, Massachusetts"
+    - start: 12/2018
+      name: USMLE Step 3
+    - start: 06/2022
+      name: American Board of Radiology (ABR) Core Exam
+    - start: 03/2023
+      name: Advanced Cardiac Life Support (ACLS)/Basic Life Support (BLS)
+    - start: 07/2024
+      name: "Full Medical License #1020445, Massachusetts"
+    - start: 07/2024
+      name: "Full Medical License #036.170530, Illinois"
+    - start: 09/2024
+      name: Board Certified in Diagnostic Radiology, American Board of Radiology
+  practice_activities:
+    - activity: Musculoskeletal Radiology (attending radiologist)
+      location: Beth Israel Deaconess Medical Center, Boston, MA
+  innovations:
+    - start: 11/2025
+      end: Present
+      title: New MRI and CT hip preservation protocols for preoperative surgical planning
+      description: Led the design and implementation of dedicated hip preservation MRI and CT protocols for a new hip preservation surgeon at BIDMC, working with MRI and CT technologists and the orthopedic surgeon to select sequences and acquisition parameters. The protocols are in clinical use at a volume of at least 5-7 cases per month.
+  multidisciplinary_conferences:
+    - Sarcoma Conference
+    - Rheumatology Conference
+    - Surgery Conference
+    - Gynecology and Oncology Conference
+    - Colorectal Surgery Conference
+
+education_of_patients_and_community: []
+
+# Training courses and certificates (listed under licensure/certification
+# in the 10/21/2025 CV). Shown in the HMS CV under "Other education".
+other_education:
+  - start: 09/2015
+    name: Collaborative Institutional Training Initiative (CITI Program)
+  - start: 12/2015
+    name: "Clinical Research Program, Massachusetts General Hospital: Maintaining Research Subject Privacy and Information Security: What Clinical Researchers Must Know"
+  - start: 11/2016
+    name: "Harvard Catalyst Education Program: T3/T4 Research: Translating Effective Interventions into Practice"
+  - start: 11/2016
+    name: "Harvard Catalyst Education Program: Applied Biostatistics for Clinical Trials"
+  - start: 11/2016
+    name: "Harvard Catalyst Education Program: Basic Biostatistics for Clinical Research"
+  - start: 11/2016
+    name: "Harvard Catalyst Education Program: Clinical Effectiveness Research; Effectively Communicating Research"
+  - start: 11/2016
+    name: "Harvard Catalyst Education Program: Successful Grant Writing Strategies"
+  - start: 11/2026
+    name: "RSNA 2026 Early Career Forum (selected participant, by application), RSNA Annual Meeting, Chicago, IL: faculty development, financial literacy, wellness, remote work, ergonomics and medical malpractice"
+  # RSNA 2026 AI Deep Learning Lab, McCormick Place, Chicago, IL, 11/29-12/02/2026 (registered)
+  - start: 11/2026
+    name: "RSNA 2026 AI Deep Learning Lab: A Low-Code Introduction to AI Agents in Radiology (S2-CIN19)"
+  - start: 11/2026
+    name: "RSNA 2026 AI Deep Learning Lab: An Introduction to Foundation Models in Medical Imaging (M1-CIN21)"
+  - start: 11/2026
+    name: "RSNA 2026 AI Deep Learning Lab: How to Evaluate a Deep Learning Model for Deployment in Real Practice (M3-CIN22)"
+  - start: 12/2026
+    name: "RSNA 2026 AI Deep Learning Lab: Vibe Coding 101: Building Radiology Applications Without Programming Experience (T6-CIN23)"
+  - start: 12/2026
+    name: "RSNA 2026 AI Deep Learning Lab: Leveraging Pretrained Embedding Models for Your Data and Use Cases, Advanced (T8-CIN24)"
+  - start: 12/2026
+    name: "RSNA 2026 AI Deep Learning Lab: How to Fine Tune a Vision Language Model, Advanced (W1-CIN25)"
+  - start: 12/2026
+    name: "RSNA 2026 AI Deep Learning Lab: Sourcing and Preprocessing Medical Imaging Data for Vision-Language Models (W3-CIN26)"
+
+# ---------------------------------------------------------------------
+# Report of Scholarship
+#   Use * after a name for equal authorship, ** for a mentored trainee.
+#   Publications are numbered in the order they appear in each list.
+# ---------------------------------------------------------------------
+
+my_name_in_citations:   # these spellings are bolded on the website
+  - Martinez-Salazar EL
+  - Martínez-Salazar EL
+  - Martinez Salazar EL
+  - Martinez-Salazar EL*
+
+publications:
+  research_investigations:
+    - authors: Martinez-Salazar EL, Tobón-Castaño A, Blair S.
+      title: Natural Plasmodium knowlesi malaria infections in humans.
+      journal: Biomedica.
+      details: 2012;32:121-130.
+      year: 2012
+    - authors: Martínez-Salazar EL, Tobón-Castaño A.
+      title: Platelet profile is associated with clinical complications in patients with vivax and falciparum malaria in Colombia.
+      journal: Rev Soc Bras Med Trop.
+      details: 2014 May-Jun;47(3):341-9.
+      doi: 10.1590/0037-8682-0078-2014
+      pmid: "25075486"
+      year: 2014
+    - authors: Miranda-Arboleda AF, Martinez-Salazar EL, Tobón-Castaño A.
+      title: "The kidney in malaria: from pathogenesis to clinical symptoms."
+      journal: Infectio.
+      details: 2014;18(3):120-128.
+      year: 2014
+    - authors: Godoy IR, Martinez-Salazar EL, Eajazi A, Genta PR, Bredella MA, Torriani M.
+      title: Fat accumulation in the tongue is associated with male gender, abnormal upper airway patency and whole-body adiposity.
+      journal: Metabolism.
+      details: 2016 Nov;65(11):1657-1663. Epub 2016 Sep 2.
+      doi: 10.1016/j.metabol.2016.08.008
+      pmid: "27733254"
+      pmcid: PMC5367267
+      year: 2016
+      note: Featured in The Wall Street Journal Research Report column (print edition, November 2, 2016).
+      note_url: https://www.wsj.com/articles/letting-children-always-win-is-a-losing-strategy-1478012703
+      featured: true
+    - authors: Meehan TM, Martinez-Salazar EL, Torriani M.
+      title: "Aftermath of Ankle Inversion Injuries: Spectrum of MR Imaging Findings."
+      journal: Magn Reson Imaging Clin N Am.
+      details: 2017 Feb;25(1):45-61. Epub 2016 Oct 20.
+      doi: 10.1016/j.mric.2016.08.012
+      pmid: "27888851"
+      year: 2017
+      featured: true
+    - authors: Vicentini JRT, Martinez-Salazar EL, Chang CY, Bredella MA, Rosenthal DI, Torriani M.
+      title: MR imaging features of hemispherical spondylosclerosis.
+      journal: Skeletal Radiol.
+      details: 2017 Oct;46(10):1367-1378. Epub 2017 Jun 28.
+      doi: 10.1007/s00256-017-2699-1
+      pmid: "28660403"
+      year: 2017
+    - authors: Martinez-Salazar EL, Vicentini JRT, Johnson AH, Torriani M.
+      title: "Hallux saltans due to stenosing tenosynovitis of flexor hallucis longus: dynamic sonography and arthroscopic findings."
+      journal: Skeletal Radiol.
+      details: 2018 May;47(5):747-750. Epub 2017 Dec 28.
+      doi: 10.1007/s00256-017-2853-9
+      pmid: "29285554"
+      year: 2018
+      featured: true
+    - authors: Srinivasa S, Fitch KV, Wong K, O'Malley TK, Maehler P, Branch KL, Looby SE, Burdo TH, Martinez-Salazar EL, Torriani M, Lyons SH, Weiss J, Feldpausch M, Stanley TL, Adler GK, Grinspoon SK.
+      title: Randomized, Placebo-Controlled Trial to Evaluate Effects of Eplerenone on Metabolic and Inflammatory Indices in HIV.
+      journal: J Clin Endocrinol Metab.
+      details: 2018 Jun 1;103(6):2376-2384.
+      doi: 10.1210/jc.2018-00330
+      pmid: "29659888"
+      pmcid: PMC6370281
+      year: 2018
+    - authors: Godoy IRB, Martinez-Salazar EL, Simeone FJ, Bredella MA, Palmer WE, Torriani M.
+      title: "MRI of pectoralis major tears: association between ancillary findings and tear severity."
+      journal: Skeletal Radiol.
+      details: 2018 Aug;47(8):1127-1135. Epub 2018 Feb 9.
+      doi: 10.1007/s00256-018-2893-9
+      pmid: "29426957"
+      year: 2018
+      featured: true
+    - authors: Galm BP, Martinez-Salazar EL, Swearingen B, Torriani M, Klibanski A, Bredella MA, Tritos NA.
+      title: MRI texture analysis as a predictor of tumor recurrence or progression in patients with clinically non-functioning pituitary adenomas.
+      journal: Eur J Endocrinol.
+      details: 2018 Sep;179(3):191-198. Epub 2018 Jul 4.
+      doi: 10.1530/EJE-18-0291
+      pmid: "29973377"
+      year: 2018
+    - authors: Srinivasa S, Fitch KV, Quadri N, Maehler P, O'Malley TK, Martinez-Salazar EL, Burdo TH, Feldpausch M, Torriani M, Adler GK, Grinspoon SK.
+      title: Significant Association of Aldosterone and Liver Fat Among HIV-Infected Individuals With Metabolic Dysregulation.
+      journal: J Endocr Soc.
+      details: 2018 Sep 3;2(10):1147-1157.
+      doi: 10.1210/js.2018-00194
+      pmid: "30283827"
+      pmcid: PMC6162603
+      year: 2018
+    - authors: Gill CM, Azevedo DC, Oliveira AL, Martinez-Salazar EL, Torriani M, Bredella MA.
+      title: Sex differences in pericardial adipose tissue assessed by PET/CT and association with cardiometabolic risk.
+      journal: Acta Radiol.
+      details: 2018 Oct;59(10):1203-1209. Epub 2018 Feb 14.
+      doi: 10.1177/0284185118756950
+      pmid: "29444586"
+      pmcid: PMC6190825
+      year: 2018
+    - authors: Braun LR, Feldpausch MN, Czerwonka N, Weiss J, Branch K, Lee H, Martinez-Salazar EL, Torriani M, Sponseller CA, Grinspoon SK, Stanley TL.
+      title: "Effects of Pitavastatin on Insulin Sensitivity and Liver Fat: A Randomized Clinical Trial."
+      journal: J Clin Endocrinol Metab.
+      details: 2018 Nov 1;103(11):4176-4186.
+      doi: 10.1210/jc.2018-01446
+      pmid: "30239757"
+      pmcid: PMC6194811
+      year: 2018
+    - authors: Bos SA, Gill CM, Martinez-Salazar EL, Torriani M, Bredella MA.
+      title: Preliminary investigation of brown adipose tissue assessed by PET/CT and cancer activity.
+      journal: Skeletal Radiol.
+      details: 2019 Mar;48(3):413-419. Epub 2018 Sep 13.
+      doi: 10.1007/s00256-018-3046-x
+      pmid: "30215105"
+      pmcid: PMC6345160
+      year: 2019
+    - authors: Martinez-Salazar EL, Tran J, Patiño A, Sureshkumar A, Catanzano T.
+      title: "Infections of the Male and Female Reproductive System: Spectrum of Imaging Findings."
+      journal: Semin Ultrasound CT MR.
+      details: 2020 Feb;41(1):2-9. Epub 2019 Oct 23.
+      doi: 10.1053/j.sult.2019.10.007
+      pmid: "31964491"
+      year: 2020
+      featured: true
+    - authors: Patiño A, Martinez-Salazar EL, Tran J, Sureshkumar A, Catanzano T.
+      title: Review of Imaging Findings in Urinary Tract Infections.
+      journal: Semin Ultrasound CT MR.
+      details: 2020 Feb;41(1):99-105. Epub 2019 Oct 2.
+      doi: 10.1053/j.sult.2019.09.004
+      pmid: "31964498"
+      year: 2020
+    - authors: Vicentini JRT, Martinez-Salazar EL, Simeone FJ, Bredella MA, Palmer WE, Torriani M.
+      title: Kinematic MRI of ischiofemoral impingement.
+      journal: Skeletal Radiol.
+      details: 2021 Jan;50(1):97-106. Epub 2020 Jul 7.
+      doi: 10.1007/s00256-020-03519-4
+      pmid: "32638058"
+      year: 2021
+      featured: true
+    - authors: Vicentini JRT, Hilgersom NFJ, Martinez-Salazar EL, Simeone FJ, Bredella MA, Palmer WE, Oh LS, Torriani M.
+      title: "Distal Triceps Tendon Tears: Magnetic Resonance Imaging Patterns Using a Systematic Classification."
+      journal: J Comput Assist Tomogr.
+      details: 2022 Mar-Apr 01;46(2):224-230.
+      doi: 10.1097/RCT.0000000000001265
+      pmid: "35081601"
+      year: 2022
+      featured: true
+    - authors: Godoy IRB, Vicentini JRT, Martinez-Salazar EL.
+      title: Textural analysis as an instrument to detect differences on sacral chordoma MRI post-radiation therapy.
+      journal: Skeletal Radiol.
+      details: 2026 Apr;55(4):849-860. Epub 2025 Nov 11.
+      doi: 10.1007/s00256-025-05070-6
+      pmid: "41217469"
+      year: 2026
+      featured: true
+    - authors: Madruga LBA**, Fonseca PEO, Scremin GM, Ratti MAS, Coelho JPC, Polato MJ, Martinez Salazar EL.
+      title: "Imaging-based prevalence of the peroneus quartus muscle and its association with peroneal tendon pathology: a systematic review and meta-analysis."
+      journal: Skeletal Radiol.
+      details: 2026 Dec;55(12):3229-3239. Epub 2026 Aug 18.
+      doi: 10.1007/s00256-026-05343-8
+      pmid: "42611193"
+      year: 2026
+      featured: true
+  case_reports:
+    - authors: Fredette RP, Ahn L, Towery E, Mahvi DA, Martinez-Salazar EL.
+      title: "Ossifying fibromyxoid tumor: a rare case involving the paraspinal musculature and spinous processes."
+      journal: Skeletal Radiol.
+      details: 2025. Epub 2025 Aug 15.
+      doi: 10.1007/s00256-025-05012-2
+      pmid: "40813495"
+      year: 2025
+      featured: true
+    - authors: Michaels O**, Orlando M, Cesanek N, Martinez Salazar EL.
+      title: "Charcot-Marie-Tooth disease type 1A: multimodality imaging of extensive peripheral nerve hypertrophy and cavus adductovarus foot."
+      journal: Skeletal Radiol.
+      details: 2026. Epub 2026 Sep 16.   # volume/pages not assigned yet
+      doi: 10.1007/s00256-026-05369-y
+      year: 2026
+      featured: true
+  non_peer_reviewed: []
+
+abstracts:
+  - text: "Martinez-Salazar EL, Tobón-Castaño A. Platelet count and platelet parameters in malaria patients from Colombia. XVIII International Congress for Tropical Medicine and Malaria and XLVIII Congress of the Brazilian Society for Tropical Medicine, Rio de Janeiro, Brazil. Volume 1, p. 304."
+  - text: "Flores EJ, Mishra V, Goyal S, Martinez-Salazar EL, Shailam R, Choy G, Pomerantz S, Harvey HB. Recognizing the Pediatric \"No Show\": Demographic and Medical Factors Associated with Missed Care Events in Pediatric Radiology. Radiological Society of North America, 102nd Annual Meeting, Chicago, IL."
+  - text: "Godoy IRB, Martinez-Salazar EL, Bredella MA, Torriani M. Effects of radiation therapy on MRI textural features in sacral chordomas. International Skeletal Society, 43rd Annual Meeting, Paris, France."
+  - text: "Fazeli PK, Faje AT, Bredella MA, Polineni S, Martinez-Salazar EL, Torriani M, Rosen C, Klibanski A. Marrow Adipose Tissue Increases with Subacute Weight Gain in Anorexia Nervosa. Endocrine Society, ENDO 2017, Orlando, FL."
+  - text: "Fazeli PK, Faje AT, Bredella MA, Polineni S, Martinez-Salazar EL, Torriani M, Rosen C, Klibanski A. Fibroblast Growth Factor 21 is Inversely Associated with Marrow Adiposity in Lean Women. Endocrine Society, ENDO 2017, Orlando, FL."
+  - text: "Fazeli PK, Faje AT, Bredella MA, Polineni S, Martinez-Salazar EL, Torriani M, Rosen C, Klibanski A. Leptin and Marrow Adipose Tissue are Differentially Associated in the Steady State as Compared to Periods of Subacute Change. ENDO 2018, Chicago, IL."
+  - text: "Srinivasa S, Fitch KV, Maehler P, Looby SE, Burdo TH, Martinez-Salazar EL, Torriani M, Weiss J, Feldpausch M, Stanley TL, Adler GK, Grinspoon SK. Randomized Placebo Controlled Trial to Evaluate Effects of Eplerenone on Insulin Sensitivity and Inflammation among HIV-infected Individuals with Abdominal Fat Accumulation. ENDO 2018, Chicago, IL."
+  - text: "Campbell G, Martinez-Salazar EL, Wretzel S. Bowel spasms and vasospasms: A case report of carcinoid tumor causing RCVS. American College of Physicians Massachusetts Chapter Poster Day; selected for MA ACP Annual Scientific Meeting presentation, 2019, Waltham, MA."
+  - text: "Kirkendoll S, Alouidor R, Leung B, Ford K, Abraham A, Martinez-Salazar EL. Incidental Small Bowel Masses in Trauma Laparotomy: Case Report and Literature Review of Incidental Small Bowel Ectopic Pancreatic Tissue. Poster presentation, MCACS 68th Annual Conference, December 4, 2021."
+  - text: "Martinez-Salazar EL, Rasla J, Oliveira A. Tibiofemoral Dislocations: When the Knee Unhinges. ISS 49th Annual Musculoskeletal Diagnostic Meeting, 2022, Barcelona, Spain."
+  - text: "Martinez-Salazar EL, Farag A, Fielding J, Urbanczyk K, Oliveira A. Neurovascular injuries and tibiofemoral dislocations. SSR 2023 Annual Meeting, 2023, Savannah, GA."
+  - text: "Martinez-Salazar EL, Oliveira A, Regmi N, Khubchandani M. Lisfranc Fracture-Dislocation: Comprehensive Review. MSK 2023 Global Musculoskeletal Societies Joint Meeting, London, England."
+  - text: "Fielding J, Martinez-Salazar EL, Haqqani F, Oliveira A. Knee Deep in Subchondral Bone Injuries: A Joint Effort. MSK 2023 Global Musculoskeletal Societies Joint Meeting, London, England."
+  - text: "Ahn L, Fredette R, Martinez-Salazar EL. Roentgen Key Case Challenge: Ossifying Fibromyxoid Tumor: A Rare Case Involving the Paraspinal Musculature and Spinous Processes. ARRS 2025 Annual Meeting, April 27-May 1, San Diego, CA."
+  # check: co-authors still to be added (shown as "...")
+  - text: "Dhakal S**, ..., Martinez-Salazar EL. Intraosseous hemangioma of the rib presenting with spontaneous massive hemothorax. Case of the Day (oral). Society of Skeletal Radiology (SSR) Annual Meeting, April 11, 2027, Charleston, SC. Accepted."
+  - text: "Dhakal S**, ..., Martinez-Salazar EL. Value of MRI findings in suspected septic arthritis. Scientific podium presentation. Society of Skeletal Radiology (SSR) Annual Meeting, April 11-14, 2027, Charleston, SC. Accepted."   # check: exact title and date
+  - text: "Bixby S, ..., Martinez-Salazar EL, .... SSR 2026-27 Hip Preservation Consensus (white paper). Scientific podium presentation. Society of Skeletal Radiology (SSR) Annual Meeting, April 11-14, 2027, Charleston, SC. Accepted."   # check: exact title and authors
+  - text: "Sokolovski B**, ..., Martinez-Salazar EL. CT features associated with malignancy in bone lesions evaluated with PSMA PET/CT and biopsy. Electronic Exhibit (Exhibit 18). Society of Skeletal Radiology (SSR) Annual Meeting, April 11-14, 2027, Charleston, SC. Accepted."
+
+languages:
+  - language: Spanish
+    level: Native
+
+# Narrative report (HMS asks for ~500 words). Leave blank until ready.
+narrative: ""
