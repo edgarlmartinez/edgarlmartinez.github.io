@@ -49,3 +49,11 @@ teaching_blurb: >-
   I supervise musculoskeletal radiology fellows in the ACGME-accredited
   program at BIDMC, teach radiology residents, and mentor medical students,
   residents and research fellows on their academic projects.
+
+# Expert consultation page (/consulting/).
+# Keep `enabled: false` until HMFP / BIDMC have approved this outside activity.
+# While false, the page still exists for your own preview but is hidden from
+# the menu and from search engines.
+consulting:
+  enabled: false
+  form_url: ""        # link to your Google Form (or other inquiry form)
