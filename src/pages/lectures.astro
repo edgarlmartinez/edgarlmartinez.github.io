@@ -17,7 +17,7 @@ const list = newest((lectures.lectures || []).map((l) => ({ ...l, start: l.date 
           {l.topics && <ul class="tags" style="margin-bottom:14px">{l.topics.map((t) => <li>{t}</li>)}</ul>}
           {l.link
             ? <a class="btn btn-outline" href={l.link} target="_blank" rel="noopener">Open slides ↗</a>
-            : <span class="meta">Slides coming soon</span>}
+            : lectures.folder_link ? <a class="btn btn-outline" href={lectures.folder_link} target="_blank" rel="noopener">Find in the library ↗</a> : <span class="meta">Slides coming soon</span>}
         </div>
       ))}
     </div>
