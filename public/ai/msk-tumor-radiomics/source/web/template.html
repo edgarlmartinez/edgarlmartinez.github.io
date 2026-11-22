@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>MSK Tumor Radiomics</title>
+<style>
+:root{--bg:#0c1118;--panel:#141d27;--panel2:#111a24;--line:#26313d;--text:#dce5ed;--muted:#8293a6;--teal:#50dbc4;--ref:#b58cff;--warn:#e3a35b;--bad:#ff7f8a;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:13px;color:var(--text);background:var(--bg);color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid #33414f;background:#1c2834;border-radius:7px;padding:6px 11px;min-height:30px}
+button:hover{background:#263442}button.on{background:#163c39;border-color:#2c6b60;color:#8de1d1}
+input[type=range]{accent-color:var(--teal)}
+select{background:#0c131c;border:1px solid #334050;border-radius:6px;padding:5px 8px}
+.app{display:grid;grid-template-columns:250px minmax(0,1fr) 440px;grid-template-rows:auto 1fr;height:100dvh}
+header{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel2);flex-wrap:wrap}
+header h1{font-size:15px;margin:0;font-weight:600;letter-spacing:-.2px}
+.ruo{font-size:11px;color:#f2c0c5;background:#43282e;border:1px solid #78424d;border-radius:5px;padding:3px 8px}
+.sp{flex:1}
+aside{border-right:1px solid var(--line);overflow:auto;background:var(--panel2)}
+.eyebrow{font-size:10px;letter-spacing:1.6px;font-weight:650;color:#73abaf;text-transform:uppercase;padding:14px 14px 6px}
+.case{padding:9px 14px;border-bottom:1px solid #1d2731;cursor:pointer}
+.case:hover{background:#ffffff08}.case.sel{background:#163c3966;box-shadow:inset 3px 0 var(--teal)}
+.case .id{font-weight:550;display:flex;justify-content:space-between}.case .meta{color:var(--muted);font-size:11px;margin-top:3px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;background:#23303d;color:#acbaca}
+.good{color:#0b2f28;background:var(--teal)}.mid{color:#2b1a06;background:var(--warn)}.low{color:#2b0a0e;background:var(--bad)}
+main{position:relative;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.toolbar{display:flex;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.toolbar label{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px}
+#wrap{flex:1;position:relative;background:#05080c;min-height:300px}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+#hint{position:absolute;left:12px;bottom:10px;color:#93a5b6;font-size:11px;background:#0c1118cc;padding:6px 9px;border-radius:6px;pointer-events:none}
+#sliceLbl{position:absolute;right:12px;top:10px;color:#93a5b6;font-size:11px;background:#0c1118cc;padding:5px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
+section.right{border-left:1px solid var(--line);overflow:auto;background:var(--panel)}
+.card{padding:14px 16px;border-bottom:1px solid var(--line)}
+.card h3{margin:0 0 8px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{color:#8d9aab;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600;text-align:right;padding:6px 5px;border-bottom:1px solid var(--line);background:var(--panel)}
+th:first-child,td:first-child{text-align:left}
+td{text-align:right;padding:5px 5px;border-bottom:1px solid #25313a80;font-variant-numeric:tabular-nums}
+td.f{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat .v{font-size:20px;font-weight:600;letter-spacing:-.4px;font-variant-numeric:tabular-nums}.stat .k{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.7px}
+.muted{color:var(--muted)}p{line-height:1.55;color:#9aabbc;margin:6px 0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+details summary{cursor:pointer;color:#9cadbe}
+.edited{color:var(--warn);font-size:11px}
+@media (max-width:1100px){.app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 70vh auto;height:auto}aside{max-height:200px}section.right{border-left:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>MSK Tumor Segmentation &amp; Radiomics · CT / MRI</h1>
+  <span class="ruo">Research use only · not for clinical use</span>
+  <span class="sp"></span>
+  <button id="csvBtn" title="Download the metrics and features of the case on screen">Export case CSV</button>
+</header>
+<aside>
+  <div class="eyebrow">Held-out test cases</div>
+  <div style="padding:0 14px 8px"><select id="modSel" style="width:100%"><option value="">All sequences</option><option>MR_T1</option><option>MR_T2FS</option><option>CT</option></select></div>
+  <div id="list"></div>
+</aside>
+<main>
+  <div class="toolbar">
+    <button id="tRef" class="on" title="Expert contour (TCIA)">Expert</button>
+    <button id="tAuto" class="on" title="nnU-Net automatic mask">Automatic</button>
+    <label>Slice <input id="z" type="range" min="0" max="0" value="0" style="width:140px"></label>
+    <label>Contrast <input id="ctr" type="range" min="50" max="250" value="100" style="width:80px"></label>
+    <label>Brightness <input id="bri" type="range" min="-100" max="100" value="0" style="width:80px"></label>
+    <span class="sp"></span>
+    <button id="tEdit" title="Correct the automatic mask with a brush">Correct mask</button>
+    <label id="brushL" hidden>Brush <input id="brush" type="range" min="2" max="20" value="6" style="width:70px"></label>
+    <button id="tErase" hidden>Erase</button>
+    <button id="tReset" hidden>Reset</button>
+  </div>
+  <div id="wrap"><canvas id="cv"></canvas><div id="sliceLbl"></div>
+    <div id="hint">Scroll or use the slider to change slice. Purple outline: expert. Teal: automatic.</div></div>
+</main>
+<section class="right">
+  <div class="card"><h3>Case <span id="caseTitle" class="muted"></span></h3>
+    <div class="stats" id="segStats"></div>
+    <table style="margin-top:12px"><thead><tr><th>Volumetrics</th><th>Expert</th><th>Automatic</th></tr></thead><tbody id="volT"></tbody></table>
+    <div id="editNote" class="edited" hidden>Mask corrected in the browser. Volume and diameters are recomputed live; texture features need the Python pipeline.</div>
+  </div>
+  <div class="card"><h3>Texture features <label class="muted" style="font-weight:400;font-size:11px;margin-left:auto"><input type="checkbox" id="onlyRobust" checked> robust only</label></h3>
+    <p style="margin-top:0">Robust means ICC ≥ 0.90 under mask perturbation (erode, dilate, contour jitter) on all 51 patients and ICC ≥ 0.75 between automatic and expert masks on the held-out patients.</p>
+    <div style="max-height:360px;overflow:auto"><table><thead><tr><th>Feature</th><th>Expert</th><th>Auto</th><th title="perturbation ICC">ICC pert.</th><th title="auto vs expert ICC">ICC auto</th></tr></thead><tbody id="featT"></tbody></table></div>
+  </div>
+  <div class="card"><h3>Held-out performance</h3><div id="summary"></div><svg id="scatter" viewBox="0 0 400 230" style="width:100%;margin-top:8px"></svg>
+    <div class="legend"><span><span class="sw" style="background:#b58cff"></span>MR T1</span><span><span class="sw" style="background:#50dbc4"></span>MR T2FS/STIR</span><span><span class="sw" style="background:#e3a35b"></span>CT</span></div></div>
+  <div class="card"><h3>Method</h3>
+    <p><b>Segmentation.</b> nnU-Net v2 (3D full resolution, the framework behind TotalSegmentator), one contrast-agnostic MRI model (T1 and T2FS/STIR pooled) and one CT model, trained on 40 patients. <span id="trainNote"></span> Post-processing: on MRI, a two-sequence consensus keeps the tumor components that T1 and T2FS/STIR agree on (falls back to the largest component when only one sequence exists); on CT, the largest connected component.</p>
+    <p><b>Normalization.</b> CT stays in Hounsfield units, resegmented to −200…400 HU, fixed bin width 25 HU, resampled to 1×1×3 mm. MRI: N4 bias-field correction, z-score over the body, 3-SD resegmentation, fixed bin number 32, in-plane 1 mm and 2D texture because slices are 4–15 mm thick.</p>
+    <p><b>Features.</b> PyRadiomics 3.1 (IBSI-aligned definitions): shape, first order, GLCM, GLRLM, GLSZM, GLDM, NGTDM on the original image.</p>
+    <details><summary>Data and license</summary><p>TCIA Soft-tissue-Sarcoma collection (Vallières M, et al. Phys Med Biol 2015;60:5471; Clark K, et al. J Digit Imaging 2013), obtained through the NCI Imaging Data Commons, CC BY 3.0. 51 patients with extremity soft-tissue sarcoma; expert GTV contours on T1, T2FS/STIR and the CT of the PET/CT. No BIDMC or patient data from this author's institution were used. The CT is the low-dose attenuation CT of PET/CT, so CT results are a lower bound for diagnostic CT.</p></details>
+  </div>
+</section>
+</div>
+<script>
+const D=__DATA__;
+const MODC={MR_T1:'#b58cff',MR_T2FS:'#50dbc4',CT:'#e3a35b'};
+const MODN={MR_T1:'MR T1',MR_T2FS:'MR T2FS/STIR',CT:'CT'};
+let cur=null,z=0,showRef=true,showAuto=true,edit=false,erase=false,edited=false;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+const $=id=>document.getElementById(id);
+const fmt=(v,d=2)=>v==null||isNaN(v)?'–':Math.abs(v)>=1000?v.toFixed(0):Math.abs(v)>=10?v.toFixed(1):v.toFixed(d);
+function unrle(r,n){const a=new Uint8Array(n);let p=0,v=0;for(const c of r){if(v)a.fill(1,p,p+c);p+=c;v^=1}return a}
+function dcls(d){return d>=.8?'good':d>=.6?'mid':'low'}
+function load(c){
+  const n=c.px*c.px*c.n;
+  if(!c._img){c._img=new Image();c._img.src=c.img;c._img.onload=draw;c._ref=unrle(c.ref,n);c._auto0=unrle(c.auto,n)}
+  c._auto=c._auto0.slice();edited=false;$('editNote').hidden=true;
+  cur=c;
+  // start on the slice with most expert tumor
+  let best=0,bz=0;for(let k=0;k<c.n;k++){let s=0;const o=k*c.px*c.px;for(let i=0;i<c.px*c.px;i++)s+=c._ref[o+i];if(s>best){best=s;bz=k}}
+  z=bz;$('z').max=c.n-1;$('z').value=z;
+  renderList();renderInfo();draw();
+}
+function renderList(){
+  const f=$('modSel').value;$('list').innerHTML='';
+  D.cases.filter(c=>!f||c.mod===f).forEach(c=>{
+    const d=c.metrics.dice,el=document.createElement('div');el.className='case'+(c===cur?' sel':'');
+    el.innerHTML=`<div class="id"><span>${c.id}</span><span class="badge ${dcls(d)}">Dice ${d.toFixed(2)}</span></div><div class="meta"><span style="color:${MODC[c.mod]}">${MODN[c.mod]}</span> · ${fmt(c.metrics.vol_ref_ml,1)} mL</div>`;
+    el.onclick=()=>load(c);$('list').appendChild(el)});
+}
+function vol(mask){const c=cur;let s=0;for(let i=0;i<mask.length;i++)s+=mask[i];return s*c.mmpx*c.mmpx*c.dz/1000}
+function axes(mask){ // longest axial diameter + perpendicular, cranio-caudal extent (browser approximation)
+  const c=cur,P=c.px;let best=[0,0],zs=[];
+  for(let k=0;k<c.n;k++){const o=k*P*P;const pts=[];
+    for(let y=0;y<P;y++)for(let x=0;x<P;x++)if(mask[o+y*P+x]){const e=!x||!y||x==P-1||y==P-1||!mask[o+y*P+x-1]||!mask[o+y*P+x+1]||!mask[o+(y-1)*P+x]||!mask[o+(y+1)*P+x];if(e)pts.push([x,y])}
+    if(!pts.length)continue;zs.push(k);
+    const s=pts.length>400?pts.filter((_,i)=>i%Math.ceil(pts.length/400)==0):pts;
+    let dm=0,a=null,b=null;for(let i=0;i<s.length;i++)for(let j=i+1;j<s.length;j++){const d=(s[i][0]-s[j][0])**2+(s[i][1]-s[j][1])**2;if(d>dm){dm=d;a=s[i];b=s[j]}}
+    dm=Math.sqrt(dm);if(dm>best[0]){const ux=(b[0]-a[0])/dm,uy=(b[1]-a[1])/dm;let lo=1e9,hi=-1e9;for(const p of s){const t=-uy*p[0]+ux*p[1];lo=Math.min(lo,t);hi=Math.max(hi,t)}best=[dm,hi-lo]}}
+  return{la:best[0]*c.mmpx,sa:best[1]*c.mmpx,cc:zs.length?(zs[zs.length-1]-zs[0]+1)*c.dz:0}
+}
+function renderInfo(){
+  const c=cur,m=c.metrics;$('caseTitle').textContent=`${c.id} · ${MODN[c.mod]}`;
+  const dice=edited?diceNow():m.dice;
+  $('segStats').innerHTML=`<div class="stat"><div class="v">${dice.toFixed(3)}</div><div class="k">Dice${edited?' (edited)':''}</div></div><div class="stat"><div class="v">${fmt(m.hd95_mm,1)}</div><div class="k">HD95 mm</div></div><div class="stat"><div class="v">${fmt(m.dice_raw,3)}</div><div class="k">Dice, no post-proc.</div></div>`;
+  const au=edited?axes(c._auto):{la:m.auto_axial_long_axis_mm,sa:m.auto_axial_short_axis_mm,cc:m.auto_craniocaudal_extent_mm};
+  const va=edited?vol(c._auto):m.vol_auto_ml;
+  $('volT').innerHTML=[['Volume (mL)',m.vol_ref_ml,va],['Axial long axis (mm)',m.ref_axial_long_axis_mm,au.la],['Perpendicular short axis (mm)',m.ref_axial_short_axis_mm,au.sa],['Craniocaudal extent (mm)',m.ref_craniocaudal_extent_mm,au.cc]]
+    .map(r=>`<tr><td>${r[0]}</td><td>${fmt(r[1],1)}</td><td>${fmt(r[2],1)}</td></tr>`).join('');
+  const only=$('onlyRobust').checked;
+  const fs=c.feats.filter(f=>!only||f[5]).sort((a,b)=>(b[5]-a[5])||((b[3]??0)-(a[3]??0)));
+  $('featT').innerHTML=fs.map(f=>`<tr><td class="f" title="${f[0]}">${f[0].replace('_',' · ')}</td><td>${fmt(f[1],3)}</td><td>${fmt(f[2],3)}</td><td style="color:${f[3]>=.9?'var(--teal)':f[3]>=.75?'var(--warn)':'var(--bad)'}">${fmt(f[3],2)}</td><td style="color:${f[4]>=.75?'var(--teal)':'var(--bad)'}">${fmt(f[4],2)}</td></tr>`).join('')||'<tr><td colspan=5 class="muted">No features</td></tr>';
+}
+function diceNow(){const a=cur._auto,r=cur._ref;let i=0,s=0;for(let k=0;k<a.length;k++){i+=a[k]&r[k];s+=a[k]+r[k]}return s?2*i/s:0}
+let geom={s:1,ox:0,oy:0};
+function draw(){
+  const c=cur;if(!c||!c._img||!c._img.complete)return;
+  const W=cv.clientWidth,H=cv.clientHeight,dpr=devicePixelRatio||1;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle='#05080c';ctx.fillRect(0,0,W,H);
+  const P=c.px,s=Math.min(W,H)/P*.96;geom={s,ox:(W-P*s)/2,oy:(H-P*s)/2};
+  ctx.imageSmoothingEnabled=true;
+  ctx.filter=`contrast(${$('ctr').value}%) brightness(${100+ +$('bri').value}%)`;
+  ctx.drawImage(c._img,0,z*P,P,P,geom.ox,geom.oy,P*s,P*s);ctx.filter='none';
+  const o=z*P*P;
+  const ov=new ImageData(P,P),px=ov.data;
+  const lay=(m,rgb,fill)=>{for(let y=0;y<P;y++)for(let x=0;x<P;x++){const i=o+y*P+x;if(!m[i])continue;
+      const e=!x||!y||x==P-1||y==P-1||!m[i-1]||!m[i+1]||!m[i-P]||!m[i+P],q=(y*P+x)*4;
+      if(e){px[q]=rgb[0];px[q+1]=rgb[1];px[q+2]=rgb[2];px[q+3]=255}else if(fill&&px[q+3]<255){px[q]=rgb[0];px[q+1]=rgb[1];px[q+2]=rgb[2];px[q+3]=60}}};
+  if(showAuto)lay(c._auto,[80,219,196],true);
+  if(showRef)lay(c._ref,[181,140,255],false);
+  if(!window._oc){window._oc=document.createElement('canvas')}const oc=window._oc;oc.width=P;oc.height=P;oc.getContext('2d').putImageData(ov,0,0);
+  ctx.imageSmoothingEnabled=false;ctx.drawImage(oc,geom.ox,geom.oy,P*s,P*s);
+  // scale bar 5 cm
+  const L=50/c.mmpx*s;ctx.fillStyle='#dce5ed';ctx.fillRect(geom.ox+10,geom.oy+P*s-16,L,2);ctx.font='11px system-ui';ctx.fillText('5 cm',geom.ox+10,geom.oy+P*s-22);
+  $('sliceLbl').textContent=`slice ${z+1}/${c.n} · ${c.mmpx.toFixed(2)} mm/px · ${c.dz.toFixed(1)} mm thick`;
+}
+function summary(){
+  const S=D.summary;let h='<table><thead><tr><th>Sequence</th><th>n</th><th>Dice median (IQR)</th><th>HD95 mm</th><th>Robust feats</th></tr></thead><tbody>';
+  for(const k of ['MR_T1','MR_T2FS','CT'])if(S[k]){const s=S[k];h+=`<tr><td style="color:${MODC[k]}">${MODN[k]}</td><td>${s.n}</td><td>${s.dice_median.toFixed(2)} (${s.dice_q1.toFixed(2)}–${s.dice_q3.toFixed(2)})</td><td>${s.hd95_median.toFixed(1)}</td><td>${s.n_robust}/${s.n_features}</td></tr>`}
+  $('summary').innerHTML=h+'</tbody></table>';
+  // log-log scatter of volumes
+  const sv=$('scatter'),pts=[];let mx=1;for(const k in S)for(const v of S[k].vol){pts.push([k,v[0],v[1]]);mx=Math.max(mx,v[0],v[1])}
+  const lo=Math.log10(5),hi=Math.log10(mx*1.3),X=v=>50+(Math.log10(Math.max(v,5))-lo)/(hi-lo)*330,Y=v=>200-(Math.log10(Math.max(v,5))-lo)/(hi-lo)*185;
+  let g=`<line x1="${X(5)}" y1="${Y(5)}" x2="${X(mx*1.3)}" y2="${Y(mx*1.3)}" stroke="#3a4856" stroke-dasharray="4 4"/>`;
+  for(const t of [10,100,1000,3000])if(t<mx*1.3){g+=`<text x="${X(t)}" y="218" fill="#8293a6" font-size="10" text-anchor="middle">${t}</text><text x="44" y="${Y(t)+3}" fill="#8293a6" font-size="10" text-anchor="end">${t}</text>`}
+  g+=`<text x="215" y="230" fill="#8293a6" font-size="10" text-anchor="middle">Expert volume (mL)</text><text x="10" y="105" fill="#8293a6" font-size="10" transform="rotate(-90 10 105)" text-anchor="middle">Automatic (mL)</text>`;
+  for(const p of pts)g+=`<circle cx="${X(p[1])}" cy="${Y(p[2])}" r="4" fill="${MODC[p[0]]}" fill-opacity=".85"/>`;
+  sv.innerHTML=g;
+  if(D.meta.train_note)$('trainNote').textContent=D.meta.train_note;
+}
+// interaction
+cv.addEventListener('wheel',e=>{e.preventDefault();if(!cur)return;z=Math.max(0,Math.min(cur.n-1,z+(e.deltaY>0?1:-1)));$('z').value=z;draw()},{passive:false});
+$('z').oninput=e=>{z=+e.target.value;draw()};$('ctr').oninput=draw;$('bri').oninput=draw;
+$('tRef').onclick=e=>{showRef=!showRef;e.target.classList.toggle('on',showRef);draw()};
+$('tAuto').onclick=e=>{showAuto=!showAuto;e.target.classList.toggle('on',showAuto);draw()};
+$('tEdit').onclick=e=>{edit=!edit;e.target.classList.toggle('on',edit);['brushL','tErase','tReset'].forEach(i=>$(i).hidden=!edit);cv.style.cursor=edit?'crosshair':'default';
+  $('hint').textContent=edit?'Drag to paint the automatic mask on this slice. Toggle Erase to remove.':'Scroll or use the slider to change slice. Purple outline: expert. Teal: automatic.'};
+$('tErase').onclick=e=>{erase=!erase;e.target.classList.toggle('on',erase)};
+$('tReset').onclick=()=>{cur._auto=cur._auto0.slice();edited=false;$('editNote').hidden=true;renderInfo();draw()};
+$('modSel').onchange=renderList;$('onlyRobust').onchange=renderInfo;
+let painting=false;
+function paint(e){if(!edit||!cur)return;const r=cv.getBoundingClientRect(),P=cur.px;
+  const x=(e.clientX-r.left-geom.ox)/geom.s,y=(e.clientY-r.top-geom.oy)/geom.s,b=+$('brush').value/2,o=z*P*P;
+  for(let yy=Math.floor(y-b);yy<=y+b;yy++)for(let xx=Math.floor(x-b);xx<=x+b;xx++)if(xx>=0&&yy>=0&&xx<P&&yy<P&&(xx-x)**2+(yy-y)**2<=b*b)cur._auto[o+yy*P+xx]=erase?0:1;
+  edited=true;$('editNote').hidden=false;draw()}
+cv.addEventListener('pointerdown',e=>{painting=true;paint(e)});cv.addEventListener('pointermove',e=>{if(painting)paint(e)});
+addEventListener('pointerup',()=>{if(painting){painting=false;if(edit)renderInfo()}});
+addEventListener('resize',draw);
+$('csvBtn').onclick=()=>{if(!cur)return;const m=cur.metrics,a=edited?axes(cur._auto):null;
+  let s='section,item,expert,automatic,icc_perturbation,icc_auto_vs_expert,robust\n';
+  s+=`segmentation,dice,,${(edited?diceNow():m.dice).toFixed(4)},,,\nsegmentation,hd95_mm,,${m.hd95_mm},,,\n`;
+  s+=`volumetrics,volume_ml,${m.vol_ref_ml},${edited?vol(cur._auto):m.vol_auto_ml},,,\n`;
+  s+=`volumetrics,axial_long_axis_mm,${m.ref_axial_long_axis_mm},${a?a.la:m.auto_axial_long_axis_mm},,,\n`;
+  for(const f of cur.feats)s+=`feature,${f[0]},${f[1]},${f[2]??''},${f[3]??''},${f[4]??''},${f[5]}\n`;
+  const u=URL.createObjectURL(new Blob([s],{type:'text/csv'}));const l=document.createElement('a');l.href=u;l.download=`${cur.id}_${cur.mod}_radiomics.csv`;l.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+summary();renderList();load(D.cases[0]);
+</script>
+</body>
+</html>
