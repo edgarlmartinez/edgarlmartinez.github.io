@@ -402,6 +402,16 @@ teaching:
       title: Research coordinator (1)
       description: Trained a coordinator on administrative tasks of the Metabolic Imaging Core.
       institution: Massachusetts General Hospital
+  # Teaching, learning and assessment materials
+  materials:
+    - start: 2026
+      title: MSK Measurement Toolkit and Teaching Case Collection
+      description: Interactive web tool for residents and fellows with 27 literature-based musculoskeletal measurement calculators, how-to diagrams, a measure-on-image tool and a curated teaching case library organized by body region. Freely available online.
+      url: https://edgarlmartinez.github.io/ai/   # check: final URL
+    - start: 11/2026
+      title: Vertebral Morphometry on Lateral Spine Radiographs (v0.1), open research demo
+      description: Browser-based tool that measures vertebral body height loss against the expected normal height from adjacent levels (Genant grade) and estimates retropulsion (posterior wall displacement and sagittal canal compromise). Built on public VerSe CT data; research use only.
+      url: https://edgarlmartinez.github.io/ai/vertebral-morphometry/
   # Formally mentored / supervised trainees
   mentored_trainees:
     - start: 09/2024

@@ -145,6 +145,13 @@ const dp = (() => {
           {e.description && <tr><td class="d"></td><td colspan="2">{e.description}</td></tr>}
         </>)}</table>
       </>)}
+      {has(teaching.materials) && <>
+        <h4>Teaching, Learning and Assessment Materials</h4>
+        <table>{chrono(teaching.materials).map((e) => <>
+          <tr><td class="d">{range(e)}</td><td>{e.title}</td></tr>
+          <tr><td class="d"></td><td>{e.description}{e.url && <> <a href={e.url}>{e.url.replace(/^https?:\/\//, '')}</a></>}</td></tr>
+        </>)}</table>
+      </>}
       {has(teaching.mentored_trainees) && <>
         <h4>Formally Mentored Trainees</h4>
         <table>{chrono(teaching.mentored_trainees).map((e) => <>
