@@ -1,0 +1,574 @@
+# Educational cases shown at /cases/.
+# Images live in public/cases/images/ and must be de-identified at the pixel level
+# before committing: mask burned-in text, initials and scanner labels, then resample,
+# normalize and re-encode (see README in public/cases/). Never use exact study dates.
+# Add a case: copy an entry, set region to one of the regions listed below, add refs.
+
+regions:
+  - Hand
+  - Wrist
+  - Forearm
+  - Elbow
+  - Humerus
+  - Shoulder
+  - Chest
+  - Cervical spine
+  - Thoracic spine
+  - Lumbar spine
+  - Pelvis
+  - Hip
+  - Femur
+  - Thigh
+  - Knee
+  - Leg
+  - Ankle
+  - Foot
+cases:
+  - id: sternal-foramen
+    region: Chest
+    title: Sternal fusion anomaly and the sternal foramen
+    modality: CT, radiograph
+    added: 2026-11
+    images:
+      - src: images/chest-sternum-coronal-mip.png
+        caption: Coronal CT MIP
+      - src: images/chest-sternum-sagittal-ct.png
+        caption: Sagittal CT
+      - src: images/chest-sternum-lateral-xr.png
+        caption: Lateral chest radiograph
+    findings: >-
+      Coronal MIP and sagittal CT show a congenital fusion anomaly of the sternal body at a sternebral
+      junction, also visible on the lateral radiograph. These anomalies occur where the sternal ossification
+      centers fuse.
+    teaching:
+      - >-
+        The sternal body forms from paired ossification centers (sternebrae) that fuse from caudal to cranial
+        between puberty and about age 25. Incomplete fusion produces segmentation anomalies, clefts and
+        foramina.
+      - >-
+        The most clinically relevant anomaly is the sternal foramen: a round or oval midline defect in the
+        lower sternal body, found in about 4–7% of chest CTs (higher in some cadaver series). Reported widths
+        range from under 1 mm to about 10 mm.
+      - >-
+        It is invisible on frontal radiographs and easy to miss on axial CT; coronal MIP or thick-slab and
+        sagittal reformats show it best.
+      - >-
+        A needle placed through the foramen meets no bone. Cardiac tamponade and death have followed sternal
+        acupuncture and sternal bone marrow aspiration. In one CT series, the pericardium or heart lay
+        directly behind the foramen in 20% of patients, at a mean depth of about 5 cm from the skin.
+      - >-
+        Report a sternal foramen when present, especially in patients who may have sternal marrow sampling,
+        acupuncture or other sternal procedures.
+      - >-
+        Fusion anomalies at sternebral junctions are developmental. Corticated margins and the absence of
+        hematoma or soft-tissue swelling help separate them from fracture.
+    refs:
+      - yekeler2006
+      - gossner2013
+      - choi2017
+      - sfmeta2023
+      - restrepo2009
+      - cooper1988
+      - halvorsen1995
+      - vanmarum2001
+      - santavy2013
+      - bardaa2020
+      - babinski2012
+  - id: sickle-h-vertebrae
+    region: Lumbar spine
+    also_in:
+      - Hip
+    title: 'Sickle cell disease: H-shaped vertebrae and femoral head AVN'
+    modality: Radiograph, CT
+    added: 2026-11
+    images:
+      - src: images/spine-sickle-lat-xr.png
+        caption: Lateral lumbar radiograph
+      - src: images/spine-sickle-ap-xr.png
+        caption: AP lumbar radiograph
+      - src: images/spine-sickle-sag-ct.png
+        caption: Sagittal CT
+      - src: images/spine-sickle-cor-ct.png
+        caption: Coronal CT
+    findings: >-
+      Lumbar vertebral bodies show central, step-like endplate depressions with preserved peripheral
+      endplates, giving an H shape, from endplate infarcts in a patient with sickle cell anemia. The patient
+      also has bilateral avascular necrosis of the femoral heads; note the femoral head changes on the coronal
+      CT and radiographs.
+    teaching:
+      - >-
+        H-shaped ("Lincoln log") vertebrae result from infarction of the central endplate, which is supplied
+        by long, thin nutrient end-arteries. The periphery has a separate apophyseal supply and keeps growing,
+        leaving a square-edged central depression.
+      - >-
+        The sharp, step-like central depression differs from the smooth biconcave ("fish") vertebrae of
+        osteoporosis or osteomalacia.
+      - >-
+        Differential for H-shaped vertebrae: sickle cell disease (most common), other hemoglobinopathies, and
+        Gaucher disease. Compensatory overgrowth of adjacent vertebrae can give "tower vertebrae".
+      - >-
+        Femoral head avascular necrosis affects about 10% of patients with sickle cell disease, is often
+        bilateral, and frequently progresses to collapse. Look for the contralateral hip and the humeral
+        heads.
+      - >-
+        Stage femoral head AVN with ARCO criteria (subchondral fracture, crescent sign, collapse); MRI is most
+        sensitive for early disease.
+      - >-
+        Other skeletal clues to sickle cell disease: marrow hyperplasia, medullary bone infarcts,
+        bone-within-bone appearance, and osteomyelitis (Salmonella and Staphylococcus).
+    refs:
+      - ejindu2007
+      - lonergan2001
+      - marlow1998
+      - schwartz1979
+      - milner1991
+      - hernigou2003
+      - yoon2020
+  - id: sclerotic-met
+    region: Pelvis
+    title: Sclerotic metastasis with rim enhancement and edema
+    modality: CT, MRI
+    added: 2026-11
+    images:
+      - src: images/pelvis-met-axial-ct.png
+        caption: Axial CT
+      - src: images/pelvis-met-axial-sub.png
+        caption: Axial post-contrast subtraction MRI
+      - src: images/pelvis-met-cor-t1.png
+        caption: Coronal T1
+      - src: images/pelvis-met-cor-stir.png
+        caption: Coronal STIR
+    findings: >-
+      A sclerotic iliac lesion on CT is low signal on T1, has a peripheral rim of enhancement on subtraction
+      imaging, and is surrounded by edema on STIR: a classic sclerotic metastasis.
+    teaching:
+      - >-
+        A bone island (enostosis) is dark on all sequences, with no edema and no enhancement. Surrounding
+        edema or a rim of enhancement around a sclerotic focus argues for metastasis.
+      - >-
+        The "halo sign", a rim of high T2 signal around a lesion, is strongly associated with metastasis. A
+        central fat "bull's-eye" favors a benign focus.
+      - >-
+        On CT, untreated osteoblastic metastases have lower attenuation than bone islands: mean attenuation
+        under 885 HU and maximum under 1060 HU favor metastasis.
+      - >-
+        Bone islands have brush-like spiculated margins that blend with adjacent trabeculae. Size growth alone
+        does not prove malignancy.
+      - >-
+        Common sources of sclerotic metastases: prostate and breast; also carcinoid, bladder, lung and
+        medulloblastoma.
+      - >-
+        A replaced-marrow lesion shows little signal drop on opposed-phase imaging (see the Chemical shift
+        calculator).
+    refs:
+      - schweitzer1993
+      - ulano2016
+      - greenspan1995
+      - zajick2005
+  - id: synovial-sarcoma-met
+    region: Thigh
+    title: Slow-growing intramuscular metastasis from synovial sarcoma
+    modality: PET/CT, MRI
+    added: 2026-11
+    images:
+      - src: images/thigh-ssmet-petct-initial.png
+        caption: FDG PET/CT, initial study
+      - src: images/thigh-ssmet-petct-followup.png
+        caption: FDG PET/CT, about 9 months later
+      - src: images/thigh-ssmet-t2fs.png
+        caption: Axial fluid-sensitive fat-suppressed MRI
+      - src: images/thigh-ssmet-t1.png
+        caption: Axial T1
+    findings: >-
+      In a patient with synovial sarcoma, a small FDG-avid focus in the posterior thigh musculature on the
+      initial PET/CT was detected again about 9 months later, larger and more avid. MRI shows a
+      well-circumscribed intramuscular mass that is T2 hyperintense, isointense to muscle on T1, and avidly
+      enhancing: a slow-growing metastasis.
+    teaching:
+      - >-
+        Synovial sarcoma often looks deceptively benign: small, well-defined and slow-growing, sometimes with
+        a long history. Slow growth does not exclude malignancy.
+      - >-
+        Lung is the most common metastatic site, but soft-tissue and intramuscular metastases occur. In a
+        sarcoma patient, a new enhancing intramuscular nodule is a metastasis until proven otherwise.
+      - >-
+        Synovial sarcoma metastasizes late; many metastases appear more than 5 years after diagnosis, so long
+        surveillance matters.
+      - >-
+        An isointense T1 lesion can be nearly invisible on T1 alone. Fluid-sensitive and post-contrast
+        fat-suppressed images find small intramuscular deposits.
+      - >-
+        Classic primary tumor features: heterogeneous T2 "triple signal", fluid levels, calcification in about
+        a third on radiographs, and a juxta-articular location.
+    refs:
+      - murphey2006
+      - jones1993
+      - krieg2011
+  - id: psma-red-marrow
+    region: Femur
+    also_in:
+      - Hip
+    title: 'PSMA-avid femoral lesion: focal red marrow, not metastasis'
+    modality: PSMA PET/CT, MRI
+    added: 2026-11
+    images:
+      - src: images/femur-psma-petct.png
+        caption: 'PSMA PET/CT: uptake in the right proximal femur'
+      - src: images/femur-psma-cor-fluid.png
+        caption: Coronal fluid-sensitive MRI
+      - src: images/femur-psma-ax-fluid.png
+        caption: Axial fluid-sensitive MRI
+      - src: images/femur-psma-cor-t1.png
+        caption: Coronal T1
+      - src: images/femur-psma-ax-t1.png
+        caption: Axial T1
+      - src: images/femur-psma-op-roi.png
+        caption: Opposed-phase with ROI (mean 26.56)
+      - src: images/femur-psma-ip-roi.png
+        caption: In-phase with ROI (mean 259.05)
+    findings: >-
+      A PSMA-avid focus in the right proximal femur was suspected to be a metastasis. MRI showed a focal
+      marrow lesion with marked signal loss on opposed-phase imaging (ROI mean 259.05 in-phase vs 26.56
+      opposed-phase, about a 90% drop), most consistent with a focal island of red marrow.
+    teaching:
+      - >-
+        PSMA is not prostate-specific. Benign bone uptake is common: fractures, fibrous dysplasia, Paget
+        disease, hemangiomas, degenerative change, and focal or hyperplastic red marrow. Isolated mild rib
+        uptake is a frequent pitfall, especially with 18F-PSMA-1007.
+      - >-
+        Structured systems (PSMA-RADS, E-PSMA) grade a solitary indeterminate bone focus as equivocal and
+        recommend correlation rather than calling it metastatic.
+      - >-
+        Chemical shift MRI resolves many of these: red marrow keeps fat between its cells and drops signal on
+        opposed-phase. A drop of 20% or more (OP/IP ratio 0.80 or less) favors a non-neoplastic process; here
+        the drop is about 90%.
+      - >-
+        The T1 rule helps too: marrow brighter than skeletal muscle (or disc) on T1 is almost always
+        hematopoietic marrow; lesions darker than muscle are suspicious.
+      - >-
+        Use an ROI matched in size and position on both echoes and avoid cortex. Very small ROIs are sensitive
+        to partial volume, so check that the result fits the morphology.
+    refs:
+      - rowe2018
+      - ceci2021
+      - rauscher2020
+      - zajick2005
+      - disler1997
+      - carroll1997
+    toolkit_link:
+      href: ai/msk-toolkit/#cs
+      label: Try the % signal drop calculator in the MSK toolkit
+  - id: ewing-scapula
+    region: Shoulder
+    title: 'Ewing sarcoma of the scapula: easy to miss on radiographs'
+    modality: Radiograph, MRI
+    added: 2026-11
+    images:
+      - src: images/shoulder-ewing-xr.png
+        caption: AP shoulder radiograph
+      - src: images/shoulder-ewing-mri-fs.png
+        caption: Fat-suppressed MRI
+    findings: >-
+      Ewing sarcoma of the scapula. The radiographic findings are subtle and easily overlooked unless the
+      scapula is specifically reviewed; fat-suppressed MRI shows the marrow lesion and its soft-tissue
+      component.
+    teaching:
+      - >-
+        Flat bones (pelvis, scapula, ribs) are common Ewing sites, more so with increasing age. The
+        soft-tissue mass is often large compared with the subtle bone change.
+      - >-
+        On the AP shoulder, the scapular body overlaps the ribs and is easily skipped. Make the scapula part
+        of the search pattern: trace the axillary and medial borders, the glenoid neck, the spine and the
+        coracoid, and compare cortical outlines and trabecular density.
+      - >-
+        Look for permeative or moth-eaten destruction, faint sclerosis, periosteal reaction along the borders,
+        and displaced fat planes from a soft-tissue mass. Add a scapular Y view, and use CT or MRI for
+        persistent or night pain.
+      - >-
+        Delay is common: early symptoms are often blamed on sports injury, and the first radiograph is
+        frequently read as normal.
+      - >-
+        MRI defines marrow extent, the soft-tissue mass and skip lesions; staging needs chest CT and
+        whole-body imaging.
+    refs:
+      - murphey2013
+      - widhe2000
+  - id: posterior-talar-process
+    region: Ankle
+    also_in:
+      - Foot
+    title: Posterior talar process fracture
+    modality: Radiograph
+    added: 2026-11
+    images:
+      - src: images/ankle-posterior-talar-process-fx.png
+        caption: Lateral ankle radiograph
+    findings: >-
+      Lateral radiograph shows a fracture of the posterior process of the talus, a rare and frequently missed
+      injury.
+    teaching:
+      - >-
+        The posterior process has a lateral and a medial tubercle, with the flexor hallucis longus tendon
+        running in the groove between them.
+      - >-
+        Shepherd fracture: lateral tubercle, from forced plantar flexion (impaction against the posterior
+        tibia) or avulsion by the posterior talofibular ligament.
+      - >-
+        Cedell fracture: medial tubercle, from dorsiflexion and pronation with avulsion by the posterior
+        tibiotalar ligament. It is hard to see on the lateral view.
+      - >-
+        Os trigonum (unfused lateral tubercle, present in roughly 7–14% of people) is the main differential.
+        It has smooth, fully corticated, rounded margins and is often bilateral. A fracture has irregular,
+        non-corticated edges, local swelling and acute pain.
+      - >-
+        CT confirms the fracture and shows its size and subtalar joint involvement. Missed fractures can lead
+        to nonunion, posterior impingement and FHL tenosynovitis.
+    refs:
+      - melenevsky2015
+      - shepherd1882
+      - cedell1974
+      - nyska1998
+      - karasick1996
+references:
+  yekeler2006:
+    short: Yekeler 2006
+    citation: >-
+      Yekeler E, Tunaci M, Tunaci A, Dursun M, Acunas G. Frequency of sternal variations and anomalies
+      evaluated by MDCT. AJR Am J Roentgenol. 2006;186(4):956-960.
+    url: https://doi.org/10.2214/AJR.04.1779
+  gossner2013:
+    short: Gossner 2013
+    citation: >-
+      Gossner J. Relationship of sternal foramina to vital structures of the chest: a computed tomographic
+      study. Anat Res Int. 2013;2013:780193.
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3810316/
+  choi2017:
+    short: Choi 2017
+    citation: >-
+      Choi PJ, Iwanaga J, Tubbs RS. A comprehensive review of the sternal foramina and its clinical
+      significance. Cureus. 2017;9(12):e1929.
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5805319/
+  sfmeta2023:
+    short: Meta-analysis 2023
+    citation: >-
+      Prevalence and morphometry of sternal and xiphoid foramen: a meta-analysis on 16,666 subjects. Surg
+      Radiol Anat. 2023.
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10129975/
+  restrepo2009:
+    short: Restrepo 2009
+    citation: >-
+      Restrepo CS, Martinez S, Lemos DF, et al. Imaging appearances of the sternum and sternoclavicular
+      joints. RadioGraphics. 2009;29(3):839-859.
+    url: https://doi.org/10.1148/rg.293055136
+  cooper1988:
+    short: Cooper 1988
+    citation: >-
+      Cooper PD, Stewart JH, McCormick WF. Development and morphology of the sternal foramen. Am J Forensic
+      Med Pathol. 1988;9(4):342-347.
+    url: https://doi.org/10.1097/00000433-198812000-00016
+  halvorsen1995:
+    short: Halvorsen 1995
+    citation: >-
+      Halvorsen TB, Anda SS, Naess AB, Levang OW. Fatal cardiac tamponade after acupuncture through congenital
+      sternal foramen. Lancet. 1995;345(8958):1175.
+    url: https://doi.org/10.1016/s0140-6736(95)91004-2
+  vanmarum2001:
+    short: van Marum 2001
+    citation: >-
+      van Marum RJ, te Velde L. Cardiac tamponade following sternal puncture in two patients. Neth J Med.
+      2001;59(1):39-40.
+    url: https://doi.org/10.1016/s0300-2977(01)00126-7
+  santavy2013:
+    short: Santavy 2013
+    citation: >-
+      Santavy P, Troubil M, Lonsky V. Pericardial tamponade: a rare complication of sternal bone marrow
+      biopsy. Hematol Rep. 2013;5(3):e13.
+    url: https://doi.org/10.4081/hr.2013.e13
+  bardaa2020:
+    short: Bardaa 2020
+    citation: >-
+      Bardaa S, Karray N, Hammami Z, Maatoug S. Professional accountability in a sternal bone marrow
+      aspiration: a forensic case report. Pan Afr Med J. 2020;36:255.
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7519791/
+  babinski2012:
+    short: Babinski 2012
+    citation: >-
+      Babinski MA, Rafael FA, Steil AD, et al. High prevalence of sternal foramen: quantitative, anatomical
+      analysis and its clinical implication in acupuncture practice. Int J Morphol. 2012;30(3):1042-1049.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=High%20prevalence%20of%20sternal%20foramen%3A%20quantitative%2C%20anatomical%20analysis%20and%20its%20clinical%20implication%20in%20acupuncture%20practice.
+  ejindu2007:
+    short: Ejindu 2007
+    citation: >-
+      Ejindu VC, Hine AL, Mashayekhi M, Shorvon PJ, Misra RR. Musculoskeletal manifestations of sickle cell
+      disease. RadioGraphics. 2007;27(4):1005-1021.
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=Musculoskeletal%20manifestations%20of%20sickle%20cell%20disease.
+  lonergan2001:
+    short: Lonergan 2001
+    citation: Lonergan GJ, Cline DB, Abbondanzo SL. Sickle cell anemia. RadioGraphics. 2001;21(4):971-994.
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=Sickle%20cell%20anemia.
+  marlow1998:
+    short: Marlow 1998
+    citation: >-
+      Marlow TJ, Brunson CY, Jackson S, Schabel SI. "Tower vertebra": a new observation in sickle cell
+      disease. Skeletal Radiol. 1998;27(4):195-198.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Tower%20vertebra%3A%20a%20new%20observation%20in%20sickle%20cell%20disease.
+  schwartz1979:
+    short: Schwartz 1979
+    citation: >-
+      Schwartz AM, Homer MJ, McCauley RG. "Step-off" vertebral body: Gaucher's disease versus sickle cell
+      hemoglobinopathy. AJR Am J Roentgenol. 1979;132(1):81-85.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Step-off%20vertebral%20body%3A%20Gaucher's%20disease%20versus%20sickle%20cell%20hemoglobinopathy.
+  milner1991:
+    short: Milner 1991
+    citation: >-
+      Milner PF, Kraus AP, Sebes JI, et al. Sickle cell disease as a cause of osteonecrosis of the femoral
+      head. N Engl J Med. 1991;325(21):1476-1481.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Sickle%20cell%20disease%20as%20a%20cause%20of%20osteonecrosis%20of%20the%20femoral%20head.
+  hernigou2003:
+    short: Hernigou 2003
+    citation: >-
+      Hernigou P, Bachir D, Galacteros F. The natural history of symptomatic osteonecrosis in adults with
+      sickle-cell disease. J Bone Joint Surg Am. 2003;85(3):500-504.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=The%20natural%20history%20of%20symptomatic%20osteonecrosis%20in%20adults%20with%20sickle-cell%20disease.
+  yoon2020:
+    short: ARCO 2019
+    citation: >-
+      Yoon BH, Mont MA, Koo KH, et al. The 2019 revised version of Association Research Circulation Osseous
+      staging system of osteonecrosis of the femoral head. J Arthroplasty. 2020;35(4):933-940.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=The%202019%20revised%20version%20of%20Association%20Research%20Circulation%20Osseous%20staging%20system%20of%20osteonecrosis%20of%20the%20femoral%20head.
+  schweitzer1993:
+    short: Schweitzer 1993
+    citation: >-
+      Schweitzer ME, Levine C, Mitchell DG, Gannon FH, Gomella LG. Bull's-eyes and halos: useful MR
+      discriminators of osseous metastases. Radiology. 1993;188(1):249-252.
+    url: https://doi.org/10.1148/radiology.188.1.8511306
+  ulano2016:
+    short: Ulano 2016
+    citation: >-
+      Ulano A, Bredella MA, Burke P, et al. Distinguishing untreated osteoblastic metastases from enostoses
+      using CT attenuation measurements. AJR Am J Roentgenol. 2016;207(2):362-368.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Distinguishing%20untreated%20osteoblastic%20metastases%20from%20enostoses%20using%20CT%20attenuation%20measurements.
+  greenspan1995:
+    short: Greenspan 1995
+    citation: 'Greenspan A. Bone island (enostosis): current concept--a review. Skeletal Radiol. 1995;24(2):111-115.'
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=Bone%20island%20(enostosis)%3A%20current%20concept--a%20review.
+  zajick2005:
+    short: Zajick 2005
+    citation: >-
+      Zajick DC Jr, Morrison WB, Schweitzer ME, Parellada JA, Carrino JA. Benign and malignant processes:
+      normal values and differentiation with chemical shift MR imaging in vertebral marrow. Radiology.
+      2005;237(2):590-596.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Benign%20and%20malignant%20processes%3A%20normal%20values%20and%20differentiation%20with%20chemical%20shift%20MR%20imaging%20in%20vertebral%20marrow.
+  murphey2006:
+    short: Murphey 2006
+    citation: >-
+      Murphey MD, Gibson MS, Jennings BT, Crespo-Rodríguez AM, Fanburg-Smith J, Gajewski DA. From the archives
+      of the AFIP: Imaging of synovial sarcoma with radiologic-pathologic correlation. RadioGraphics.
+      2006;26(5):1543-1565.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=From%20the%20archives%20of%20the%20AFIP%3A%20Imaging%20of%20synovial%20sarcoma%20with%20radiologic-pathologic%20correlation.
+  jones1993:
+    short: Jones 1993
+    citation: >-
+      Jones BC, Sundaram M, Kransdorf MJ. Synovial sarcoma: MR imaging findings in 34 patients. AJR Am J
+      Roentgenol. 1993;161(4):827-830.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Synovial%20sarcoma%3A%20MR%20imaging%20findings%20in%2034%20patients.
+  krieg2011:
+    short: Krieg 2011
+    citation: >-
+      Krieg AH, Hefti F, Speth BM, et al. Synovial sarcomas usually metastasize after >5 years: a multicenter
+      retrospective analysis with minimum follow-up of 10 years for survivors. Ann Oncol. 2011;22(2):458-467.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Synovial%20sarcomas%20usually%20metastasize%20after%20%3E5%20years%3A%20a%20multicenter%20retrospective%20analysis%20with%20minimum%20follow-up%20of%2010%20years%20for%20survivors.
+  rowe2018:
+    short: PSMA-RADS 2018
+    citation: >-
+      Rowe SP, Pienta KJ, Pomper MG, Gorin MA. PSMA-RADS version 1.0: a step towards standardizing the
+      interpretation and reporting of PSMA-targeted PET imaging studies. Eur Urol Focus. 2018;4(5):686-693.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=PSMA-RADS%20version%201.0%3A%20a%20step%20towards%20standardizing%20the%20interpretation%20and%20reporting%20of%20PSMA-targeted%20PET%20imaging%20studies.
+  ceci2021:
+    short: E-PSMA 2021
+    citation: >-
+      Ceci F, Oprea-Lager DE, Emmett L, et al. E-PSMA: the EANM standardized reporting guidelines v1.0 for
+      PSMA-PET. Eur J Nucl Med Mol Imaging. 2021;48(5):1626-1638.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=E-PSMA%3A%20the%20EANM%20standardized%20reporting%20guidelines%20v1.0%20for%20PSMA-PET.
+  rauscher2020:
+    short: Rauscher 2020
+    citation: >-
+      Rauscher I, Krönke M, König M, et al. Matched-pair comparison of 68Ga-PSMA-11 PET/CT and 18F-PSMA-1007
+      PET/CT: frequency of pitfalls and detection efficacy in biochemical recurrence after radical
+      prostatectomy. J Nucl Med. 2020;61(1):51-57.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Matched-pair%20comparison%20of%2068Ga-PSMA-11%20PET%2FCT%20and%2018F-PSMA-1007%20PET%2FCT%3A%20frequency%20of%20pitfalls%20and%20detection%20efficacy%20in%20biochemical%20recurrence%20after%20radical%20prostatectomy.
+  disler1997:
+    short: Disler 1997
+    citation: >-
+      Disler DG, McCauley TR, Ratner LM, Kesack CD, Cooper JA. In-phase and out-of-phase MR imaging of bone
+      marrow: prediction of neoplasia based on the detection of coexistent fat and water. AJR Am J Roentgenol.
+      1997;169(5):1439-1447.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=In-phase%20and%20out-of-phase%20MR%20imaging%20of%20bone%20marrow%3A%20prediction%20of%20neoplasia%20based%20on%20the%20detection%20of%20coexistent%20fat%20and%20water.
+  carroll1997:
+    short: Carroll 1997
+    citation: >-
+      Carroll KW, Feller JF, Tirman PF. Useful internal standards for distinguishing infiltrative marrow
+      pathology from hematopoietic marrow at MRI. J Magn Reson Imaging. 1997;7(2):394-398.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Useful%20internal%20standards%20for%20distinguishing%20infiltrative%20marrow%20pathology%20from%20hematopoietic%20marrow%20at%20MRI.
+  murphey2013:
+    short: Murphey 2013
+    citation: >-
+      Murphey MD, Senchak LT, Mambalam PK, Logie CI, Klassen-Fischer MK, Kransdorf MJ. From the radiologic
+      pathology archives: Ewing sarcoma family of tumors: radiologic-pathologic correlation. RadioGraphics.
+      2013;33(3):803-831.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=From%20the%20radiologic%20pathology%20archives%3A%20Ewing%20sarcoma%20family%20of%20tumors%3A%20radiologic-pathologic%20correlation.
+  widhe2000:
+    short: Widhe 2000
+    citation: >-
+      Widhe B, Widhe T. Initial symptoms and clinical features in osteosarcoma and Ewing sarcoma. J Bone Joint
+      Surg Am. 2000;82(5):667-674.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Initial%20symptoms%20and%20clinical%20features%20in%20osteosarcoma%20and%20Ewing%20sarcoma.
+  melenevsky2015:
+    short: Melenevsky 2015
+    citation: >-
+      Melenevsky Y, Mackey RA, Abrahams RB, Thomson NB 3rd. Talar fractures and dislocations: a radiologist's
+      guide to timely diagnosis and classification. RadioGraphics. 2015;35(3):765-779.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Talar%20fractures%20and%20dislocations%3A%20a%20radiologist's%20guide%20to%20timely%20diagnosis%20and%20classification.
+  shepherd1882:
+    short: Shepherd 1882
+    citation: Shepherd FJ. A hitherto undescribed fracture of the astragalus. J Anat Physiol. 1882;17(Pt 1):79-81.
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=A%20hitherto%20undescribed%20fracture%20of%20the%20astragalus.
+  cedell1974:
+    short: Cedell 1974
+    citation: >-
+      Cedell CA. Rupture of the posterior talotibial ligament with the avulsion of a bone fragment from the
+      talus. Acta Orthop Scand. 1974;45(3):454-461.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Rupture%20of%20the%20posterior%20talotibial%20ligament%20with%20the%20avulsion%20of%20a%20bone%20fragment%20from%20the%20talus.
+  nyska1998:
+    short: Nyska 1998
+    citation: >-
+      Nyska M, Howard CB, Matan Y, et al. Fracture of the posterior body of the talus--the hidden fracture.
+      Arch Orthop Trauma Surg. 1998;117(1-2):114-117.
+    url: >-
+      https://pubmed.ncbi.nlm.nih.gov/?term=Fracture%20of%20the%20posterior%20body%20of%20the%20talus--the%20hidden%20fracture.
+  karasick1996:
+    short: Karasick 1996
+    citation: >-
+      Karasick D, Schweitzer ME. The os trigonum syndrome: imaging features. AJR Am J Roentgenol.
+      1996;166(1):125-129.
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=The%20os%20trigonum%20syndrome%3A%20imaging%20features.

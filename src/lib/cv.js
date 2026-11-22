@@ -84,3 +84,5 @@ export const levels = [
   ['national', 'National'],
   ['international', 'International'],
 ];
+
+export const cases = fs.existsSync(path.join(dataDir, 'cases.yaml')) ? load('cases.yaml') : { regions: [], cases: [], references: {} };

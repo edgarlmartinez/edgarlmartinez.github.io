@@ -31,8 +31,9 @@ h1, h2, h3 { font-family: var(--serif); color: var(--navy); line-height: 1.2; fo
 .site-header { border-bottom: 1px solid var(--line); background: rgba(255,255,255,.92); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 10; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; flex-wrap: wrap; }
 .brand { font-family: var(--serif); font-weight: 600; color: var(--navy); text-decoration: none; font-size: 1.05rem; }
-nav { display: flex; gap: 4px; }
-nav a { color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 999px; font-size: .95rem; }
+nav { display: flex; gap: 4px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+nav::-webkit-scrollbar { display: none; }
+nav a { white-space: nowrap; color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 999px; font-size: .95rem; }
 nav a:hover { color: var(--navy); background: var(--bg-soft); }
 nav a[aria-current='page'] { color: var(--navy); background: var(--accent-soft); font-weight: 500; }
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .875rem; padding: 28px 0 40px; margin-top: 64px; }
