@@ -1,16 +1,21 @@
 # Public AI model builds (public datasets only).
-# Each project has its own public GitHub repository. Never list or link
-# models fine-tuned on BIDMC data, and never commit patient data or keys.
-#
-# Example:
-#  - title: Lisfranc injury detection on foot radiographs (public-data baseline)
-#    repo: https://github.com/edgarlmartinez/lisfranc-ai-baseline
-#    dataset: Name of the public dataset
-#    dataset_url: https://...
-#    license: Dataset license (e.g. CC BY 4.0)
-#    model: e.g. ResNet-50 / YOLOv8 keypoints
-#    status: Baseline on public data. Institutional validation in progress.
-#    year: 2026
-#    tags: [Foot and ankle, Radiographs, Detection]
+# Never list or link models fine-tuned on BIDMC data, and never commit
+# patient data or keys.
 
-projects: []
+projects:
+  - title: Vertebral morphometry on lateral spine radiographs (v0.1)
+    demo: ai/vertebral-morphometry/
+    repo: https://github.com/edgarlmartinez/edgarlmartinez.github.io/tree/main/public/ai/vertebral-morphometry
+    dataset: VerSe 2019 spine CT (simulated lateral radiographs)
+    dataset_url: https://github.com/anjany/verse
+    license: CC BY-SA 4.0
+    model: Landmark heatmap network, 0.5M parameters
+    status: >-
+      Early research baseline. Measures vertebral body height loss against
+      the expected normal height from adjacent levels (Genant grade), and
+      estimates retropulsion as posterior wall displacement and sagittal canal
+      compromise. On 8 held-out simulated cases it agreed on 59 of 61 normal
+      levels but detected only 6 of 14 fractures. Not yet tested on real
+      radiographs.
+    year: 2026
+    tags: [Spine, Radiographs, Fractures, Morphometry]

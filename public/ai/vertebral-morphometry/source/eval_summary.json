@@ -1,0 +1,130 @@
+{
+ "full_projection": {
+  "variant": "full",
+  "n_cases": 8,
+  "n_levels": 75,
+  "point_error_mm": {
+   "as": 1.55,
+   "ai": 1.52,
+   "ms": 1.66,
+   "mi": 1.63,
+   "ps": 1.57,
+   "pi": 1.83,
+   "sl": 1.85
+  },
+  "point_error_mm_mean": {
+   "as": 2.06,
+   "ai": 2.0,
+   "ms": 2.13,
+   "mi": 1.95,
+   "ps": 2.12,
+   "pi": 2.06,
+   "sl": 2.09
+  },
+  "mae_Ha": 1.38,
+  "mae_Hm": 1.95,
+  "mae_Hp": 1.57,
+  "mae_max_height_loss_pct": 6.98,
+  "mae_posterior_wall_displacement_mm": 0.87,
+  "mae_canal_compromise_pct": 3.16,
+  "fracture_tp": 6,
+  "fracture_fp": 2,
+  "fracture_fn": 8,
+  "fracture_tn": 59,
+  "sensitivity": 0.429,
+  "specificity": 0.967,
+  "exact_grade_agreement": 0.813,
+  "within_one_grade": 0.88,
+  "weighted_kappa": 0.425,
+  "confusion_pred_rows_ref_cols": [
+   [
+    59,
+    2,
+    6,
+    0
+   ],
+   [
+    0,
+    0,
+    1,
+    1
+   ],
+   [
+    2,
+    0,
+    1,
+    2
+   ],
+   [
+    0,
+    0,
+    0,
+    1
+   ]
+  ]
+ },
+ "slab_projection": {
+  "variant": "slab",
+  "n_cases": 8,
+  "n_levels": 75,
+  "point_error_mm": {
+   "as": 1.51,
+   "ai": 1.42,
+   "ms": 1.61,
+   "mi": 1.51,
+   "ps": 1.53,
+   "pi": 1.73,
+   "sl": 1.73
+  },
+  "point_error_mm_mean": {
+   "as": 1.85,
+   "ai": 1.82,
+   "ms": 2.06,
+   "mi": 1.83,
+   "ps": 1.97,
+   "pi": 1.94,
+   "sl": 2.17
+  },
+  "mae_Ha": 1.43,
+  "mae_Hm": 1.99,
+  "mae_Hp": 1.37,
+  "mae_max_height_loss_pct": 6.75,
+  "mae_posterior_wall_displacement_mm": 0.85,
+  "mae_canal_compromise_pct": 2.83,
+  "fracture_tp": 6,
+  "fracture_fp": 3,
+  "fracture_fn": 8,
+  "fracture_tn": 58,
+  "sensitivity": 0.429,
+  "specificity": 0.951,
+  "exact_grade_agreement": 0.813,
+  "within_one_grade": 0.893,
+  "weighted_kappa": 0.443,
+  "confusion_pred_rows_ref_cols": [
+   [
+    58,
+    2,
+    5,
+    1
+   ],
+   [
+    1,
+    0,
+    1,
+    0
+   ],
+   [
+    2,
+    0,
+    2,
+    2
+   ],
+   [
+    0,
+    0,
+    0,
+    1
+   ]
+  ]
+ }
+}
