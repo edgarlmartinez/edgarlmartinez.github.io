@@ -329,6 +329,77 @@ cases:
       - cedell1974
       - nyska1998
       - karasick1996
+  - id: accessory-navicular
+    region: Foot
+    also_in:
+      - Ankle
+    title: Painful type II accessory navicular (os naviculare syndrome)
+    modality: Radiograph, MRI
+    added: 2026-11
+    images:
+      - src: images/foot-accnav-xr.png
+        caption: Foot radiograph
+      - src: images/foot-accnav-sag-t1.png
+        caption: Sagittal T1
+      - src: images/foot-accnav-sag-fluid.png
+        caption: Sagittal fluid-sensitive
+      - src: images/foot-accnav-ax-fluid.png
+        caption: Axial fluid-sensitive
+      - src: images/foot-accnav-ax-t1.png
+        caption: Axial T1
+    findings: >-
+      Type II accessory navicular at the medial navicular tuberosity, joined to the navicular by a
+      synchondrosis. Fluid-sensitive images show bone marrow edema in the medial navicular next to
+      the synchondrosis, with fluid and inflammation around the posterior tibial tendon
+      (tenosynovitis). T1 images show the ossicle, the synchondrosis and the tendon attaching to the
+      ossicle. Together these findings fit a symptomatic accessory navicular (os naviculare
+      syndrome).
+    teaching:
+      - >-
+        The accessory navicular is one of the most common accessory ossicles of the foot, seen in
+        roughly 4–21% of people. Type II accounts for about half or more of them, and type I for
+        about 30%.
+      - >-
+        Three types are described. Type I (os tibiale externum) is a small round sesamoid within the
+        distal posterior tibial tendon (PTT), with no connection to the navicular. Type II is a
+        larger triangular or heart-shaped ossicle joined to the navicular tuberosity by a 1–2 mm
+        fibrocartilaginous synchondrosis. Type III (cornuate navicular) is an ossicle fused to the
+        navicular by a bony bridge, giving a prominent medial horn.
+      - >-
+        Type II is the type most often painful. Much of the PTT inserts on the ossicle, so tension,
+        shear and compression across the synchondrosis can cause avulsion or a painful
+        pseudarthrosis, with inflammatory chondro-osseous changes on histology.
+      - >-
+        MRI is the key study. The hallmark of a symptomatic type II ossicle is bone marrow edema in
+        the ossicle and/or the adjacent navicular, centered on the synchondrosis, often with fluid
+        in the synchondrosis. In surgically proven cases this pattern was present in every patient
+        and correlated with osteonecrosis, inflammation and cartilage destruction at the
+        synchondrosis.
+      - >-
+        Look at the PTT, because associated tenosynovitis, tendinosis or partial tearing near its
+        insertion is common. A large type II ossicle may also go with a flatfoot and PTT
+        dysfunction, since the tendon pulls on the ossicle instead of the navicular.
+      - >-
+        On radiographs the ossicle is best seen on the external (lateral) oblique view. Irregular or
+        sclerotic synchondrosis margins, widening, or a change from prior films suggest stress. Bone
+        scan or SPECT/CT uptake also localizes symptoms, but MRI shows the tendon too.
+      - >-
+        Differential: an acute avulsion fracture of the navicular tuberosity (sharp, non-corticated
+        margins, no rounded ossicle), a type I sesamoid within the tendon, navicular stress fracture
+        (dorsal central third, not medial), and isolated PTT tenosynovitis or tear.
+      - >-
+        Treatment starts conservatively (immobilization, orthotics, activity change). Refractory
+        cases are treated by excision of the ossicle, with or without advancing and reattaching the
+        PTT (Kidner procedure), or by fusion of the synchondrosis in younger patients.
+    refs:
+      - miller1995
+      - choi2004
+      - mosel2004
+      - lawson1984
+      - sella1987
+      - mellado2003
+      - kiter1999
+      - schweitzer2000
 references:
   yekeler2006:
     short: Yekeler 2006
@@ -572,3 +643,52 @@ references:
       Karasick D, Schweitzer ME. The os trigonum syndrome: imaging features. AJR Am J Roentgenol.
       1996;166(1):125-129.
     url: https://pubmed.ncbi.nlm.nih.gov/?term=The%20os%20trigonum%20syndrome%3A%20imaging%20features.
+  miller1995:
+    short: Miller 1995
+    citation: >-
+      Miller TT, Staron RB, Feldman F, Parisien M, Glucksman WJ, Gandolfo LH. The symptomatic
+      accessory tarsal navicular bone: assessment with MR imaging. Radiology. 1995;195(3):849-853.
+    url: https://doi.org/10.1148/radiology.195.3.7754020
+  choi2004:
+    short: Choi 2004
+    citation: >-
+      Choi YS, Lee KT, Kang HS, Kim EK. MR imaging findings of painful type II accessory navicular
+      bone: correlation with surgical and pathologic studies. Korean J Radiol. 2004;5(4):274-279.
+    url: https://doi.org/10.3348/kjr.2004.5.4.274
+  mosel2004:
+    short: Mosel 2004
+    citation: >-
+      Mosel LD, Kat E, Voyvodic F. Imaging of the symptomatic type II accessory navicular bone.
+      Australas Radiol. 2004;48:267-271.
+    url: https://doi.org/10.1111/j.1440-1673.2004.01286.x
+  lawson1984:
+    short: Lawson 1984
+    citation: >-
+      Lawson JP, Ogden JA, Sella E, Barwick KW. The painful accessory navicular. Skeletal Radiol.
+      1984;12(4):250-262.
+    url: https://doi.org/10.1007/BF00349506
+  sella1987:
+    short: Sella 1987
+    citation: >-
+      Sella EJ, Lawson JP. Biomechanics of the accessory navicular synchondrosis. Foot Ankle.
+      1987;8(3):156-163.
+    url: https://doi.org/10.1177/107110078700800310
+  mellado2003:
+    short: Mellado 2003
+    citation: >-
+      Mellado JM, Ramos A, Salvadó E, et al. Accessory ossicles and sesamoid bones of the ankle and
+      foot: imaging findings, clinical significance and differential diagnosis. Eur Radiol. 2003;13
+      Suppl 6:L164-L177.
+    url: https://doi.org/10.1007/s00330-003-2011-8
+  kiter1999:
+    short: Kiter 1999
+    citation: >-
+      Kiter E, Erdag N, Karatosun V, Günal I. Tibialis posterior tendon abnormalities in feet with
+      accessory navicular bone and flatfoot. Acta Orthop Scand. 1999;70(6):618-621.
+    url: https://doi.org/10.3109/17453679908997852
+  schweitzer2000:
+    short: Schweitzer 2000
+    citation: >-
+      Schweitzer ME, Karasick D. MR imaging of disorders of the posterior tibialis tendon. AJR Am J
+      Roentgenol. 2000;175:627-635.
+    url: https://pubmed.ncbi.nlm.nih.gov/10954441/
