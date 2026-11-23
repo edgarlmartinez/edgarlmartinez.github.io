@@ -62,6 +62,27 @@ cases:
       - >-
         Fusion anomalies at sternebral junctions are developmental. Corticated margins and the absence of
         hematoma or soft-tissue swelling help separate them from fracture.
+    surgeon:
+      points:
+        - >-
+          Whether there is a true through-and-through defect (a sternal foramen) and where it sits,
+          usually the lower sternal body or near the xiphisternal junction. A needle passed into a
+          foramen goes straight to the pericardium and heart.
+        - >-
+          This matters for sternal marrow aspiration, sternal acupuncture and any other blind
+          sternal needle procedure. Fatal cardiac tamponade after acupuncture through a foramen has
+          been reported.
+        - >-
+          State the size and level in the report, because the defect is usually invisible on a
+          frontal chest radiograph and the operator will not know to avoid it.
+        - >-
+          Separate a harmless fusion line or sclerotic band from a true foramen, so that the warning
+          is reserved for real defects.
+      sources:
+        - label: "Halvorsen 1995 (Lancet)"
+          url: https://doi.org/10.1016/s0140-6736(95)91004-2
+        - label: "Yekeler 2006 (AJR)"
+          url: https://doi.org/10.2214/AJR.04.1779
     refs:
       - yekeler2006
       - gossner2013
@@ -116,6 +137,28 @@ cases:
       - >-
         Other skeletal clues to sickle cell disease: marrow hyperplasia, medullary bone infarcts,
         bone-within-bone appearance, and osteomyelitis (Salmonella and Staphylococcus).
+    surgeon:
+      points:
+        - >-
+          For the hips, the deciding question is whether the femoral head has collapsed. Look for a
+          subchondral crescent or flattening. Joint-preserving surgery such as core decompression is
+          for heads that have not collapsed, and replacement is for heads that have.
+        - >-
+          Give the stage (Ficat, Steinberg or ARCO) and the extent of necrosis. A larger necrotic
+          arc predicts collapse; in the modified Kerboul method a combined angle over 240° is high
+          risk and under 190° is low risk.
+        - >-
+          Report bone marrow edema around the lesion, which predicts worsening pain and progression,
+          and always comment on the other hip.
+        - >-
+          In the spine, H-shaped vertebrae are a marker of the disease rather than a surgical
+          problem. Mention them so the clinician links back pain to sickle cell disease and checks
+          the hips.
+      sources:
+        - label: "Orthobullets: Hip osteonecrosis"
+          url: https://www.orthobullets.com/recon/5006/hip-osteonecrosis
+        - label: "AAOS OrthoInfo: Osteonecrosis of the hip"
+          url: https://www.orthoinfo.org/bodypart/hip-thigh/osteonecrosis-of-the-hip
     refs:
       - ejindu2007
       - lonergan2001
@@ -160,6 +203,27 @@ cases:
       - >-
         A replaced-marrow lesion shows little signal drop on opposed-phase imaging (see the Chemical shift
         calculator).
+    surgeon:
+      points:
+        - >-
+          Whether a primary cancer is already proven. A new bone lesion without a known primary
+          needs a staging workup (CT of the chest, abdomen and pelvis) and a biopsy before any
+          fixation.
+        - >-
+          Whether the lesion threatens a weight-bearing structure. Iliac wing lesions are usually
+          managed with radiation and systemic therapy, while periacetabular or proximal femoral
+          lesions may need fixation.
+        - >-
+          For long bones, give what is needed for a Mirels score: site, lytic or blastic pattern,
+          and the fraction of cortex involved. A score over 8 favors prophylactic fixation, and a
+          cortex more than 50% destroyed is a classic warning sign.
+        - >-
+          List every other lesion. Surgeons treat the patient's whole skeletal burden, not one spot.
+      sources:
+        - label: "Orthobullets: Metastatic disease of extremity"
+          url: https://www.orthobullets.com/pathology/8045/metastatic-disease-of-extremity
+        - label: "Orthobullets: Impending fracture"
+          url: https://www.orthobullets.com/pathology/8002/impending-fracture-and-prophylactic-fixation
     refs:
       - schweitzer1993
       - ulano2016
@@ -200,6 +264,25 @@ cases:
       - >-
         Classic primary tumor features: heterogeneous T2 "triple signal", fluid levels, calcification in about
         a third on radiographs, and a juxta-articular location.
+    surgeon:
+      points:
+        - >-
+          Size, depth relative to the fascia, and growth over time. Deep masses over 5 cm are the
+          ones most likely to be malignant and to get multidisciplinary care.
+        - >-
+          The compartment and the distance to the neurovascular bundle. These decide whether wide
+          resection with a clean margin is possible while saving the limb.
+        - >-
+          Whether this is a single new lesion or one of several. Metastases develop in 30–60% of
+          synovial sarcomas, and PET/CT and chest CT complete the staging.
+        - >-
+          If tissue is needed, recommend a core needle biopsy rather than fine-needle aspiration,
+          planned with the sarcoma team.
+      sources:
+        - label: "Orthobullets: Synovial sarcoma"
+          url: https://www.orthobullets.com/pathology/8052/synovial-sarcoma
+        - label: "AAOS OrthoInfo: Soft tissue sarcomas"
+          url: https://www.orthoinfo.org/diseases--conditions/tumors/soft-tissue-sarcomas
     refs:
       - murphey2006
       - jones1993
@@ -248,6 +331,25 @@ cases:
       - >-
         Use an ROI matched in size and position on both echoes and avoid cortex. Very small ROIs are sensitive
         to partial volume, so check that the result fits the morphology.
+    surgeon:
+      points:
+        - >-
+          Whether the lesion is real disease. A single bone metastasis can change stage and
+          treatment, so calling a benign mimic avoids an unnecessary biopsy, radiation or fixation.
+        - >-
+          Say clearly how confident you are and why. Signal drop on opposed-phase imaging shows fat
+          in the marrow, which favors red marrow over tumor.
+        - >-
+          If doubt remains, give a follow-up plan or name the best biopsy target. Surgeons reserve
+          surgery in metastatic disease for bone that is fractured or at risk.
+        - >-
+          If it were a metastasis, report what they would need: cortical involvement and its
+          location in the proximal femur, the most common site of pathologic fracture.
+      sources:
+        - label: "AAOS OrthoInfo: Bone tumor"
+          url: https://www.orthoinfo.org/diseases--conditions/tumors/bone-tumor
+        - label: "Orthobullets: Metastatic disease of extremity"
+          url: https://www.orthobullets.com/pathology/8045/metastatic-disease-of-extremity
     refs:
       - rowe2018
       - ceci2021
@@ -290,6 +392,25 @@ cases:
       - >-
         MRI defines marrow extent, the soft-tissue mass and skip lesions; staging needs chest CT and
         whole-body imaging.
+    surgeon:
+      points:
+        - >-
+          The full extent in the marrow and the soft tissue mass. A soft tissue component is present
+          in over 80% of cases, and MRI defines what must be resected.
+        - >-
+          The relationship to the glenoid, the shoulder joint and the brachial plexus and axillary
+          vessels. Limb salvage depends on negative margins, and neurovascular involvement may rule
+          it out.
+        - >-
+          Tumor size. A tumor over 8 cm carries a worse prognosis.
+        - >-
+          Staging. Metastases are present at diagnosis in about a quarter of patients, so the
+          surgeon expects chest CT and a whole-body bone survey (bone scan or PET) before planning.
+      sources:
+        - label: "Orthobullets: Ewing sarcoma"
+          url: https://www.orthobullets.com/pathology/8047/ewings-sarcoma
+        - label: "AAOS OrthoInfo: Bone tumor"
+          url: https://www.orthoinfo.org/diseases--conditions/tumors/bone-tumor
     refs:
       - murphey2013
       - widhe2000
@@ -323,6 +444,24 @@ cases:
       - >-
         CT confirms the fracture and shows its size and subtalar joint involvement. Missed fractures can lead
         to nonunion, posterior impingement and FHL tenosynovitis.
+    surgeon:
+      points:
+        - >-
+          Fracture or os trigonum. An os trigonum is common, with smooth corticated margins, while a
+          fracture has sharp, uncorticated edges. Say which one, because the treatment differs.
+        - >-
+          Displacement, comminution and fragment size. CT is the best study when radiographs are
+          negative or equivocal and suspicion is high.
+        - >-
+          Involvement of the subtalar (posterior facet) joint. A displaced intra-articular fragment
+          may need fixation or excision, while nondisplaced fractures usually go in a cast for about
+          6 weeks.
+        - >-
+          The relationship to the flexor hallucis longus groove, which explains pain with toe motion
+          and can cause later impingement.
+      sources:
+        - label: "Orthobullets: Talus fracture (other than neck)"
+          url: https://www.orthobullets.com/trauma/1049/talus-fracture-other-than-neck
     refs:
       - melenevsky2015
       - shepherd1882
@@ -391,6 +530,27 @@ cases:
         Treatment starts conservatively (immobilization, orthotics, activity change). Refractory
         cases are treated by excision of the ossicle, with or without advancing and reattaching the
         PTT (Kidner procedure), or by fusion of the synchondrosis in younger patients.
+    surgeon:
+      points:
+        - >-
+          The type. Type II (joined by a synchondrosis) is the one that becomes painful through
+          motion and stress at the joint. Type I is a sesamoid in the tendon, and type III is an
+          enlarged, fused tuberosity.
+        - >-
+          Edema on both sides of the synchondrosis, which is evidence that the ossicle is the pain
+          generator and supports excision if nonoperative care fails.
+        - >-
+          The condition of the posterior tibial tendon: tendinosis, tenosynovitis or tear, and how
+          much of the tendon inserts on the ossicle. This affects whether the tendon is simply
+          reattached or needs further repair.
+        - >-
+          Flatfoot alignment. Correcting the arch is not routine, but a collapsing foot changes the
+          plan.
+      sources:
+        - label: "Orthobullets: Accessory navicular"
+          url: https://www.orthobullets.com/pediatrics/4070/accessory-navicular
+        - label: "AAOS OrthoInfo: Accessory navicular"
+          url: https://orthoinfo.aaos.org/en/diseases--conditions/ortho-pinion-accessory-navicular/
     refs:
       - miller1995
       - choi2004
@@ -400,6 +560,90 @@ cases:
       - mellado2003
       - kiter1999
       - schweitzer2000
+  - id: patellar-maltracking
+    region: Knee
+    title: "Patellar maltracking: patella alta, lateral subluxation and Hoffa's fat pad impingement"
+    modality: Radiograph, MRI
+    added: 2026-11
+    images:
+      - src: images/knee-pfmal-lat-xr.png
+        caption: Lateral knee radiograph
+      - src: images/knee-pfmal-ax-1.png
+        caption: Axial fat-suppressed MRI, patella
+      - src: images/knee-pfmal-ax-2.png
+        caption: Axial fat-suppressed MRI, patella
+      - src: images/knee-pfmal-ax-3.png
+        caption: Axial fat-suppressed MRI, trochlea
+      - src: images/knee-pfmal-sag.png
+        caption: Sagittal fat-suppressed MRI
+    findings: >-
+      The lateral radiograph shows a high-riding patella (patella alta). Axial fat-suppressed MRI
+      shows mild lateral subluxation of the patella relative to the trochlear groove and edema in
+      the superolateral part of Hoffa's (infrapatellar) fat pad, between the patellar tendon and the
+      lateral femoral condyle. There is also edema in the fat pad above the trochlea (prefemoral
+      region). Together these findings indicate patellar maltracking with fat pad impingement.
+    toolkit_link:
+      href: toolkit/#knee
+      label: Measure patellar height, trochlea and TT-TG in the toolkit
+    teaching:
+      - >-
+        Patellar maltracking is abnormal motion of the patella relative to the trochlea, usually
+        lateral. It ranges from anterior knee pain without dislocation to recurrent instability, and
+        MRI can show its signs even without a history of dislocation.
+      - >-
+        The main anatomic risk factors are patella alta, trochlear dysplasia and a lateralized
+        tibial tubercle (high TT-TG). In Dejour's series, patella alta (Caton-Deschamps 1.2 or more)
+        was present in 24% and TT-TG of 20 mm or more in 56% of unstable knees, compared with 3–6.5%
+        of controls.
+      - >-
+        Patella alta delays engagement of the patella in the trochlea, so the patella has little
+        bony restraint in early flexion. Quantify it on the lateral radiograph (Insall-Salvati over
+        1.2, Caton-Deschamps 1.2 or more); MRI Insall-Salvati cutoffs are higher (over 1.5 in
+        Shabshin 2004, over 1.3 in some reviews).
+      - >-
+        Superolateral Hoffa's fat pad edema sits between the lateral femoral condyle and the deep
+        surface of the patellar tendon. It is associated with patella alta and other maltracking
+        measurements and is thought to reflect impingement; seeing it should prompt a search for
+        maltracking.
+      - >-
+        A related entity, patellar tendon–lateral femoral condyle friction syndrome, showed abnormal
+        patellar alignment in 37 of 42 patients with this lateral soft-tissue edema.
+      - >-
+        Edema of the suprapatellar fat pads (quadriceps and prefemoral) is less specific: it is
+        common, its link to maltracking is not established, and it should be reported as a possible
+        pain source only with matching symptoms.
+      - >-
+        Report a full patellofemoral checklist: patellar height, TT-TG, trochlear morphology (depth,
+        sulcus angle, lateral trochlear inclination), patellar tilt and subluxation, MPFL integrity,
+        cartilage, and a bone bruise pattern (medial patella and lateral femoral condyle) that
+        indicates a prior dislocation.
+    surgeon:
+      points:
+        - >-
+          Each measurement maps to an operation. Patella alta leads to distalization of the tibial
+          tubercle, a high TT-TG to medialization, high-grade trochlear dysplasia (Dejour B or D) to
+          trochleoplasty, and a torn MPFL to MPFL reconstruction.
+        - >-
+          A loose osteochondral fragment is the main reason to operate after a first dislocation.
+          Otherwise a first episode is usually treated with a brace and therapy.
+        - >-
+          MPFL status, because it is the main restraint in the first 30° of flexion: intact,
+          sprained, or torn, and where (patellar, mid-substance or femoral).
+        - >-
+          Cartilage on the patella and trochlea, because damage there affects the outcome and may
+          change the choice of procedure.
+      sources:
+        - label: "Orthobullets: Patellar instability"
+          url: https://www.orthobullets.com/knee-and-sports/3020/patellar-instability
+        - label: "AAOS OrthoInfo: Unstable kneecap"
+          url: https://www.orthoinfo.org/bodypart/kneelower-leg/unstable-kneecap
+    refs:
+      - jibri2019
+      - campagna2012
+      - chung2001
+      - dejour1994
+      - shabshin2004
+      - insall1971
 references:
   yekeler2006:
     short: Yekeler 2006
@@ -692,3 +936,39 @@ references:
       Schweitzer ME, Karasick D. MR imaging of disorders of the posterior tibialis tendon. AJR Am J
       Roentgenol. 2000;175:627-635.
     url: https://pubmed.ncbi.nlm.nih.gov/10954441/
+  jibri2019:
+    short: Jibri 2019
+    citation: >-
+      Jibri Z, Jamieson P, Rakhra KS, Sampaio ML, Dervin G. Patellar maltracking: an update on the
+      diagnosis and treatment strategies. Insights Imaging. 2019;10:65.
+    url: https://doi.org/10.1186/s13244-019-0755-1
+  campagna2012:
+    short: Campagna 2012
+    citation: >-
+      Campagna R, Pessis E, Biau DJ, et al. Is superolateral Hoffa fat pad edema a consequence of
+      impingement between lateral femoral condyle and patellar ligament? Radiology.
+      2012;263:469-474.
+    url: https://doi.org/10.1148/radiol.12111066
+  chung2001:
+    short: Chung 2001
+    citation: >-
+      Chung CB, Skaf A, Roger B, Campos J, Stump X, Resnick D. Patellar tendon-lateral femoral
+      condyle friction syndrome: MR imaging in 42 patients. Skeletal Radiol. 2001;30(12):694-697.
+    url: https://doi.org/10.1007/s002560100409
+  dejour1994:
+    short: Dejour 1994
+    citation: >-
+      Dejour H, Walch G, Nove-Josserand L, Guier C. Factors of patellar instability: an anatomic
+      radiographic study. Knee Surg Sports Traumatol Arthrosc. 1994;2(1):19-26.
+    url: https://doi.org/10.1007/BF01552649
+  shabshin2004:
+    short: Shabshin 2004
+    citation: >-
+      Shabshin N, Schweitzer ME, Morrison WB, Parker L. MRI criteria for patella alta and baja.
+      Skeletal Radiol. 2004;33(8):445-450.
+    url: https://doi.org/10.1007/s00256-004-0794-6
+  insall1971:
+    short: Insall 1971
+    citation: >-
+      Insall J, Salvati E. Patella position in the normal knee joint. Radiology. 1971;101:101-104.
+    url: https://pubmed.ncbi.nlm.nih.gov/?term=Patella%20position%20in%20the%20normal%20knee%20joint%20Insall
