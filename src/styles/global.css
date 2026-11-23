@@ -69,6 +69,9 @@ nav a[aria-current='page'] { color: var(--navy); background: var(--accent-soft);
 .stat span { color: var(--muted); font-size: .9rem; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; margin: 0; }
 .tags li { background: var(--accent-soft); color: #9fe3ee; border-radius: 999px; padding: 4px 12px; font-size: .9rem; }
+.tags-links li { padding: 0; }
+.tags-links a { display: block; padding: 4px 12px; color: inherit; text-decoration: none; border-radius: 999px; }
+.tags-links a:hover { background: #17404a; color: #fff; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; background: var(--card); }
 .card h3 { font-size: 1.05rem; margin: 0 0 6px; }

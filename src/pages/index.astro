@@ -7,8 +7,8 @@ const currentRoles = newest(cv.faculty_academic_appointments).filter(isCurrent).
 const links = Object.entries(site.links || {}).filter(([k, v]) => v && k !== 'email');
 const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst', pubmed: 'PubMed', google_scholar: 'Google Scholar', orcid: 'ORCID', linkedin: 'LinkedIn', x: 'X' };
 
-// Toolkit sections (kept in sync by hand with /toolkit/ tabs).
-const toolkitSections = ['Spine and scoliosis', 'Craniocervical junction', 'Chemical shift', 'Shoulder', 'Pelvis and hip', 'Knee', 'Wrist', 'Foot and ankle', 'Pediatric foot'];
+// Toolkit sections, each linking straight to its tab (ids kept in sync by hand with the toolkit's MODULES).
+const toolkitSections = [['Spine and scoliosis', 'spine'], ['Craniocervical junction', 'ccj'], ['Chemical shift', 'cs'], ['Shoulder', 'shoulder'], ['Pelvis and hip', 'hip'], ['Knee', 'knee'], ['Wrist', 'wrist'], ['Foot and ankle', 'foot'], ['Pediatric foot', 'pedfoot']];
 
 // Cases: newest first, with the first image as a thumbnail.
 const caseList = [...(cases.cases || [])].sort((a, b) => String(b.added || '').localeCompare(String(a.added || '')));
@@ -42,7 +42,7 @@ const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: 
           <a class="btn btn-primary" href={`${base}/toolkit/`}>Open the toolkit →</a>
         </div>
         <p>Literature-based normal values, grading and interpretation for common musculoskeletal measurements. Measure directly on your own image with guided landmarks, then check yourself against practice cases with answer keys. Every threshold links to its source.</p>
-        <ul class="tags">{toolkitSections.map((s) => <li>{s}</li>)}</ul>
+        <ul class="tags tags-links">{toolkitSections.map(([s, id]) => <li><a href={`${base}/toolkit/#${id}`}>{s}</a></li>)}</ul>
         <p class="meta" style="margin-top:12px">Works offline in the browser. Images you load never leave your computer. For research and education only.</p>
       </section>
 
