@@ -26,6 +26,16 @@ html:root,html:root[data-theme]{
 .site-header nav a:hover{color:#e9f1f8;background:#11161c}
 .site-header nav a[aria-current='page']{color:#e9f1f8;background:var(--accent-soft);font-weight:500}
 .site-footer{border-top:1px solid var(--line);color:var(--muted);font-size:.875rem;padding:28px 0 40px;margin-top:64px}
+/* Page layout like the other site pages: same content width as the header, a plain page title
+   instead of a separate app bar, the site's text size, and section tabs on the page background. */
+html body{font-size:15px}
+html body .wrap{max-width:1040px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+html body .top{background:transparent;border-bottom:0}
+html body .top .wrap{padding-block:40px 14px}
+html body .top h1{font-size:2rem;color:#e9f1f8}
+html body .top .sub{font-size:15px}
+html body nav.tabs{background:rgba(0,0,0,.92);backdrop-filter:blur(6px)}
+html body nav.tabs button{padding:10px 8px 8px;font-size:14px}
 .caselinks{margin:6px 0 0;font-size:14px;color:var(--muted)}
 .caselinks a{color:var(--accent)}
 @media print{.site-header,.site-footer{display:none}}
