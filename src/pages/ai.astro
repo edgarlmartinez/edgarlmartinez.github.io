@@ -19,7 +19,7 @@ const list = [...aiProjects].sort((a, b) => (b.year || 0) - (a.year || 0));
           {p.dataset && <p class="meta" style="margin:0 0 10px">Dataset: {p.dataset_url ? <a href={p.dataset_url} target="_blank" rel="noopener">{p.dataset}</a> : p.dataset}{p.license && ` (${p.license})`}</p>}
           {p.tags && <ul class="tags" style="margin-bottom:14px">{p.tags.map((t) => <li>{t}</li>)}</ul>}
           <div class="btns">
-            {p.demo && <a class="btn btn-outline" style="background:var(--navy);color:#fff" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/${p.demo}`}>Open demo</a>}
+            {p.demo && <a class="btn btn-outline" style="background:var(--solid);border-color:var(--solid);color:#fff" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/${p.demo}`}>Open demo</a>}
             {p.repo && <a class="btn btn-outline" href={p.repo} target="_blank" rel="noopener">Code and README ↗</a>}
           </div>
         </div>

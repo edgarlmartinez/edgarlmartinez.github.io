@@ -6,7 +6,7 @@ const c = site.consulting || {};
 <Base title={`Expert consultation · ${site.display_name}`} description="Independent expert consultation in musculoskeletal radiology for legal and professional matters.">
   {!c.enabled && <meta slot="head" name="robots" content="noindex, nofollow" />}
   <section class="section wrap" style="max-width:820px">
-    {!c.enabled && <p class="card" style="background:#fff7e6;border-color:#f0d9a8"><b>Preview only.</b> This page is hidden from the menu and search engines until <code>consulting.enabled</code> is set to true.</p>}
+    {!c.enabled && <p class="card" style="background:#251d0b;border-color:#5a4a1f"><b>Preview only.</b> This page is hidden from the menu and search engines until <code>consulting.enabled</code> is set to true.</p>}
     <h1>Expert consultation</h1>
     <p>Dr. Martinez Salazar accepts a limited number of requests for independent expert consultation in musculoskeletal radiology. Typical matters include:</p>
     <ul>
@@ -33,7 +33,7 @@ const c = site.consulting || {};
     </div>
 
     {c.form_url
-      ? <a class="btn btn-outline" style="background:var(--navy);color:#fff" href={c.form_url} target="_blank" rel="noopener">Submit an inquiry ↗</a>
+      ? <a class="btn btn-outline" style="background:var(--solid);border-color:var(--solid);color:#fff" href={c.form_url} target="_blank" rel="noopener">Submit an inquiry ↗</a>
       : <p class="meta">The inquiry form will be available soon.</p>}
   </section>
 </Base>

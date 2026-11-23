@@ -1,12 +1,15 @@
 :root {
-  --ink: #14202e;
-  --muted: #566476;
-  --line: #dde3ea;
-  --bg: #ffffff;
-  --bg-soft: #f4f7fa;
-  --navy: #16324f;
-  --accent: #1f7a8c;
-  --accent-soft: #e3f1f4;
+  color-scheme: dark;
+  --ink: #e6ebf1;
+  --muted: #9aa7b6;
+  --line: #262d36;
+  --bg: #000000;
+  --bg-soft: #11161c;
+  --navy: #e9f1f8;
+  --card: #0b0f14;
+  --solid: #1f7a8c;
+  --accent: #5cc8da;
+  --accent-soft: #10292f;
   --radius: 12px;
   --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -23,12 +26,12 @@ body {
   font-size: 16px;
 }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
-a:hover { color: var(--navy); }
+a:hover { color: #fff; }
 h1, h2, h3 { font-family: var(--serif); color: var(--navy); line-height: 1.2; font-weight: 600; }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
 
 /* Header / footer */
-.site-header { border-bottom: 1px solid var(--line); background: rgba(255,255,255,.92); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 10; }
+.site-header { border-bottom: 1px solid var(--line); background: rgba(0,0,0,.85); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 10; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; flex-wrap: wrap; }
 .brand { font-family: var(--serif); font-weight: 600; color: var(--navy); text-decoration: none; font-size: 1.05rem; }
 nav { display: flex; gap: 4px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
@@ -50,11 +53,11 @@ nav a[aria-current='page'] { color: var(--navy); background: var(--accent-soft);
 .roles li { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 14px; font-size: .9rem; }
 .btns { display: flex; flex-wrap: wrap; gap: 12px; }
 .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; font-weight: 500; text-decoration: none; border: 1px solid transparent; font-size: .95rem; cursor: pointer; font-family: inherit; }
-.btn-primary { background: #fff; color: var(--navy); }
-.btn-primary:hover { background: var(--accent-soft); color: var(--navy); }
+.btn-primary { background: #fff; color: #0b1a2a; }
+.btn-primary:hover { background: #d9f1f5; color: #0b1a2a; }
 .btn-ghost { border-color: rgba(255,255,255,.5); color: #fff; background: transparent; }
 .btn-ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
-.btn-outline { border-color: var(--line); color: var(--navy); background: #fff; }
+.btn-outline { border-color: #3a4450; color: var(--navy); background: transparent; }
 .btn-outline:hover { background: var(--bg-soft); }
 
 .section { padding: 56px 0 0; }
@@ -65,14 +68,14 @@ nav a[aria-current='page'] { color: var(--navy); background: var(--accent-soft);
 .stat b { display: block; font-family: var(--serif); font-size: 2rem; color: var(--navy); line-height: 1.1; }
 .stat span { color: var(--muted); font-size: .9rem; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; margin: 0; }
-.tags li { background: var(--accent-soft); color: #145866; border-radius: 999px; padding: 4px 12px; font-size: .9rem; }
+.tags li { background: var(--accent-soft); color: #9fe3ee; border-radius: 999px; padding: 4px 12px; font-size: .9rem; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-.card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; background: #fff; }
+.card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; background: var(--card); }
 .card h3 { font-size: 1.05rem; margin: 0 0 6px; }
 .card .meta { color: var(--muted); font-size: .875rem; }
 .timeline { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
 .timeline li { padding: 0 0 18px 20px; position: relative; }
-.timeline li::before { content: ''; position: absolute; left: -7px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--accent); }
+.timeline li::before { content: ''; position: absolute; left: -7px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
 .timeline .when { color: var(--muted); font-size: .85rem; }
 .timeline .what { font-weight: 500; }
 .timeline .where { color: var(--muted); font-size: .9rem; }
