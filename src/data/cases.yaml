@@ -256,7 +256,7 @@ cases:
       - disler1997
       - carroll1997
     toolkit_link:
-      href: ai/msk-toolkit/#cs
+      href: toolkit/#cs
       label: Try the % signal drop calculator in the MSK toolkit
   - id: ewing-scapula
     region: Shoulder

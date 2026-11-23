@@ -3,18 +3,6 @@
 # patient data or keys.
 
 projects:
-  - title: MSK measurement toolkit (v1.0)
-    demo: ai/msk-toolkit/
-    repo: https://github.com/edgarlmartinez/edgarlmartinez.github.io/tree/main/public/ai/msk-toolkit
-    model: Literature-based calculators, no trained model
-    status: >-
-      Interactive offline reference for 27 musculoskeletal measurements, from
-      Cobb angle and craniocervical intervals to chemical shift signal drop,
-      acromiohumeral interval, hip coverage, distal radius and hallux valgus.
-      Each gives normal ranges, grading and the cited source, with a how-to
-      diagram and a tool to measure angles and lengths on your own images.
-    year: 2026
-    tags: [Measurements, Radiographs, MRI, Education]
   - title: Vertebral morphometry on lateral spine radiographs (v0.1)
     demo: ai/vertebral-morphometry/
     repo: https://github.com/edgarlmartinez/edgarlmartinez.github.io/tree/main/public/ai/vertebral-morphometry

@@ -28,6 +28,7 @@ const path = Astro.url.pathname.replace(base, '') || '/';
         <nav>
           <a href={`${base}/`} aria-current={path === '/' ? 'page' : undefined}>Home</a>
           <a href={`${base}/publications/`} aria-current={path.startsWith('/publications') ? 'page' : undefined}>Publications</a>
+          <a href={`${base}/toolkit/`}>Measurement toolkit</a>
           {aiProjects.length > 0 && <a href={`${base}/ai/`} aria-current={path.startsWith('/ai') ? 'page' : undefined}>AI projects</a>}
           {cases.cases?.length > 0 && <a href={`${base}/cases/`} aria-current={path.startsWith('/cases') ? 'page' : undefined}>Educational cases</a>}
           <a href={`${base}/lectures/`} aria-current={path.startsWith('/lectures') ? 'page' : undefined}>Lectures</a>

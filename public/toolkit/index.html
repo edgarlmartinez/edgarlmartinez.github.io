@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>MSK Measurement Toolkit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: sticky region tabs over a two-column grid of calculator cards; cases and references are their own views. */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --surface-2:#eaeef2; --ink:#14202b; --muted:#566676; --line:#d5dde4;
+  --accent:#0d7468; --accent-ink:#ffffff; --accent-soft:#d9eeeb;
+  --bone:#e4e8ec; --bone-edge:#8796a5;
+  --ok:#1b7243; --ok-bg:#e0f2e7; --info:#38597a; --info-bg:#e3ebf4; --warn:#8f5400; --warn-bg:#fbedd3; --alert:#ad2a20; --alert-bg:#f8e0dd;
+  --seg-ok:#86c9a1; --seg-info:#a9bdd2; --seg-warn:#f1bd66; --seg-alert:#e98c82;
+  --canvas:#070a0e;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-head:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1117; --surface:#131b24; --surface-2:#1a2430; --ink:#dce5ed; --muted:#8c9cad; --line:#283544;
+  --accent:#4fd3be; --accent-ink:#052b25; --accent-soft:#12352f;
+  --bone:#2a3644; --bone-edge:#8fa1b3;
+  --ok:#72d39c; --ok-bg:#112e1e; --info:#9fbad8; --info-bg:#172638; --warn:#f2bd62; --warn-bg:#33260e; --alert:#ff8d82; --alert-bg:#3a1613;
+  --seg-ok:#3c8f61; --seg-info:#56718f; --seg-warn:#b9852a; --seg-alert:#b9554c;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1117; --surface:#131b24; --surface-2:#1a2430; --ink:#dce5ed; --muted:#8c9cad; --line:#283544;
+  --accent:#4fd3be; --accent-ink:#052b25; --accent-soft:#12352f;
+  --bone:#2a3644; --bone-edge:#8fa1b3;
+  --ok:#72d39c; --ok-bg:#112e1e; --info:#9fbad8; --info-bg:#172638; --warn:#f2bd62; --warn-bg:#33260e; --alert:#ff8d82; --alert-bg:#3a1613;
+  --seg-ok:#3c8f61; --seg-info:#56718f; --seg-warn:#b9852a; --seg-alert:#b9554c;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-head);text-wrap:balance;margin:0;font-weight:600}
+a{color:var(--accent)}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* header */
+.top{background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-block:14px 10px}
+.top h1{font-size:22px;letter-spacing:-.01em}
+.top .sub{color:var(--muted);font-size:13px;flex-basis:100%;max-width:70ch}
+.ruo{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--alert);background:var(--alert-bg);border-radius:4px;padding:3px 8px}
+.ver{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-left:auto}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 12px 8px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs .sep{width:1px;background:var(--line);margin:8px 6px;flex:none}
+
+main{padding-block:20px 48px}
+.view-head{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin-bottom:16px}
+.view-head h2{font-size:20px}
+.view-head p{margin:0;color:var(--muted);max-width:75ch;flex-basis:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:16px;align-items:start}
+
+/* calculator card */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card.flash{animation:flash 1.2s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+.card-head{display:flex;gap:10px;align-items:flex-start}
+.card-head h3{font-size:17px;flex:1}
+.chip{font-size:11px;border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.chip.vary{background:var(--warn-bg);color:var(--warn)}
+.how{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:start}
+.how p{margin:0;color:var(--muted);font-size:13px}
+.dg{width:100%;height:auto;background:var(--surface-2);border-radius:8px;display:block}
+.dg .bn{fill:var(--bone);stroke:var(--bone-edge);stroke-width:1.4}
+.dg .bs{fill:none;stroke:var(--bone-edge);stroke-linecap:round}
+.dg .ms{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round}
+.dg .ma{fill:none;stroke:var(--accent);stroke-width:1.6;marker-start:url(#ah);marker-end:url(#ah)}
+.dg .rf{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 3}
+.dg .pt{fill:var(--accent)}
+.dg text{font-family:var(--f-mono);font-size:10px;fill:var(--ink)}
+.dg text.m{fill:var(--accent);font-weight:500}
+.dg text.s{fill:var(--muted);font-size:9px}
+.dg .dark{fill:var(--canvas)}
+.dg .roi{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:3 2}
+.inputs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 12px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:12px;color:var(--muted);font-weight:500}
+.field label em{font-style:normal;opacity:.75;font-weight:400}
+.ctl{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:6px;background:var(--bg);overflow:hidden}
+.ctl:focus-within{border-color:var(--accent)}
+.ctl input,.ctl select{border:0;background:transparent;padding:6px 8px;min-width:0;flex:1;width:100%}
+.ctl input{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.ctl input:focus,.ctl select:focus{outline:none}
+.ctl .unit{padding:6px 8px 6px 0;color:var(--muted);font-family:var(--f-mono);font-size:12px;align-self:center}
+.ctl .meas{border:0;border-left:1px solid var(--line);background:var(--surface-2);padding:0 8px;cursor:pointer;color:var(--accent);font-size:12px;font-weight:600}
+.ctl .meas:hover{background:var(--accent-soft)}
+.check{flex-direction:row;align-items:center;gap:8px;grid-column:span 1;font-size:13px}
+.check input{width:16px;height:16px;accent-color:var(--accent)}
+.check label{color:var(--ink);font-size:13px;font-weight:400}
+.results{display:flex;flex-direction:column;gap:10px}
+.res{border-top:1px solid var(--line);padding-top:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:baseline}
+.res .rl{font-size:12px;color:var(--muted);font-weight:500}
+.res .rv{font-family:var(--f-mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums;grid-row:span 2;align-self:center;text-align:right}
+.res .rv small{font-size:13px;color:var(--muted)}
+.res .empty{color:var(--muted);font-size:12px;grid-column:1/-1}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;border-radius:5px;padding:2px 8px;justify-self:start}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.sev-ok{color:var(--ok);background:var(--ok-bg)} .sev-info{color:var(--info);background:var(--info-bg)}
+.sev-warn{color:var(--warn);background:var(--warn-bg)} .sev-alert{color:var(--alert);background:var(--alert-bg)}
+.res .note{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:0}
+.bar{grid-column:1/-1;position:relative;height:30px;margin-top:2px}
+.bar .segs{position:absolute;inset:0 0 auto;height:8px;display:flex;border-radius:4px;overflow:hidden}
+.bar .segs span{height:100%;opacity:.9}
+.bar .segs span+span{border-left:2px solid var(--surface)}
+.seg-ok{background:var(--seg-ok)}.seg-info{background:var(--seg-info)}.seg-warn{background:var(--seg-warn)}.seg-alert{background:var(--seg-alert)}
+.bar .mk{position:absolute;top:-3px;width:3px;height:14px;background:var(--ink);border-radius:2px;transform:translateX(-50%)}
+.bar .tk{position:absolute;top:11px;font-family:var(--f-mono);font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+.flags{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.flags li{font-size:13px;border-radius:6px;padding:7px 10px 7px 12px;border-left:3px solid currentColor}
+.flags li span{color:var(--ink)}
+details.pit{font-size:13px}
+details.pit summary{cursor:pointer;color:var(--muted);font-weight:500}
+details.pit ul{margin:6px 0 0;padding-left:18px;color:var(--muted)}
+.card-foot{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border-top:1px dashed var(--line);padding-top:10px;font-size:12px;color:var(--muted)}
+.card-foot .srcs{flex:1;min-width:0}
+.card-foot a{text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12.5px;font-weight:500}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{color:var(--accent-ink);filter:brightness(1.05)}
+.btn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.tbl-wrap{overflow-x:auto}
+table.ref{border-collapse:collapse;font-size:12.5px;width:100%}
+table.ref th,table.ref td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.ref th{color:var(--muted);font-weight:500}
+.example{font-size:12px;color:var(--muted);background:var(--surface-2);border-radius:6px;padding:6px 10px}
+
+/* measure */
+.measure{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.stage{background:var(--canvas);border-radius:10px;overflow:hidden;position:relative;touch-action:none;height:min(72vh,680px);min-height:360px}
+.stage canvas{display:block;width:100%;height:100%;cursor:crosshair}
+.stage .hint{position:absolute;left:10px;bottom:10px;right:10px;font-size:12px;color:#cfd8e0;background:rgba(7,10,14,.7);padding:6px 10px;border-radius:6px;pointer-events:none}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.panel h3{font-size:14px}
+.toolrow{display:flex;flex-wrap:wrap;gap:6px}
+.mlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.mlist li{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.mlist li b{font-family:var(--f-mono);font-weight:500}
+.mlist li .grow{flex:1}
+.panel small{color:var(--muted)}
+.panel .ctl{background:var(--bg)}
+.rowc{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+input[type=range]{accent-color:var(--accent);width:100%}
+
+/* cases */
+.regions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.regions button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:13px}
+.regions button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.regions button:disabled{opacity:.45;cursor:default}
+.regions button .n{font-family:var(--f-mono);font-size:11px;opacity:.75;margin-left:4px}
+.region-sec{margin-bottom:28px}
+.region-sec>h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:14px}
+.case{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;margin-bottom:16px}
+.case h4{font-family:var(--f-head);font-size:18px;margin:0 0 4px;font-weight:600}
+.case .meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.case p{margin:0 0 10px;max-width:68ch}
+.case ul.tp{margin:0 0 10px;padding-left:18px;display:flex;flex-direction:column;gap:5px;max-width:70ch}
+.case h5{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;font-weight:600}
+.case ol.cr{margin:0;padding-left:20px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;align-content:start}
+.gallery figure{margin:0;background:var(--canvas);border-radius:8px;overflow:hidden;cursor:zoom-in;display:flex;flex-direction:column}
+.gallery img{width:100%;height:170px;object-fit:contain;display:block}
+.gallery figcaption{font-size:11.5px;color:#cdd6de;padding:5px 8px;background:#0e141b}
+.lightbox{position:fixed;inset:0;background:rgba(5,8,12,.92);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lightbox img{max-width:100%;max-height:80vh;object-fit:contain}
+.lightbox p{color:#dfe6ec;margin:0;font-size:13px;text-align:center;max-width:70ch}
+.lightbox .row{display:flex;gap:8px}
+.lightbox .btn{background:#1b2530;color:#e6edf2;border-color:#33414f}
+.refs-list ol{padding-left:22px;display:flex;flex-direction:column;gap:6px;max-width:95ch}
+.refs-list h3{font-size:15px;margin:20px 0 8px}
+.refs-list li{font-size:13px}
+.disclaimer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:28px;max-width:90ch}
+
+@media (max-width:860px){.measure{grid-template-columns:1fr}.case{grid-template-columns:1fr}}
+@media (max-width:520px){.how{grid-template-columns:1fr}.how svg{max-width:240px}.top h1{font-size:19px}.ver{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.card.flash{animation:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker>
+</defs></svg>
+
+<header class="top"><div class="wrap">
+  <h1>MSK Measurement Toolkit</h1><span class="ruo">Research &amp; education only</span><span class="ver" id="ver"></span><a class="ver" href="../" style="margin-left:12px">← edgarlmartinez.github.io</a>
+  <p class="sub">Literature-based normal ranges, grading and interpretation for common musculoskeletal measurements, with a measure-on-image tool<span id="subcases"> and a teaching case file</span>. Every threshold links to its source.</p>
+</div></header>
+<nav class="tabs" aria-label="Sections"><div class="wrap" id="tabs" role="tablist"></div></nav>
+<main class="wrap" id="main"></main>
+
+<!-- =====================================================================
+     TOOLKIT DATA — edit this block to change cutoffs, add measurements,
+     add cases or references. The engine further down never needs editing.
+
+     How to add a measurement: copy any object inside a module's
+     `calculators: [ ... ]`, give it a new `id`, then edit:
+       inputs   – fields the user fills in (type: number | select | check)
+                  add measure:'angle' | 'tilt' | 'length' to show a
+                  "Measure" button that links to the image tool
+       results  – each has calc(v) returning a number (v = input values,
+                  null when empty) and either `bands` (ordered cutoffs:
+                  value < upTo, or <= upTo when incl:true; last band has
+                  no upTo) or classify(x, v) returning {label, sev, note}
+                  sev is one of ok | info | warn | alert
+       flags    – extra findings: {when:(v,r)=>true/false, sev, text, refs}
+       refs     – keys from REFERENCES below
+       diagram  – inner SVG markup for a 200 x 140 schematic
+       vary:true – shows a "cutoffs vary" chip where studies disagree
+
+     How to add a case: add an object to CASES (region must match one of
+     REGIONS), put its images in the cases/ folder next to this file.
+     ===================================================================== -->
+<script>
+const TOOLKIT_META = { version: '1.1', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
+
+const has = x => x !== null && x !== undefined && !(typeof x === 'number' && isNaN(x));
+const sum = (...a) => a.reduce((s, x) => s + (x || 0), 0);
+
+/* ---------- shared diagram pieces ---------- */
+const DG = {
+  chemShift: (extra = '') => `
+    <rect x="12" y="22" width="80" height="80" rx="6" class="bn"/><text x="52" y="16" text-anchor="middle">in-phase</text>
+    <rect x="108" y="22" width="80" height="80" rx="6" class="bn"/><text x="148" y="16" text-anchor="middle">opposed-phase</text>
+    <circle cx="52" cy="62" r="20" style="fill:var(--bone-edge)" opacity=".85"/><circle cx="52" cy="62" r="13" class="roi"/>
+    <circle cx="148" cy="62" r="20" style="fill:var(--bone-edge)" opacity=".35"/><circle cx="148" cy="62" r="13" class="roi"/>
+    ${extra}
+    <text x="100" y="124" text-anchor="middle" class="m">(IP − OP) / IP × 100</text>`
+};
+
+/* ---------- Lonstein & Carlson 1984 progression table ---------- */
+const LONSTEIN = [
+  { cobb: [5, 19],  risser: [0, 1], pct: 22 },
+  { cobb: [20, 29], risser: [0, 1], pct: 68 },
+  { cobb: [5, 19],  risser: [2, 4], pct: 1.6 },
+  { cobb: [20, 29], risser: [2, 4], pct: 23 }
+];
+const lonstein = v => {
+  if (!has(v.cobb) || !has(v.risser)) return null;
+  const row = LONSTEIN.find(r => v.cobb >= r.cobb[0] && v.cobb <= r.cobb[1] && v.risser >= r.risser[0] && v.risser <= r.risser[1]);
+  return row ? row.pct : null;
+};
+
+/* ======================= MEASUREMENT MODULES ======================= */
+const MODULES = [
+/* ------------------------------------------------------------------ */
+{ id: 'spine', tab: 'Spine', title: 'Scoliosis & sagittal alignment',
+  blurb: 'Standing PA and lateral full-length spine radiographs. Measure on the same projection and the same end vertebrae as the prior study when comparing.',
+  calculators: [
+  { id: 'cobb', title: 'Coronal Cobb angle',
+    howTo: 'Choose the end vertebrae: the most tilted vertebrae at the top and bottom of the curve. Draw a line along the superior endplate of the upper end vertebra and the inferior endplate of the lower end vertebra. The Cobb angle is the angle between the two lines.',
+    diagram: `
+      <g class="bn"><rect x="74" y="16" width="40" height="18" rx="3" transform="rotate(-14 94 25)"/><rect x="84" y="44" width="40" height="18" rx="3" transform="rotate(-4 104 53)"/><rect x="88" y="72" width="40" height="18" rx="3" transform="rotate(6 108 81)"/><rect x="78" y="100" width="40" height="18" rx="3" transform="rotate(14 98 109)"/></g>
+      <line x1="34" y1="30.8" x2="150" y2="1.8" class="ms"/><line x1="38" y1="103.2" x2="154" y2="132.2" class="ms"/>
+      <text x="8" y="70" class="m">Cobb</text><text x="8" y="82" class="s">angle between</text><text x="8" y="92" class="s">endplate lines</text>`,
+    inputs: [
+      { id: 'cobb', label: 'Cobb angle', unit: '°', value: 28, measure: 'angle' },
+      { id: 'prior', label: 'Prior Cobb angle', unit: '°', optional: true, value: 22, measure: 'angle' },
+      { id: 'risser', label: 'Risser grade', type: 'select', optional: true, value: '1',
+        options: [['', 'Not assessed'], ['0', '0 · no ossification'], ['1', '1 · up to 25%'], ['2', '2 · 26–50%'], ['3', '3 · 51–75%'], ['4', '4 · 76–100%'], ['5', '5 · fused']] },
+      { id: 'age', label: 'Age', unit: 'y', optional: true, value: 12 }
+    ],
+    results: [
+      { id: 'mag', label: 'Curve magnitude', unit: '°', calc: v => v.cobb, scale: [0, 80], bands: [
+        { upTo: 10, label: 'Below scoliosis threshold', sev: 'ok', note: 'Curves under 10° are spinal asymmetry, not scoliosis.' },
+        { upTo: 25, label: 'Mild scoliosis', sev: 'info', note: 'Usually observed with serial radiographs.' },
+        { upTo: 40, incl: true, label: 'Moderate scoliosis', sev: 'warn', note: 'Bracing range (25–40°) in skeletally immature patients.' },
+        { upTo: 50, label: 'Severe scoliosis', sev: 'alert', note: 'Surgery is commonly considered above 45–50° in growing patients.' },
+        { label: 'Severe scoliosis (50° or more)', sev: 'alert', note: 'Thoracic curves of 50–75° at maturity progress about 1° per year in adulthood.' } ] },
+      { id: 'delta', label: 'Change from prior', unit: '°', signed: true, calc: v => has(v.prior) && has(v.cobb) ? v.cobb - v.prior : null,
+        classify: d => Math.abs(d) >= 5
+          ? { label: d > 0 ? 'Progression beyond measurement error' : 'Improvement beyond measurement error', sev: d > 0 ? 'alert' : 'ok', note: 'A change of 5° or more exceeds typical intra-observer variability (about 3–5°).' }
+          : { label: 'Within measurement error', sev: 'info', note: 'Changes under 5° may be measurement variability (inter-observer error up to about 7°).' } }
+    ],
+    flags: [
+      { when: v => has(v.cobb) && v.cobb >= 25 && v.cobb <= 40 && has(v.risser) && v.risser <= 2 && (!has(v.age) || v.age >= 10), sev: 'warn',
+        text: 'Meets the SRS radiographic brace criteria (25–40°, Risser 0–2, age 10 or older). In BrAIST, bracing lowered the rate of progression to 50°.', refs: ['richards2005', 'weinstein2013'] },
+      { when: v => lonstein(v) !== null, sev: 'info',
+        text: v => `Untreated progression risk for this curve size and Risser grade: about ${lonstein(v)}% (Lonstein & Carlson).`, refs: ['lonstein1984'] }
+    ],
+    tables: [
+      { title: 'Risser grade (iliac apophysis, US system)', head: ['Grade', 'Ossification'], rows: [['0', 'None'], ['1', 'Up to 25% of the iliac crest'], ['2', '26–50%'], ['3', '51–75%'], ['4', '76–100%, not fused'], ['5', 'Apophysis fused to the ilium']] },
+      { title: 'Nash–Moe vertebral rotation (convex pedicle)', head: ['Grade', 'Appearance on PA view'], rows: [['0', 'Pedicles symmetric'], ['1', 'Convex pedicle shifts toward midline; concave pedicle starts to fade'], ['2', 'Convex pedicle in second third of the hemibody; concave pedicle fading'], ['3', 'Convex pedicle at the midline; concave pedicle not visible'], ['4', 'Convex pedicle past the midline']] }
+    ],
+    refs: ['kane1977', 'cobb1948', 'weinstein2008', 'weinstein1983', 'morrissy1990', 'carman1990', 'risser1958', 'nashmoe1969'] },
+
+  { id: 'kyph', title: 'Thoracic kyphosis', vary: true,
+    howTo: 'On the standing lateral, draw a line along the superior endplate of T4 (or T5) and the inferior endplate of T12. The angle between them is the thoracic kyphosis. Normal values rise with age.',
+    diagram: `
+      <g class="bn"><rect x="60" y="17" width="40" height="14" rx="3" transform="rotate(20 80 24)"/><rect x="75" y="40" width="40" height="14" rx="3" transform="rotate(8 95 47)"/><rect x="80" y="64" width="40" height="14" rx="3"/><rect x="75" y="88" width="40" height="14" rx="3" transform="rotate(-8 95 95)"/><rect x="60" y="111" width="40" height="14" rx="3" transform="rotate(-20 80 118)"/></g>
+      <line x1="44.8" y1="3.7" x2="128" y2="34" class="ms"/><line x1="44.8" y1="138" x2="128" y2="108" class="ms"/>
+      <text x="8" y="14" class="s">T4</text><text x="8" y="134" class="s">T12</text><text x="140" y="74" class="m">kyphosis</text><text x="8" y="74" class="s">ant</text><text x="176" y="96" class="s">post</text>`,
+    inputs: [
+      { id: 'k', label: 'Kyphosis (T4–T12 or T5–T12)', unit: '°', value: 52, measure: 'angle' },
+      { id: 'wedge', label: 'Adjacent vertebrae wedged ≥5°', unit: 'n', optional: true, value: 3, help: 'For Scheuermann criteria' }
+    ],
+    results: [
+      { id: 'k', label: 'Thoracic kyphosis', unit: '°', calc: v => v.k, scale: [0, 80], bands: [
+        { upTo: 20, label: 'Hypokyphosis', sev: 'warn', note: 'Flattened thoracic spine; typical of thoracic adolescent idiopathic scoliosis.' },
+        { upTo: 40, incl: true, label: 'Normal (20–40°)', sev: 'ok', note: 'SRS normal range for T5–T12.' },
+        { upTo: 50, incl: true, label: 'Upper limit of normal', sev: 'info', note: 'Kyphosis increases with age; up to about 50° can be normal in older adults.' },
+        { label: 'Hyperkyphosis', sev: 'warn', note: 'Consider Scheuermann disease, osteoporotic wedge fractures, or postural kyphosis.' } ] }
+    ],
+    flags: [
+      { when: v => has(v.k) && v.k > 45 && has(v.wedge) && v.wedge >= 3, sev: 'alert', text: 'Kyphosis over 45° with 3 or more adjacent vertebrae wedged 5° or more: meets Sørensen criteria for Scheuermann kyphosis.', refs: ['sorensen1964'] },
+      { when: v => has(v.k) && v.k > 45 && !has(v.wedge), sev: 'info', text: 'Over 45°: check for 3 or more adjacent wedged vertebrae, endplate irregularity and Schmorl nodes (Scheuermann).', refs: ['sorensen1964'] }
+    ],
+    refs: ['fon1980', 'bernhardt1989', 'obrien2008', 'sorensen1964'] },
+
+  { id: 'sag', title: 'Lumbar lordosis & spinopelvic (SRS–Schwab)',
+    howTo: 'Lumbar lordosis: L1 superior to S1 superior endplate. Pelvic incidence (PI): angle between the perpendicular to the S1 endplate at its midpoint and the line to the femoral head center. Pelvic tilt (PT): that line versus vertical. SVA: horizontal offset of the C7 plumb line from the posterosuperior S1 corner (positive = anterior).',
+    diagram: `
+      <polygon points="90,60 130,35 152,80 142,126 126,120 104,90" class="bn"/>
+      <circle cx="62" cy="112" r="16" class="bn"/>
+      <line x1="90" y1="60" x2="130" y2="35" class="ms"/>
+      <line x1="110" y1="47.5" x2="140" y2="95.5" class="rf"/>
+      <line x1="110" y1="47.5" x2="62" y2="112" class="ms"/>
+      <line x1="62" y1="112" x2="62" y2="30" class="rf"/>
+      <line x1="90" y1="60" x2="160" y2="60" class="rf"/>
+      <circle cx="62" cy="112" r="2.5" class="pt"/><circle cx="110" cy="47.5" r="2.5" class="pt"/>
+      <text x="96" y="80" class="m">PI</text><text x="66" y="56" class="m">PT</text><text x="150" y="54" class="m">SS</text>
+      <text x="8" y="134" class="s">PI = PT + SS</text>`,
+    inputs: [
+      { id: 'll', label: 'Lumbar lordosis (L1–S1)', unit: '°', value: 38, measure: 'angle' },
+      { id: 'pi', label: 'Pelvic incidence', unit: '°', value: 58, optional: true, measure: 'angle' },
+      { id: 'pt', label: 'Pelvic tilt', unit: '°', value: 24, optional: true, measure: 'angle' },
+      { id: 'sva', label: 'SVA (+ anterior)', unit: 'mm', value: 52, optional: true, measure: 'length' }
+    ],
+    results: [
+      { id: 'll', label: 'Lumbar lordosis', unit: '°', calc: v => v.ll, scale: [0, 90], bands: [
+        { upTo: 40, label: 'Below the typical adult range', sev: 'info', note: 'Interpret against pelvic incidence: lordosis should be within about 10° of PI.' },
+        { upTo: 60, incl: true, label: 'Typical adult range (40–60°)', sev: 'ok', note: 'Wide normal range; PI determines the ideal lordosis for each patient.' },
+        { label: 'Above the typical adult range', sev: 'info', note: 'May be appropriate if PI is high.' } ] },
+      { id: 'mm', label: 'PI − LL mismatch', unit: '°', signed: true, calc: v => has(v.pi) && has(v.ll) ? v.pi - v.ll : null, scale: [-20, 40], bands: [
+        { upTo: -10, label: 'Lordosis exceeds PI by more than 10°', sev: 'info', note: 'Relative hyperlordosis.' },
+        { upTo: 10, label: 'Modifier 0 (under 10°)', sev: 'ok', note: 'Lordosis matched to pelvic incidence.' },
+        { upTo: 20, incl: true, label: 'Modifier + (10–20°)', sev: 'warn', note: 'Moderate sagittal deformity.' },
+        { label: 'Modifier ++ (over 20°)', sev: 'alert', note: 'Marked mismatch; associated with disability in adult deformity.' } ] },
+      { id: 'pt', label: 'Pelvic tilt modifier', unit: '°', calc: v => v.pt, scale: [0, 45], bands: [
+        { upTo: 20, label: 'Modifier 0 (under 20°)', sev: 'ok' },
+        { upTo: 30, incl: true, label: 'Modifier + (20–30°)', sev: 'warn', note: 'Pelvic retroversion compensating for lost lordosis.' },
+        { label: 'Modifier ++ (over 30°)', sev: 'alert' } ] },
+      { id: 'sva', label: 'SVA modifier', unit: 'mm', calc: v => v.sva, scale: [-40, 140], bands: [
+        { upTo: 40, label: 'Modifier 0 (under 4 cm)', sev: 'ok' },
+        { upTo: 95, incl: true, label: 'Modifier + (4–9.5 cm)', sev: 'warn' },
+        { label: 'Modifier ++ (over 9.5 cm)', sev: 'alert' } ] },
+      { id: 'ss', label: 'Derived sacral slope (PI − PT)', unit: '°', calc: v => has(v.pi) && has(v.pt) ? v.pi - v.pt : null }
+    ],
+    refs: ['schwab2012', 'legaye1998', 'obrien2008'] },
+
+  { id: 'coronal', title: 'Coronal balance',
+    howTo: 'On the standing PA, drop a vertical plumb line from the center of C7 and draw the central sacral vertical line (CSVL) through the middle of S1. Measure the horizontal distance between them.',
+    diagram: `
+      <path d="M112,14 C150,48 52,88 96,122" class="bs" stroke-width="12"/>
+      <polygon points="80,122 112,122 96,138" class="bn"/>
+      <line x1="112" y1="10" x2="112" y2="136" class="rf"/><line x1="96" y1="10" x2="96" y2="136" class="rf"/>
+      <line x1="96" y1="22" x2="112" y2="22" class="ma"/>
+      <text x="118" y="14" class="s">C7 plumb</text><text x="40" y="132" class="s">CSVL</text><text x="118" y="30" class="m">offset</text>`,
+    inputs: [{ id: 'd', label: 'C7 plumb line to CSVL', unit: 'mm', value: 24, measure: 'length' }],
+    results: [{ id: 'd', label: 'Coronal offset', unit: 'mm', calc: v => has(v.d) ? Math.abs(v.d) : null, scale: [0, 60], bands: [
+      { upTo: 20, label: 'Balanced (under 2 cm)', sev: 'ok' },
+      { upTo: 40, incl: true, label: 'Coronal imbalance (2–4 cm)', sev: 'warn' },
+      { label: 'Marked imbalance (over 4 cm)', sev: 'alert', note: 'Over 4 cm is associated with worse pain and function in adult scoliosis.' } ] }],
+    refs: ['obrien2008', 'glassman2005'] },
+
+  { id: 'rvad', title: 'Rib–vertebra angle difference (Mehta)',
+    howTo: 'Infantile scoliosis, apical vertebra. Draw a line perpendicular to the apical vertebral endplate and a line along each rib neck through the rib head. Each rib–vertebra angle (RVA) is measured from the perpendicular. RVAD = concave RVA − convex RVA.',
+    diagram: `
+      <rect x="85" y="47" width="30" height="26" rx="3" class="bn"/>
+      <line x1="100" y1="14" x2="100" y2="128" class="rf"/>
+      <path d="M86,62 L30,104" class="bs" stroke-width="7"/><path d="M114,62 L176,112" class="bs" stroke-width="7"/>
+      <line x1="86" y1="62" x2="30" y2="104" class="ms"/><line x1="114" y1="62" x2="176" y2="112" class="ms"/>
+      <text x="8" y="40" class="s">concave</text><text x="150" y="40" class="s">convex</text>
+      <text x="100" y="138" text-anchor="middle" class="m">RVAD = concave − convex</text>`,
+    inputs: [
+      { id: 'cc', label: 'RVA concave side', unit: '°', value: 68, measure: 'tilt' },
+      { id: 'cv', label: 'RVA convex side', unit: '°', value: 44, measure: 'tilt' },
+      { id: 'ph2', label: 'Phase 2 rib head (overlaps vertebral body)', type: 'check', value: false }
+    ],
+    results: [{ id: 'rvad', label: 'RVAD', unit: '°', signed: true, calc: v => has(v.cc) && has(v.cv) ? v.cc - v.cv : null, scale: [-10, 40], bands: [
+      { upTo: 20, label: 'Low risk of progression', sev: 'ok', note: 'Most curves with RVAD under 20° resolve.' },
+      { label: 'High risk of progression', sev: 'alert', note: 'RVAD of 20° or more predicts progressive infantile scoliosis.' } ] }],
+    flags: [{ when: v => v.ph2, sev: 'alert', text: 'Phase 2 rib head: the convex rib head overlaps the vertebral body; this indicates progression regardless of RVAD.', refs: ['mehta1972'] }],
+    refs: ['mehta1972'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
+{ id: 'ccj', tab: 'Craniocervical', title: 'Atlantoaxial & craniocervical junction',
+  blurb: 'Predental space and the measurements used for atlanto-occipital (craniocervical) dissociation. Radiograph and CT cutoffs differ; use the ones that match the modality.',
+  calculators: [
+  { id: 'adi', title: 'Atlantodental interval (predental space)',
+    howTo: 'On the lateral (or midsagittal CT), measure from the posteroinferior margin of the anterior arch of C1 to the anterior surface of the dens. The posterior atlantodental interval (PADI) is from the posterior dens to the anterior margin of the posterior arch of C1: the space available for the cord.',
+    diagram: `
+      <ellipse cx="58" cy="50" rx="10" ry="14" class="bn"/>
+      <path d="M80,30 q13,-14 26,0 l2,62 l-30,0 z" class="bn"/>
+      <rect x="70" y="92" width="48" height="38" rx="4" class="bn"/>
+      <ellipse cx="166" cy="50" rx="10" ry="14" class="bn"/>
+      <line x1="68" y1="50" x2="80" y2="50" class="ma"/><line x1="107" y1="50" x2="156" y2="50" class="ma"/>
+      <text x="60" y="80" class="m">ADI</text><text x="120" y="42" class="m">PADI</text>
+      <text x="40" y="22" class="s">C1 ant arch</text><text x="86" y="20" class="s">dens</text><text x="140" y="80" class="s">C1 post arch</text>`,
+    inputs: [
+      { id: 'adi', label: 'ADI', unit: 'mm', value: 4, measure: 'length' },
+      { id: 'padi', label: 'PADI', unit: 'mm', value: 16, optional: true, measure: 'length' },
+      { id: 'grp', label: 'Patient', type: 'select', value: 'adult', options: [['adult', 'Adult'], ['child', 'Child']] },
+      { id: 'ra', label: 'Inflammatory arthritis (e.g. RA)', type: 'check', value: false }
+    ],
+    results: [
+      { id: 'adi', label: 'Atlantodental interval', unit: 'mm', decimals: 1, calc: v => v.adi, scale: [0, 12],
+        bandsBy: v => v.grp === 'child' ? 'child' : 'adult',
+        bandSets: {
+          adult: [
+            { upTo: 3, incl: true, label: 'Normal adult (3 mm or less)', sev: 'ok' },
+            { upTo: 5, incl: true, label: 'Widened: transverse ligament insufficiency likely', sev: 'warn', note: '3–5 mm in trauma suggests transverse ligament rupture with intact alar ligaments.' },
+            { label: 'Markedly widened: transverse and alar ligaments', sev: 'alert', note: 'Over 5 mm suggests transverse plus alar ligament failure.' } ],
+          child: [
+            { upTo: 5, incl: true, label: 'Normal child (5 mm or less)', sev: 'ok' },
+            { label: 'Widened for age', sev: 'alert', note: 'Over 5 mm in a child suggests atlantoaxial instability.' } ] } },
+      { id: 'padi', label: 'Posterior atlantodental interval', unit: 'mm', decimals: 1, calc: v => v.padi, scale: [0, 30], bands: [
+        { upTo: 14, label: 'Reduced (under 14 mm)', sev: 'alert', note: 'In rheumatoid arthritis, PADI under 14 mm predicts paralysis and poorer neurologic recovery.' },
+        { label: '14 mm or more', sev: 'ok' } ] }
+    ],
+    flags: [{ when: v => v.ra && has(v.adi) && v.adi > 9, sev: 'alert', text: 'ADI over 9–10 mm in rheumatoid arthritis is a traditional surgical threshold; PADI is the better predictor.', refs: ['boden1993'] }],
+    refs: ['hinck1960', 'locke1966', 'fielding1974', 'boden1993'] },
+
+  { id: 'harris', title: 'Basion–dens & basion–axial intervals', vary: true,
+    howTo: 'BDI: distance from the basion to the tip of the dens. BAI: horizontal distance from the basion to the posterior axial line (a line along the posterior cortex of the C2 body extended upward). Positive BAI = basion anterior to the line.',
+    diagram: `
+      <path d="M8,0 L58,24 L62,34 L10,18 z" class="bn"/>
+      <path d="M68,50 q8,-10 18,0 l6,32 l10,6 l0,40 l-46,0 l0,-40 l8,-6 z" class="bn"/>
+      <line x1="102" y1="88" x2="102" y2="128" class="ms"/><line x1="102" y1="88" x2="102" y2="10" class="rf"/>
+      <circle cx="60" cy="28" r="2.5" class="pt"/><circle cx="77" cy="43" r="2.5" class="pt"/>
+      <line x1="60" y1="28" x2="77" y2="43" class="ma"/><line x1="62" y1="22" x2="101" y2="22" class="ma"/>
+      <text x="36" y="48" class="m">BDI</text><text x="68" y="16" class="m">BAI</text><text x="108" y="120" class="s">post. axial line</text><text x="10" y="40" class="s">basion</text>`,
+    inputs: [
+      { id: 'bdi', label: 'BDI', unit: 'mm', value: 10, measure: 'length' },
+      { id: 'bai', label: 'BAI (+ anterior)', unit: 'mm', optional: true, value: 6, measure: 'length' },
+      { id: 'mod', label: 'Modality', type: 'select', value: 'ct', options: [['ct', 'CT'], ['xr', 'Radiograph']] }
+    ],
+    results: [
+      { id: 'bdi', label: 'Basion–dens interval', unit: 'mm', decimals: 1, calc: v => v.bdi, scale: [0, 20],
+        bandsBy: v => v.mod,
+        bandSets: {
+          ct: [{ upTo: 8.5, incl: true, label: 'Normal on CT (8.5 mm or less)', sev: 'ok' },
+               { label: 'Widened on CT (over 8.5 mm)', sev: 'alert', note: 'Suspicious for craniocervical dissociation; correlate with CCI and MRI of the ligaments.' }],
+          xr: [{ upTo: 12, incl: true, label: 'Normal on radiograph (12 mm or less)', sev: 'ok', note: 'Harris "rule of 12". Unreliable under age 13 because the dens is not fully ossified.' },
+               { label: 'Widened on radiograph (over 12 mm)', sev: 'alert' }] } },
+      { id: 'bai', label: 'Basion–axial interval', unit: 'mm', signed: true, decimals: 1, calc: v => v.mod === 'xr' ? v.bai : null, scale: [-10, 20], bands: [
+        { upTo: -4, label: 'Basion too far posterior (under −4 mm)', sev: 'alert', note: 'Suggests posterior atlanto-occipital dislocation.' },
+        { upTo: 12, incl: true, label: 'Normal (−4 to 12 mm)', sev: 'ok' },
+        { label: 'Basion too far anterior (over 12 mm)', sev: 'alert', note: 'Suggests anterior atlanto-occipital dislocation.' } ] }
+    ],
+    flags: [{ when: v => v.mod === 'ct' && has(v.bai), sev: 'info', text: 'BAI is validated on radiographs; on CT it is less reliable, so rely on BDI and the condyle–C1 interval.', refs: ['rojas2007'] }],
+    refs: ['harris1994', 'rojas2007'] },
+
+  { id: 'powers', title: 'Powers ratio',
+    howTo: 'Lateral radiograph or midsagittal CT. BC: basion to the posterior arch of C1 (spinolaminar line). OA: opisthion to the posterior margin of the anterior arch of C1. Ratio = BC / OA.',
+    diagram: `
+      <ellipse cx="50" cy="80" rx="9" ry="13" class="bn"/><ellipse cx="166" cy="80" rx="10" ry="14" class="bn"/>
+      <path d="M10,10 L60,36 L150,30 L190,10" class="bs" stroke-width="5"/>
+      <circle cx="60" cy="36" r="3" class="pt"/><circle cx="150" cy="30" r="3" class="pt"/><circle cx="158" cy="80" r="3" class="pt"/><circle cx="58" cy="80" r="3" class="pt"/>
+      <line x1="60" y1="36" x2="158" y2="80" class="ms"/><line x1="150" y1="30" x2="58" y2="80" class="ms"/>
+      <text x="44" y="30" class="s">B</text><text x="152" y="22" class="s">O</text><text x="38" y="104" class="s">A</text><text x="164" y="104" class="s">C</text>
+      <text x="100" y="128" text-anchor="middle" class="m">BC / OA</text>`,
+    inputs: [
+      { id: 'bc', label: 'BC (basion–C1 posterior arch)', unit: 'mm', value: 33, measure: 'length' },
+      { id: 'oa', label: 'OA (opisthion–C1 anterior arch)', unit: 'mm', value: 38, measure: 'length' }
+    ],
+    results: [{ id: 'r', label: 'Powers ratio', decimals: 2, calc: v => has(v.bc) && has(v.oa) && v.oa > 0 ? v.bc / v.oa : null, scale: [0.5, 1.4], bands: [
+      { upTo: 1, label: 'Normal (under 1.0)', sev: 'ok', note: 'Insensitive to pure longitudinal distraction and posterior dislocation.' },
+      { label: 'Abnormal (1.0 or more)', sev: 'alert', note: 'Suggests anterior atlanto-occipital dislocation.' } ] }],
+    refs: ['powers1979'] },
+
+  { id: 'cci', title: 'Condyle–C1 interval (CCI)', vary: true,
+    howTo: 'Coronal and sagittal CT. Measure the joint space between the occipital condyle and the C1 lateral mass at four points on each side and use the largest gap.',
+    diagram: `
+      <ellipse cx="60" cy="38" rx="28" ry="16" class="bn"/><ellipse cx="140" cy="38" rx="28" ry="16" class="bn"/>
+      <rect x="34" y="62" width="52" height="30" rx="5" class="bn"/><rect x="114" y="62" width="52" height="30" rx="5" class="bn"/>
+      <path d="M86,82 Q100,100 114,82" class="bs" stroke-width="5"/>
+      <line x1="60" y1="54" x2="60" y2="62" class="ma"/><text x="66" y="61" class="m">CCI</text>
+      <text x="36" y="16" class="s">occipital condyles</text><text x="50" y="112" class="s">C1 lateral masses</text>`,
+    inputs: [
+      { id: 'cci', label: 'Largest CCI', unit: 'mm', value: 1.8, measure: 'length', step: 0.1 },
+      { id: 'grp', label: 'Patient', type: 'select', value: 'adult', options: [['adult', 'Adult'], ['child', 'Child']] }
+    ],
+    results: [{ id: 'cci', label: 'Condyle–C1 interval', unit: 'mm', decimals: 1, calc: v => v.cci, scale: [0, 6],
+      bandsBy: v => v.grp,
+      bandSets: {
+        child: [{ upTo: 4, label: 'Below the pediatric cutoff (under 4 mm)', sev: 'ok', note: 'Normal pediatric CCI is about 1.3 mm.' },
+                { label: 'Pediatric atlanto-occipital dissociation (4 mm or more)', sev: 'alert' }],
+        adult: [{ upTo: 1.5, label: 'Within reported adult normal range', sev: 'ok', note: 'Normal adult joints are about 1 mm or less.' },
+                { label: 'Widened for an adult', sev: 'alert', note: 'Adult CT upper limits of roughly 1.4–1.5 mm have been reported; correlate with BDI and MRI.' }] } }],
+    refs: ['pang2007', 'rojas2007'] },
+
+  { id: 'spence', title: 'C1 lateral mass overhang (rule of Spence)',
+    howTo: 'Open-mouth odontoid view or coronal CT. Measure how far each C1 lateral mass overhangs the lateral margin of C2 and add the two sides.',
+    diagram: `
+      <rect x="90" y="24" width="20" height="44" rx="8" class="bn"/>
+      <rect x="62" y="68" width="76" height="52" rx="5" class="bn"/>
+      <rect x="44" y="44" width="38" height="24" rx="5" class="bn"/><rect x="118" y="44" width="38" height="24" rx="5" class="bn"/>
+      <line x1="62" y1="30" x2="62" y2="130" class="rf"/><line x1="138" y1="30" x2="138" y2="130" class="rf"/>
+      <line x1="44" y1="36" x2="62" y2="36" class="ma"/><line x1="138" y1="36" x2="156" y2="36" class="ma"/>
+      <text x="40" y="30" class="m">a</text><text x="152" y="30" class="m">b</text><text x="100" y="136" text-anchor="middle" class="m">a + b</text>`,
+    inputs: [
+      { id: 'a', label: 'Left overhang', unit: 'mm', value: 4, measure: 'length' },
+      { id: 'b', label: 'Right overhang', unit: 'mm', value: 3.5, measure: 'length' },
+      { id: 'mod', label: 'Modality', type: 'select', value: 'xr', options: [['xr', 'Radiograph'], ['ct', 'CT']] }
+    ],
+    results: [{ id: 't', label: 'Combined overhang', unit: 'mm', decimals: 1, calc: v => has(v.a) && has(v.b) ? v.a + v.b : null, scale: [0, 14],
+      bandsBy: v => v.mod,
+      bandSets: {
+        xr: [{ upTo: 6.9, incl: true, label: 'Below Spence threshold', sev: 'ok' },
+             { upTo: 8.1, incl: true, label: 'Over 6.9 mm: transverse ligament rupture possible', sev: 'warn', note: 'Correcting for radiographic magnification, 8.1 mm has been proposed.' },
+             { label: 'Over 8.1 mm: transverse ligament rupture likely', sev: 'alert' }],
+        ct: [{ upTo: 6.9, incl: true, label: 'Below Spence threshold', sev: 'ok', note: 'Overhang is insensitive for ligament injury; MRI is the reference standard.' },
+             { label: 'Over 6.9 mm: transverse ligament rupture likely', sev: 'alert' }] } }],
+    refs: ['spence1970', 'heller2001'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
+{ id: 'cs', tab: 'Chemical shift', title: 'In- and opposed-phase signal drop',
+  blurb: 'T1 dual-echo gradient echo. Use identical ROIs on co-registered in-phase (IP) and opposed-phase (OP) images. Ideally the opposed-phase echo is acquired first, so T2* decay cannot fake or hide a drop.',
+  calculators: [
+  { id: 'marrow', title: 'Bone marrow lesion',
+    howTo: 'Place the same ROI in the lesion on the IP and OP images (same slice, same size), avoiding cortex, necrosis and partial volume with adjacent fat. Signal drop = (IP − OP) / IP × 100; ratio = OP / IP.',
+    diagram: DG.chemShift(),
+    inputs: [
+      { id: 'ip', label: 'Lesion SI, in-phase', value: 820 },
+      { id: 'op', label: 'Lesion SI, opposed-phase', value: 760 },
+      { id: 'field', label: 'Field strength', type: 'select', value: '1.5', options: [['1.5', '1.5 T'], ['3', '3 T']] }
+    ],
+    results: [
+      { id: 'drop', label: 'Signal drop', unit: '%', decimals: 1, signed: true, calc: v => has(v.ip) && has(v.op) && v.ip > 0 ? (v.ip - v.op) / v.ip * 100 : null, scale: [-10, 70], bands: [
+        { upTo: 20, label: 'Insufficient drop (under 20%)', sev: 'alert', note: 'OP/IP ratio over 0.80: favors a marrow-replacing process such as neoplasm (95% sensitive, 89% specific).' },
+        { label: 'Signal drop of 20% or more', sev: 'ok', note: 'OP/IP ratio 0.80 or less: fat persists among the cells, favoring a non-neoplastic process (red marrow, edema, benign lesion).' } ] },
+      { id: 'ratio', label: 'OP / IP ratio', decimals: 2, calc: v => has(v.ip) && has(v.op) && v.ip > 0 ? v.op / v.ip : null }
+    ],
+    flags: [
+      { when: (v, r) => has(r.drop) && r.drop < 0, sev: 'info', text: 'Opposed-phase signal is higher than in-phase. Check ROI registration and echo order; susceptibility from sclerosis, hemosiderin or gas darkens the later in-phase echo.' },
+      { when: (v, r) => has(r.drop) && r.drop >= 15 && r.drop < 25, sev: 'info', text: 'Close to the 20% cutoff: weigh morphology, enhancement and diffusion.' }
+    ],
+    pitfalls: [
+      'At 1.5 T the in-phase echo (about 4.6 ms) is later than the opposed-phase echo (about 2.3 ms); sclerotic, hemosiderin-laden or gas-containing lesions lose in-phase signal and can mask a true drop.',
+      'Acute benign fractures with extensive edema can show little drop. Correlate with fracture morphology.',
+      'Sclerotic metastases can be hard to measure; treated metastases may regain fat.',
+      'An adjunct only. It does not replace contrast-enhanced, fluid-sensitive or diffusion imaging.'
+    ],
+    refs: ['zajick2005', 'disler1997'] },
+
+  { id: 'sii', title: 'Adrenal signal intensity index',
+    howTo: 'ROI over at least half to two-thirds of the adrenal mass on IP and OP images, avoiding the edge. SII = (IP − OP) / IP × 100.',
+    diagram: DG.chemShift(),
+    inputs: [
+      { id: 'ip', label: 'Adrenal SI, in-phase', value: 410 },
+      { id: 'op', label: 'Adrenal SI, opposed-phase', value: 250 }
+    ],
+    results: [{ id: 'sii', label: 'Signal intensity index', unit: '%', decimals: 1, signed: true, calc: v => has(v.ip) && has(v.op) && v.ip > 0 ? (v.ip - v.op) / v.ip * 100 : null, scale: [-10, 70], bands: [
+      { upTo: 16.5, label: 'Below the adenoma threshold', sev: 'warn', note: 'Not diagnostic of a lipid-rich adenoma. Consider adrenal washout CT, comparison with priors, or follow-up per ACR guidance.' },
+      { label: 'Consistent with lipid-rich adenoma (over 16.5%)', sev: 'ok' } ] }],
+    pitfalls: [
+      'Metastases from intracellular-lipid-containing tumors (hepatocellular and clear cell renal carcinoma) can lose signal.',
+      'About 10–30% of adenomas are lipid-poor and will not drop; unenhanced CT under 10 HU is the CT equivalent of a positive test.',
+      'Myelolipoma has macroscopic fat (India ink artifact at fat–water interfaces), not intracellular lipid.',
+      'The 16.5% cutoff comes from 1.5 T work. At 3 T the usual echo order is reversed, so use the opposed-phase echo before the in-phase echo or a Dixon method.'
+    ],
+    refs: ['fujiyoshi2003', 'israel2004', 'mayosmith2017'] },
+
+  { id: 'asr', title: 'Adrenal-to-spleen ratio',
+    howTo: 'Measure the adrenal mass and the spleen on IP and OP images. ASR = (adrenal OP / spleen OP) ÷ (adrenal IP / spleen IP). Normalizing to spleen corrects for scanner gain between echoes.',
+    diagram: DG.chemShift(`<circle cx="76" cy="38" r="7" class="roi"/><circle cx="172" cy="38" r="7" class="roi"/><text x="66" y="96" class="s">spleen ROI</text>`),
+    inputs: [
+      { id: 'aip', label: 'Adrenal SI, in-phase', value: 410 }, { id: 'aop', label: 'Adrenal SI, opposed-phase', value: 250 },
+      { id: 'sip', label: 'Spleen SI, in-phase', value: 300 }, { id: 'sop', label: 'Spleen SI, opposed-phase', value: 310 }
+    ],
+    results: [{ id: 'asr', label: 'Adrenal-to-spleen ratio', decimals: 2,
+      calc: v => [v.aip, v.aop, v.sip, v.sop].every(x => has(x) && x > 0) ? (v.aop / v.sop) / (v.aip / v.sip) : null, scale: [0.3, 1.3], bands: [
+      { upTo: 0.71, label: 'Consistent with adenoma (under 0.71)', sev: 'ok' },
+      { label: 'Above the adenoma threshold', sev: 'warn', note: 'Not diagnostic of adenoma.' } ] }],
+    pitfalls: ['Splenic iron overload (for example transfusional hemosiderosis) invalidates the spleen as a reference; use the SII instead.'],
+    refs: ['mayosmith1995', 'fujiyoshi2003'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
+{ id: 'shoulder', tab: 'Shoulder', title: 'Acromioclavicular, subacromial & instability',
+  blurb: 'AP or Zanca (10–15° cephalic tilt) view for the AC joint; true AP (Grashey) in neutral rotation for the acromiohumeral interval. Compare with the other shoulder when possible.',
+  calculators: [
+  { id: 'cc', title: 'Coracoclavicular interval & AC joint',
+    howTo: 'CC interval: vertical distance from the top of the coracoid to the undersurface of the clavicle. AC joint width: narrowest horizontal gap between the clavicle and acromion. Measure the uninjured side on the same exam for comparison.',
+    diagram: `
+      <polygon points="12,32 168,26 170,44 12,50" class="bn"/>
+      <polygon points="174,26 196,30 196,50 174,44" class="bn"/>
+      <path d="M70,118 C70,90 96,74 126,78 L128,88 C106,88 90,98 86,118 Z" class="bn"/>
+      <line x1="112" y1="80" x2="112" y2="46" class="ma"/><line x1="170" y1="58" x2="174" y2="58" class="ma"/>
+      <text x="118" y="66" class="m">CC</text><text x="160" y="72" class="m">AC</text>
+      <text x="14" y="22" class="s">clavicle</text><text x="40" y="132" class="s">coracoid</text><text x="166" y="20" class="s">acromion</text>`,
+    inputs: [
+      { id: 'cc', label: 'CC interval, injured side', unit: 'mm', value: 18, measure: 'length' },
+      { id: 'ccn', label: 'CC interval, other side', unit: 'mm', optional: true, value: 11, measure: 'length' },
+      { id: 'ac', label: 'AC joint width', unit: 'mm', optional: true, value: 6, measure: 'length' },
+      { id: 'sex', label: 'Sex', type: 'select', value: 'm', options: [['m', 'Male'], ['f', 'Female']] }
+    ],
+    results: [
+      { id: 'cc', label: 'CC interval', unit: 'mm', decimals: 1, calc: v => v.cc, scale: [0, 30], bands: [
+        { upTo: 13, incl: true, label: 'Within normal range (11–13 mm)', sev: 'ok' },
+        { label: 'Increased CC interval', sev: 'warn', note: 'Compare with the other side to grade the injury.' } ] },
+      { id: 'pct', label: 'Increase over other side', unit: '%', signed: true, calc: v => has(v.cc) && has(v.ccn) && v.ccn > 0 ? (v.cc - v.ccn) / v.ccn * 100 : null, scale: [0, 320], bands: [
+        { upTo: 25, label: 'Under 25%: Rockwood type I–II range', sev: 'info', note: 'Type II has a widened AC joint with a normal or slightly increased CC interval.' },
+        { upTo: 100, incl: true, label: '25–100%: Rockwood type III range', sev: 'warn' },
+        { upTo: 300, incl: true, label: '100–300%: Rockwood type V range', sev: 'alert' },
+        { label: 'Over 300%', sev: 'alert' } ] },
+      { id: 'diff', label: 'Side-to-side difference', unit: 'mm', signed: true, decimals: 1, calc: v => has(v.cc) && has(v.ccn) ? v.cc - v.ccn : null,
+        classify: d => d >= 5 ? { label: '5 mm or more: complete CC ligament disruption likely', sev: 'alert' } : { label: 'Under 5 mm', sev: 'info' } },
+      { id: 'ac', label: 'AC joint width', unit: 'mm', decimals: 1, calc: v => v.ac,
+        classify: (x, v) => { const lim = v.sex === 'f' ? 6 : 7; return x > lim ? { label: `Widened (over ${lim} mm)`, sev: 'warn', note: 'A side-to-side difference over 2–3 mm also suggests injury.' } : { label: `Normal width (${lim} mm or less)`, sev: 'ok' }; } }
+    ],
+    flags: [
+      { when: (v, r) => has(r.pct) && r.pct >= 40 && r.pct < 50, sev: 'info', text: 'A 40–50% increase over the other side was described as indicating complete CC ligament disruption.', refs: ['bearden1973'] },
+      { when: (v, r) => has(r.pct) && r.pct >= 25, sev: 'info', text: 'Types IV (posterior) and VI (inferior) displacement need an axillary view or CT; the CC interval alone cannot show them.' }
+    ],
+    refs: ['bearden1973', 'rockwood1984', 'petersson1983', 'ernberg2003'] },
+
+  { id: 'ahi', title: 'Acromiohumeral interval & Hamada grade',
+    howTo: 'On an AP radiograph in neutral rotation, measure the shortest distance from the undersurface of the acromion (dense cortical line) to the top of the humeral head.',
+    diagram: `
+      <path d="M30,18 L176,18 L176,32 L30,32 Z" class="bn"/>
+      <circle cx="104" cy="86" r="38" class="bn"/>
+      <path d="M56,62 Q46,86 56,110" class="bs" stroke-width="6"/>
+      <line x1="104" y1="32" x2="104" y2="48" class="ma"/><text x="110" y="44" class="m">AHI</text>
+      <text x="32" y="12" class="s">acromion</text><text x="80" y="134" class="s">humeral head</text>`,
+    inputs: [
+      { id: 'ahi', label: 'AHI', unit: 'mm', value: 5, measure: 'length' },
+      { id: 'acet', label: 'Acetabularization of the acromion', type: 'check', value: false },
+      { id: 'ghoa', label: 'Glenohumeral joint narrowing', type: 'check', value: false },
+      { id: 'coll', label: 'Humeral head collapse', type: 'check', value: false }
+    ],
+    results: [
+      { id: 'ahi', label: 'Acromiohumeral interval', unit: 'mm', decimals: 1, calc: v => v.ahi, scale: [0, 20], bands: [
+        { upTo: 5, incl: true, label: 'Markedly reduced (5 mm or less)', sev: 'alert', note: 'Strongly associated with a massive cuff tear involving infraspinatus and fatty degeneration.' },
+        { upTo: 7, label: 'Reduced (under 7 mm)', sev: 'warn', note: '7 mm or less is associated with full-thickness supraspinatus tears.' },
+        { upTo: 14, incl: true, label: 'Normal (7–14 mm)', sev: 'ok' },
+        { label: 'Increased (over 14 mm)', sev: 'info', note: 'Consider inferior subluxation: effusion or hemarthrosis, deltoid atony, axillary nerve injury.' } ] },
+      { id: 'hamada', label: 'Hamada grade (cuff tear arthropathy)', calc: v => has(v.ahi) ? 1 : null,
+        classify: (x, v) => v.coll ? { label: 'Grade 5', sev: 'alert', note: 'Humeral head collapse (cuff tear arthropathy).' }
+          : v.ghoa ? { label: v.acet ? 'Grade 4b' : 'Grade 4a', sev: 'alert', note: v.acet ? 'Glenohumeral narrowing with acetabularization.' : 'Glenohumeral narrowing without acetabularization.' }
+          : v.acet ? { label: 'Grade 3', sev: 'alert', note: 'Acetabularization: concave deformity of the acromial undersurface.' }
+          : v.ahi <= 5 ? { label: 'Grade 2', sev: 'warn', note: 'AHI 5 mm or less.' }
+          : { label: 'Grade 1', sev: 'ok', note: 'AHI 6 mm or more.' }, hideValue: true }
+    ],
+    refs: ['weiner1970', 'golding1962', 'saupe2006', 'hamada1990', 'hamada2011'] },
+
+  { id: 'gtrack', title: 'Glenoid track (on-track / off-track Hill-Sachs)',
+    howTo: 'Glenoid: on an en face view of the glenoid, fit a circle to the inferior glenoid. D = circle diameter; d = width of anterior bone loss. Glenoid track (GT) = 0.83 × D − d. Humeral head: Hill-Sachs interval (HSI) = Hill-Sachs width + intact bone bridge between its medial edge and the rotator cuff footprint. HSI greater than GT = off-track.',
+    diagram: `
+      <circle cx="52" cy="66" r="32" class="rf"/>
+      <path d="M52,34 A32,32 0 0 0 52,98 A32,32 0 0 0 74.6,88.6 L74.6,43.4 A32,32 0 0 0 52,34 Z" class="bn"/>
+      <line x1="20" y1="66" x2="20" y2="124" class="rf"/><line x1="84" y1="66" x2="84" y2="124" class="rf"/><line x1="74.6" y1="90" x2="74.6" y2="116" class="rf"/>
+      <line x1="20" y1="120" x2="84" y2="120" class="ma"/><line x1="74.6" y1="110" x2="84" y2="110" class="ma"/>
+      <text x="46" y="134" class="m">D</text><text x="88" y="112" class="m">d</text><text x="22" y="24" class="s">glenoid en face</text>
+      <circle cx="150" cy="70" r="32" class="bn"/>
+      <circle cx="124" cy="48" r="9" style="fill:var(--surface-2)"/>
+      <line x1="176" y1="46" x2="184" y2="40" class="bs" stroke-width="5"/>
+      <path d="M118,58 A34,34 0 0 1 178,50" class="ma"/>
+      <text x="140" y="22" class="m">HSI</text><text x="118" y="118" class="s">humeral head</text>`,
+    inputs: [
+      { id: 'D', label: 'Glenoid diameter (D)', unit: 'mm', value: 26, measure: 'length' },
+      { id: 'd', label: 'Anterior bone loss width (d)', unit: 'mm', value: 4, measure: 'length' },
+      { id: 'hs', label: 'Hill-Sachs width', unit: 'mm', value: 13, measure: 'length' },
+      { id: 'br', label: 'Bone bridge to cuff footprint', unit: 'mm', value: 6, measure: 'length' },
+      { id: 'mod', label: 'Modality', type: 'select', value: 'ct', options: [['ct', 'CT'], ['mri', 'MRI']] }
+    ],
+    results: [
+      { id: 'gbl', label: 'Glenoid bone loss', unit: '%', decimals: 0, calc: v => has(v.D) && has(v.d) && v.D > 0 ? v.d / v.D * 100 : null, scale: [0, 35], bands: [
+        { upTo: 13.5, label: 'Below the subcritical threshold', sev: 'ok' },
+        { upTo: 20, label: 'Subcritical bone loss (13.5–20%)', sev: 'warn', note: 'Worse function after isolated arthroscopic Bankart repair has been reported above 13.5%.' },
+        { label: 'Critical bone loss (20% or more)', sev: 'alert', note: 'Commonly 20–25%: glenoid bone augmentation (e.g. Latarjet) is usually considered regardless of track status.' } ] },
+      { id: 'gt', label: 'Glenoid track (0.83 × D − d)', unit: 'mm', decimals: 1, calc: v => has(v.D) && has(v.d) ? 0.83 * v.D - v.d : null },
+      { id: 'hsi', label: 'Hill-Sachs interval', unit: 'mm', decimals: 1, calc: v => has(v.hs) && has(v.br) ? v.hs + v.br : null },
+      { id: 'dtd', label: 'Track status (distance to dislocation = GT − HSI)', unit: 'mm', decimals: 1, signed: true,
+        calc: v => has(v.D) && has(v.d) && has(v.hs) && has(v.br) ? (0.83 * v.D - v.d) - (v.hs + v.br) : null,
+        classify: x => x < 0 ? { label: 'Off-track', sev: 'alert', note: 'The Hill-Sachs interval exceeds the glenoid track, so the lesion engages the glenoid rim in abduction and external rotation. Usually treated with remplissage or glenoid bone augmentation in addition to Bankart repair.' }
+          : x < 10 ? { label: 'On-track, near the edge (under 10 mm)', sev: 'warn', note: 'A distance to dislocation under 10 mm was associated with higher failure after isolated arthroscopic Bankart repair.' }
+          : { label: 'On-track', sev: 'ok', note: 'The Hill-Sachs lesion stays on the glenoid track; it does not engage.' } }
+    ],
+    flags: [
+      { when: v => v.mod === 'ct', sev: 'info', text: 'CT: measure D and d on a 3D en face glenoid reconstruction with the humeral head subtracted (the reference standard). Measure the Hill-Sachs width and bone bridge on axial images or a 3D posterior view of the humeral head.' },
+      { when: v => v.mod === 'mri', sev: 'info', text: 'MRI: measure D and d on the sagittal oblique image showing the glenoid en face (best-fit circle on the inferior glenoid); measure the Hill-Sachs width and bridge on axial images at the level of the lesion. MRI agrees well with CT for track status.', refs: ['gyftopoulos2015'] }
+    ],
+    pitfalls: [
+      'Use the inferior glenoid best-fit circle, not the full pear-shaped outline.',
+      'Measure the Hill-Sachs width at its widest point, perpendicular to the long axis of the lesion, and measure the bridge to the medial edge of the cuff footprint.',
+      'The 0.83 factor reflects the glenoid track in 90° abduction with external rotation; young, active patients may need a wider safety margin.',
+      'Bipolar lesions are dynamic. Track status is a guide to surgical planning, not a guarantee of stability.'
+    ],
+    refs: ['yamamoto2007', 'digiacomo2014', 'metzger2013', 'gyftopoulos2015', 'shaha2015', 'dtd2022'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
+{ id: 'hip', tab: 'Pelvis & hip', title: 'Pelvic stability, acetabular coverage & FAI',
+  blurb: 'Hip measurements use a standardized AP pelvis (coccyx tip 1–3 cm above the symphysis, symmetric obturator foramina) unless noted. Values below are for skeletally mature hips.',
+  calculators: [
+  { id: 'flamingo', title: 'Flamingo views (single-leg stance)', vary: true,
+    howTo: 'Obtain AP pelvis views standing on the right leg, then the left. On each, measure the vertical offset between the superior borders of the two pubic bodies (positive if the right side is higher). Vertical translation = difference between the two views.',
+    diagram: `
+      <text x="50" y="14" text-anchor="middle" class="s">R stance</text><text x="150" y="14" text-anchor="middle" class="s">L stance</text>
+      <rect x="18" y="40" width="30" height="50" rx="8" class="bn"/><rect x="54" y="50" width="30" height="50" rx="8" class="bn"/>
+      <rect x="116" y="50" width="30" height="50" rx="8" class="bn"/><rect x="152" y="40" width="30" height="50" rx="8" class="bn"/>
+      <line x1="10" y1="40" x2="92" y2="40" class="rf"/><line x1="10" y1="50" x2="92" y2="50" class="rf"/>
+      <line x1="108" y1="40" x2="190" y2="40" class="rf"/><line x1="108" y1="50" x2="190" y2="50" class="rf"/>
+      <line x1="90" y1="40" x2="90" y2="50" class="ma"/><line x1="110" y1="40" x2="110" y2="50" class="ma"/>
+      <text x="100" y="124" text-anchor="middle" class="m">translation = |R − L|</text>`,
+    inputs: [
+      { id: 'r', label: 'Offset, right-leg stance (+ R higher)', unit: 'mm', value: 2, measure: 'length' },
+      { id: 'l', label: 'Offset, left-leg stance (+ R higher)', unit: 'mm', value: -1.5, measure: 'length' },
+      { id: 'w', label: 'Symphyseal width', unit: 'mm', optional: true, value: 6, measure: 'length' }
+    ],
+    results: [
+      { id: 't', label: 'Vertical translation between views', unit: 'mm', decimals: 1, calc: v => has(v.r) && has(v.l) ? Math.abs(v.r - v.l) : null, scale: [0, 10], bands: [
+        { upTo: 2, incl: true, label: 'Within normal motion (2 mm or less)', sev: 'ok', note: 'Normal motion is small; multiparous women move more than men.' },
+        { label: 'Abnormal motion (over 2 mm)', sev: 'alert', note: 'Suggests pelvic ring instability; correlate with pain and the sacroiliac joints.' } ] },
+      { id: 'w', label: 'Symphyseal width', unit: 'mm', decimals: 1, calc: v => v.w, scale: [0, 20], bands: [
+        { upTo: 6, incl: true, label: 'Normal adult (about 4–6 mm)', sev: 'ok' },
+        { upTo: 10, incl: true, label: 'Widened', sev: 'warn', note: 'Can be normal in late pregnancy and early postpartum.' },
+        { label: 'Diastasis (over 10 mm)', sev: 'alert', note: 'Over 10 mm suggests symphyseal disruption.' } ] }
+    ],
+    flags: [{ when: v => (has(v.r) && Math.abs(v.r) > 2) || (has(v.l) && Math.abs(v.l) > 2), sev: 'warn', text: 'A static step-off over 2 mm on a single view is abnormal by itself.', refs: ['vix1971'] }],
+    refs: ['siegel2008', 'garras2008', 'vix1971'] },
+
+  { id: 'lcea', title: 'Lateral center-edge angle (Wiberg)',
+    howTo: 'Find the femoral head center. Draw a vertical line through it (perpendicular to the interteardrop line) and a line from the center to the lateral edge of the sourcil (weight-bearing sclerotic zone). The LCEA is the angle between them.',
+    diagram: `
+      <path d="M30,74 Q70,34 128,42" class="bs" stroke-width="8"/>
+      <circle cx="100" cy="90" r="34" class="bn"/>
+      <line x1="100" y1="90" x2="100" y2="22" class="rf"/><line x1="100" y1="90" x2="128" y2="42" class="ms"/>
+      <circle cx="100" cy="90" r="2.5" class="pt"/><circle cx="128" cy="42" r="2.5" class="pt"/>
+      <text x="108" y="30" class="m">LCEA</text><text x="140" y="56" class="s">lateral edge</text><text x="6" y="20" class="s">medial</text><text x="164" y="20" class="s">lateral</text>`,
+    inputs: [{ id: 'a', label: 'LCEA', unit: '°', value: 22, measure: 'angle' }],
+    results: [{ id: 'a', label: 'Lateral center-edge angle', unit: '°', calc: v => v.a, scale: [0, 50], bands: [
+      { upTo: 20, label: 'Dysplasia (under 20°)', sev: 'alert', note: 'Lateral undercoverage.' },
+      { upTo: 25, label: 'Borderline dysplasia (20–25°)', sev: 'warn' },
+      { upTo: 40, label: 'Normal (25–39°)', sev: 'ok' },
+      { label: 'Overcoverage (40° or more)', sev: 'warn', note: 'Global overcoverage (pincer morphology); consider protrusio.' } ] }],
+    refs: ['wiberg1939', 'tannast2007', 'tannast2015'] },
+
+  { id: 'cover', title: 'Acetabular coverage (Tönnis, extrusion, ACEA)',
+    howTo: 'Tönnis angle: line through the medial and lateral ends of the sourcil versus a horizontal line. Extrusion index: width of uncovered femoral head lateral to the acetabular edge (A) divided by the total head width (B). Anterior center-edge angle: on the false-profile view.',
+    diagram: `
+      <circle cx="100" cy="88" r="35" class="bn"/>
+      <path d="M40,70 Q70,44 122,44" class="bs" stroke-width="8"/>
+      <line x1="76" y1="52" x2="122" y2="44" class="ms"/><line x1="76" y1="52" x2="150" y2="52" class="rf"/>
+      <line x1="65" y1="80" x2="65" y2="136" class="rf"/><line x1="122" y1="44" x2="122" y2="136" class="rf"/><line x1="135" y1="80" x2="135" y2="136" class="rf"/>
+      <line x1="122" y1="126" x2="135" y2="126" class="ma"/><line x1="65" y1="134" x2="135" y2="134" class="ma"/>
+      <text x="138" y="48" class="m">Tönnis</text><text x="140" y="124" class="m">A</text><text x="46" y="132" class="m">B</text>`,
+    inputs: [
+      { id: 't', label: 'Tönnis angle', unit: '°', value: 12, measure: 'angle' },
+      { id: 'a', label: 'Uncovered width (A)', unit: 'mm', optional: true, value: 14, measure: 'length' },
+      { id: 'b', label: 'Head width (B)', unit: 'mm', optional: true, value: 50, measure: 'length' },
+      { id: 'acea', label: 'Anterior center-edge angle', unit: '°', optional: true, value: 24, measure: 'angle' }
+    ],
+    results: [
+      { id: 't', label: 'Tönnis angle', unit: '°', signed: true, calc: v => v.t, scale: [-10, 25], bands: [
+        { upTo: 0, label: 'Overcoverage (under 0°)', sev: 'warn', note: 'Pincer morphology.' },
+        { upTo: 10, incl: true, label: 'Normal (0–10°)', sev: 'ok' },
+        { label: 'Dysplasia (over 10°)', sev: 'alert', note: 'Steep acetabular roof.' } ] },
+      { id: 'ei', label: 'Femoral head extrusion index', unit: '%', decimals: 0, calc: v => has(v.a) && has(v.b) && v.b > 0 ? v.a / v.b * 100 : null, scale: [0, 50], bands: [
+        { upTo: 25, incl: true, label: 'Normal (25% or less)', sev: 'ok' },
+        { label: 'Undercoverage (over 25%)', sev: 'alert' } ] },
+      { id: 'acea', label: 'Anterior center-edge angle', unit: '°', calc: v => v.acea, scale: [0, 50], bands: [
+        { upTo: 20, label: 'Anterior undercoverage (under 20°)', sev: 'alert' },
+        { label: 'Normal (20° or more)', sev: 'ok' } ] }
+    ],
+    refs: ['tonnis1976', 'heyman1950', 'lequesne1961', 'tannast2007', 'tannast2015'] },
+
+  { id: 'alpha', title: 'Alpha angle (cam morphology)', vary: true,
+    howTo: 'Fit a circle to the femoral head. Draw the femoral neck axis through the head center. Mark where the anterior head-neck contour first leaves the circle; the alpha angle is between the neck axis and the line from the center to that point. Use radial or oblique axial MRI, or a 45° Dunn view.',
+    diagram: `
+      <polygon points="93.6,51.5 172,90 166,126 74.3,99.7" class="bn"/>
+      <circle cx="70" cy="70" r="30" class="bn"/>
+      <circle cx="70" cy="70" r="30" class="rf"/>
+      <line x1="70" y1="70" x2="180" y2="114" class="ms"/><line x1="70" y1="70" x2="99" y2="47" class="ms"/>
+      <circle cx="70" cy="70" r="2.5" class="pt"/><circle cx="93.6" cy="51.5" r="2.5" class="pt"/>
+      <text x="96" y="74" class="m">α</text><text x="100" y="40" class="s">head-neck bump</text><text x="140" y="136" class="s">neck axis</text>`,
+    inputs: [{ id: 'a', label: 'Alpha angle', unit: '°', value: 63, measure: 'angle' }],
+    results: [{ id: 'a', label: 'Alpha angle', unit: '°', calc: v => v.a, scale: [30, 100], bands: [
+      { upTo: 50, label: 'Normal', sev: 'ok' },
+      { upTo: 55, incl: true, label: 'Borderline (50–55°)', sev: 'info', note: 'Some authors use over 50° as abnormal.' },
+      { upTo: 60, label: 'Cam morphology (over 55°)', sev: 'warn' },
+      { upTo: 83, label: 'Pronounced cam (over 60°)', sev: 'alert', note: 'Over 60° is associated with incident hip osteoarthritis.' },
+      { label: 'Severe cam (over 83°)', sev: 'alert', note: 'Over 83° carried the highest osteoarthritis risk in the CHECK cohort.' } ] }],
+    refs: ['notzli2002', 'tannast2007', 'agricola2013'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
+{ id: 'wrist', tab: 'Wrist', title: 'Distal radius',
+  blurb: 'Standard PA and true lateral wrist radiographs. Compare with the uninjured side when available. Older, lower-demand patients tolerate larger deformities.',
+  calculators: [
+  { id: 'tilt', title: 'Volar / dorsal tilt',
+    howTo: 'True lateral. Draw the long axis of the radial shaft. Connect the dorsal and volar rims of the distal articular surface. The tilt is the angle between that rim line and a line perpendicular to the shaft. The image tool "Tilt" mode measures this directly.',
+    diagram: `
+      <polygon points="82,0 118,0 118,70 132,100 130,112 70,104 72,95 82,70" class="bn"/>
+      <line x1="100" y1="0" x2="100" y2="128" class="rf"/>
+      <line x1="56" y1="108" x2="146" y2="108" class="ms"/><line x1="58" y1="102.4" x2="144" y2="113.9" class="ms"/>
+      <text x="8" y="100" class="s">volar</text><text x="150" y="100" class="s">dorsal</text><text x="150" y="126" class="m">tilt</text>`,
+    inputs: [
+      { id: 't', label: 'Tilt angle', unit: '°', value: 18, measure: 'tilt' },
+      { id: 'dir', label: 'Direction', type: 'select', value: 'dorsal', options: [['dorsal', 'Dorsal'], ['volar', 'Volar']] },
+      { id: 'age', label: 'Age', unit: 'y', optional: true, value: 58 }
+    ],
+    results: [{ id: 's', label: 'Articular tilt', unit: '°', calc: v => has(v.t) ? (v.dir === 'volar' ? v.t : -v.t) : null,
+      format: x => `${Math.abs(Math.round(x))}° ${x < 0 ? 'dorsal' : x > 0 ? 'volar' : 'neutral'}`, scale: [-40, 30], scaleLabel: x => x < 0 ? `${-x}D` : x > 0 ? `${x}V` : '0', bands: [
+      { upTo: -20, label: 'Dorsal tilt over 20°', sev: 'alert', note: 'Lafontaine instability criterion; high risk of redisplacement.' },
+      { upTo: -10, label: 'Dorsal tilt over 10°', sev: 'alert', note: 'Exceeds the AAOS threshold for considering operative fixation.' },
+      { upTo: 0, label: 'Dorsal tilt up to 10°', sev: 'warn', note: 'Loss of normal volar tilt, within commonly accepted limits.' },
+      { upTo: 20, incl: true, label: 'Normal volar tilt (mean about 11°)', sev: 'ok' },
+      { label: 'Excessive volar tilt (over 20°)', sev: 'warn', note: 'Seen with volarly displaced (Smith-type) fractures.' } ] }],
+    flags: [{ when: v => has(v.age) && v.age >= 65, sev: 'info', text: 'Age 65 or older: casting gave function comparable to volar plating at one year despite worse radiographic alignment.', refs: ['arora2011'] }],
+    refs: ['mann1992', 'goldfarb2001', 'lichtman2010', 'graham1997'] },
+
+  { id: 'incl', title: 'Radial inclination',
+    howTo: 'PA view. Draw the radial shaft axis and a line perpendicular to it at the ulnar corner of the distal radius. Radial inclination is the angle between that perpendicular and a line from the ulnar corner to the tip of the radial styloid.',
+    diagram: `
+      <polygon points="82,0 118,0 118,70 122,100 60,114 66,95 82,70" class="bn"/>
+      <line x1="100" y1="0" x2="100" y2="128" class="rf"/>
+      <line x1="140" y1="100" x2="40" y2="100" class="ms"/><line x1="130" y1="98.2" x2="44" y2="117.5" class="ms"/>
+      <circle cx="60" cy="114" r="2.5" class="pt"/><circle cx="122" cy="100" r="2.5" class="pt"/>
+      <text x="8" y="132" class="s">styloid</text><text x="130" y="92" class="s">ulnar corner</text><text x="20" y="92" class="m">inclination</text>`,
+    inputs: [{ id: 'a', label: 'Radial inclination', unit: '°', value: 17, measure: 'tilt' }],
+    results: [{ id: 'a', label: 'Radial inclination', unit: '°', calc: v => v.a, scale: [0, 40], bands: [
+      { upTo: 15, label: 'Below the acceptable limit (under 15°)', sev: 'alert' },
+      { upTo: 21, label: 'Decreased (15–20°)', sev: 'warn' },
+      { upTo: 30, incl: true, label: 'Normal (mean 22–23°)', sev: 'ok' },
+      { label: 'Increased', sev: 'info' } ] }],
+    refs: ['mann1992', 'goldfarb2001', 'graham1997'] },
+
+  { id: 'height', title: 'Radial height & shortening',
+    howTo: 'PA view. Draw two lines perpendicular to the radial shaft: one at the tip of the radial styloid and one at the ulnar corner of the articular surface. Radial height is the distance between them. Shortening can also be measured as the change in ulnar variance from the other wrist.',
+    diagram: `
+      <polygon points="82,0 118,0 118,70 122,100 60,114 66,95 82,70" class="bn"/>
+      <line x1="40" y1="114" x2="160" y2="114" class="rf"/><line x1="40" y1="100" x2="160" y2="100" class="rf"/>
+      <line x1="150" y1="100" x2="150" y2="114" class="ma"/><text x="156" y="92" class="m">height</text>`,
+    inputs: [
+      { id: 'h', label: 'Radial height', unit: 'mm', value: 8, measure: 'length' },
+      { id: 'hn', label: 'Radial height, other wrist', unit: 'mm', optional: true, value: 12, measure: 'length' }
+    ],
+    results: [
+      { id: 'h', label: 'Radial height', unit: 'mm', decimals: 1, calc: v => v.h, scale: [0, 20], bands: [
+        { upTo: 8, label: 'Below normal range (under 8 mm)', sev: 'warn' },
+        { upTo: 18, incl: true, label: 'Normal (8–18 mm, mean 11–12)', sev: 'ok' },
+        { label: 'Above the usual range', sev: 'info' } ] },
+      { id: 's', label: 'Shortening vs other wrist', unit: 'mm', decimals: 1, calc: v => has(v.h) && has(v.hn) ? v.hn - v.h : null,
+        classify: s => s > 3 ? { label: 'Over 3 mm: exceeds AAOS operative threshold', sev: 'alert' } : { label: '3 mm or less', sev: 'ok' } }
+    ],
+    refs: ['mann1992', 'lichtman2010', 'graham1997'] },
+
+  { id: 'artic', title: 'Articular step-off, gap & teardrop angle',
+    howTo: 'Step-off: vertical offset between articular fragments; gap: separation between them (CT is most accurate). Teardrop angle (lateral): angle between the central axis of the volar lunate facet (teardrop) and the radial shaft axis.',
+    diagram: `
+      <path d="M20,60 L96,60 L96,110 L20,110 Z" class="bn"/><path d="M104,68 L180,68 L180,110 L104,110 Z" class="bn"/>
+      <line x1="60" y1="60" x2="190" y2="60" class="rf"/>
+      <line x1="186" y1="60" x2="186" y2="68" class="ma"/><line x1="96" y1="40" x2="104" y2="40" class="ma"/>
+      <line x1="96" y1="44" x2="96" y2="60" class="rf"/><line x1="104" y1="44" x2="104" y2="68" class="rf"/>
+      <text x="140" y="56" class="m">step-off</text><text x="84" y="32" class="m">gap</text><text x="20" y="128" class="s">articular surface (schematic)</text>`,
+    inputs: [
+      { id: 'step', label: 'Step-off', unit: 'mm', value: 2.5, measure: 'length' },
+      { id: 'gap', label: 'Gap', unit: 'mm', optional: true, value: 1, measure: 'length' },
+      { id: 'td', label: 'Teardrop angle', unit: '°', optional: true, value: 52, measure: 'angle' }
+    ],
+    results: [
+      { id: 'm', label: 'Largest articular incongruity', unit: 'mm', decimals: 1, calc: v => has(v.step) || has(v.gap) ? Math.max(v.step || 0, v.gap || 0) : null, scale: [0, 6], bands: [
+        { upTo: 2, label: 'Under 2 mm', sev: 'ok' },
+        { label: '2 mm or more', sev: 'alert', note: 'Exceeds the AAOS threshold; incongruity of 2 mm or more led to radiocarpal arthritis in 91% versus 11% with congruent joints.' } ] },
+      { id: 'td', label: 'Teardrop angle', unit: '°', calc: v => v.td, scale: [20, 90], bands: [
+        { upTo: 45, label: 'Decreased (under 45°)', sev: 'alert', note: 'Dorsal rotation of the volar lunate facet fragment; usually needs reduction.' },
+        { label: 'Not markedly decreased (normal about 70°)', sev: 'ok' } ] }
+    ],
+    refs: ['knirk1986', 'lichtman2010', 'medoff2005'] },
+
+  { id: 'lafont', title: 'Lafontaine instability criteria',
+    howTo: 'Count the factors present. Three or more predict loss of reduction after closed treatment.',
+    inputs: [
+      { id: 'd20', label: 'Dorsal angulation over 20°', type: 'check', value: true },
+      { id: 'com', label: 'Dorsal comminution', type: 'check', value: true },
+      { id: 'ia', label: 'Intra-articular radiocarpal fracture', type: 'check', value: false },
+      { id: 'uln', label: 'Associated ulnar fracture', type: 'check', value: false },
+      { id: 'age', label: 'Age over 60', type: 'check', value: true }
+    ],
+    results: [{ id: 'n', label: 'Factors present', decimals: 0, calc: v => sum(v.d20, v.com, v.ia, v.uln, v.age),
+      classify: n => n >= 3 ? { label: 'Unstable (3 or more factors)', sev: 'alert', note: 'High risk of redisplacement with cast treatment.' } : { label: 'Fewer than 3 factors', sev: 'ok' } }],
+    refs: ['lafontaine1989'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
+{ id: 'foot', tab: 'Foot & ankle', title: 'Hallux valgus & hindfoot alignment',
+  blurb: 'Weight-bearing radiographs only. Non-weight-bearing films underestimate both hallux valgus and flatfoot deformity.',
+  calculators: [
+  { id: 'hv', title: 'Hallux valgus angles',
+    howTo: 'Weight-bearing AP foot. Draw the long axes of the first metatarsal, the proximal phalanx and the second metatarsal (bisecting lines through the shafts). HVA: first metatarsal vs proximal phalanx. IMA: first vs second metatarsal. DMAA: first metatarsal axis vs its distal articular surface.',
+    diagram: `
+      <path d="M60,135 L75,55" class="bs" stroke-width="16"/><path d="M78,50 L102,18" class="bs" stroke-width="12"/><path d="M98,135 L102,50" class="bs" stroke-width="13"/>
+      <line x1="56" y1="140" x2="80" y2="30" class="ms"/><line x1="75" y1="55" x2="108" y2="10" class="ms"/><line x1="97.6" y1="140" x2="102.4" y2="30" class="ms"/>
+      <text x="108" y="34" class="m">HVA</text><text x="74" y="122" class="m">IMA</text><text x="16" y="100" class="s">1st MT</text><text x="132" y="100" class="s">2nd MT</text>`,
+    inputs: [
+      { id: 'hva', label: 'Hallux valgus angle', unit: '°', value: 32, measure: 'angle' },
+      { id: 'ima', label: 'Intermetatarsal angle (1–2)', unit: '°', value: 13, measure: 'angle' },
+      { id: 'dmaa', label: 'DMAA', unit: '°', optional: true, value: 8, measure: 'angle' },
+      { id: 'hvi', label: 'Hallux interphalangeus angle', unit: '°', optional: true, value: 7, measure: 'angle' }
+    ],
+    results: [
+      { id: 'hva', label: 'Hallux valgus angle', unit: '°', calc: v => v.hva, scale: [0, 60], bands: [
+        { upTo: 15, label: 'Normal (under 15°)', sev: 'ok' },
+        { upTo: 20, label: 'Mild hallux valgus (15–20°)', sev: 'info' },
+        { upTo: 40, incl: true, label: 'Moderate hallux valgus (20–40°)', sev: 'warn' },
+        { label: 'Severe hallux valgus (over 40°)', sev: 'alert' } ] },
+      { id: 'ima', label: 'Intermetatarsal angle', unit: '°', calc: v => v.ima, scale: [0, 25], bands: [
+        { upTo: 9, label: 'Normal (under 9°)', sev: 'ok' },
+        { upTo: 11, label: 'Mild (9–11°)', sev: 'info' },
+        { upTo: 16, incl: true, label: 'Moderate (11–16°)', sev: 'warn' },
+        { label: 'Severe (over 16°)', sev: 'alert' } ] },
+      { id: 'dmaa', label: 'Distal metatarsal articular angle', unit: '°', calc: v => v.dmaa, scale: [0, 30], bands: [
+        { upTo: 10, incl: true, label: 'Normal (10° or less)', sev: 'ok' },
+        { label: 'Increased (over 10°)', sev: 'warn', note: 'Lateral slope of the articular surface; affects choice of osteotomy.' } ] },
+      { id: 'hvi', label: 'Hallux interphalangeus angle', unit: '°', calc: v => v.hvi, scale: [0, 25], bands: [
+        { upTo: 10, incl: true, label: 'Normal (10° or less)', sev: 'ok' },
+        { label: 'Hallux valgus interphalangeus (over 10°)', sev: 'warn' } ] }
+    ],
+    refs: ['coughlin2007', 'robinson2005'] },
+
+  { id: 'hind', title: 'Hindfoot alignment (Saltzman view)', vary: true,
+    howTo: 'Weight-bearing hindfoot alignment view. Draw the tibial shaft axis and the calcaneal axis (bisecting the calcaneal tuberosity). The angle between them is the hindfoot alignment angle; heel lateral to the tibial axis = valgus.',
+    diagram: `
+      <path d="M100,0 L100,58" class="bs" stroke-width="22"/>
+      <ellipse cx="100" cy="70" rx="24" ry="12" class="bn"/>
+      <ellipse cx="108" cy="106" rx="18" ry="28" class="bn" transform="rotate(-14 108 106)"/>
+      <line x1="100" y1="0" x2="100" y2="138" class="rf"/><line x1="99" y1="76" x2="120" y2="138" class="ms"/>
+      <text x="126" y="130" class="m">valgus</text><text x="8" y="130" class="s">medial</text><text x="160" y="16" class="s">lateral</text>`,
+    inputs: [
+      { id: 'a', label: 'Hindfoot alignment angle', unit: '°', value: 14, measure: 'angle' },
+      { id: 'dir', label: 'Direction', type: 'select', value: 'valgus', options: [['valgus', 'Valgus'], ['varus', 'Varus']] }
+    ],
+    results: [{ id: 's', label: 'Hindfoot alignment', unit: '°', calc: v => has(v.a) ? (v.dir === 'varus' ? -v.a : v.a) : null,
+      format: x => `${Math.abs(Math.round(x))}° ${x < 0 ? 'varus' : x > 0 ? 'valgus' : 'neutral'}`, scale: [-20, 30], scaleLabel: x => x < 0 ? `${-x}var` : x > 0 ? `${x}val` : '0', bands: [
+      { upTo: 0, label: 'Hindfoot varus', sev: 'warn', note: 'Seen with cavovarus foot; check for peroneal and lateral ankle pathology.' },
+      { upTo: 10, incl: true, label: 'Physiologic valgus (0–10°)', sev: 'ok' },
+      { label: 'Increased valgus (over 10°)', sev: 'warn', note: 'Seen with progressive collapsing foot (adult flatfoot) deformity.' } ] }],
+    refs: ['saltzman1995'] },
+
+  { id: 'arch', title: "Meary's angle & calcaneal pitch", vary: true,
+    howTo: "Weight-bearing lateral. Meary's angle: long axis of the talus vs long axis of the first metatarsal (apex plantar = planus, apex dorsal = cavus). Calcaneal pitch: line along the plantar calcaneus vs the floor.",
+    diagram: `
+      <polygon points="12,128 26,96 70,92 84,116 70,128" class="bn"/>
+      <ellipse cx="78" cy="72" rx="26" ry="14" class="bn" transform="rotate(22 78 72)"/>
+      <path d="M118,90 L186,118" class="bs" stroke-width="10"/>
+      <line x1="40" y1="56" x2="190" y2="116" class="ms"/><line x1="10" y1="132" x2="80" y2="112" class="ms"/>
+      <line x1="0" y1="132" x2="200" y2="132" class="rf"/>
+      <text x="104" y="62" class="m">Meary</text><text x="86" y="128" class="m">pitch</text><text x="146" y="96" class="s">1st MT</text><text x="40" y="44" class="s">talus</text>`,
+    inputs: [
+      { id: 'm', label: "Meary's angle", unit: '°', value: 12, measure: 'angle' },
+      { id: 'mdir', label: 'Apex', type: 'select', value: 'plantar', options: [['plantar', 'Plantar (planus)'], ['dorsal', 'Dorsal (cavus)']] },
+      { id: 'p', label: 'Calcaneal pitch', unit: '°', optional: true, value: 15, measure: 'angle' }
+    ],
+    results: [
+      { id: 'm', label: "Meary's angle", unit: '°', calc: v => has(v.m) ? (v.mdir === 'dorsal' ? -v.m : v.m) : null,
+        format: x => `${Math.abs(Math.round(x))}° ${x < 0 ? 'apex dorsal' : x > 0 ? 'apex plantar' : ''}`.trim(), scale: [-20, 40], scaleLabel: x => x < 0 ? `${-x}D` : x > 0 ? `${x}P` : '0', bands: [
+        { upTo: -4, label: 'Pes cavus (apex dorsal over 4°)', sev: 'warn' },
+        { upTo: 4, incl: true, label: 'Normal (0 ± 4°)', sev: 'ok' },
+        { upTo: 15, incl: true, label: 'Mild pes planus (4–15°)', sev: 'info' },
+        { upTo: 30, incl: true, label: 'Moderate pes planus (15–30°)', sev: 'warn' },
+        { label: 'Severe pes planus (over 30°)', sev: 'alert' } ] },
+      { id: 'p', label: 'Calcaneal pitch', unit: '°', calc: v => v.p, scale: [0, 45], bands: [
+        { upTo: 18, label: 'Low (under 18°): planus', sev: 'warn' },
+        { upTo: 30, incl: true, label: 'Normal (18–30°)', sev: 'ok' },
+        { label: 'High (over 30°): cavus', sev: 'warn' } ] }
+    ],
+    refs: ['younger2005'] }
+  ] }
+];
+
+/* ======================= TEACHING CASES ======================= */
+const REGIONS = ['Hand', 'Wrist', 'Forearm', 'Elbow', 'Humerus', 'Shoulder', 'Chest', 'Cervical spine', 'Thoracic spine', 'Lumbar spine', 'Pelvis', 'Hip', 'Femur', 'Thigh', 'Knee', 'Leg', 'Ankle', 'Foot'];
+/* Case fields: id, region (one of REGIONS), alsoIn (optional extra regions), title, modality, added (year-month only, never exact study dates),
+   images [{src, caption}], findings, teaching [bullets], refs [REFERENCES keys],
+   calc (optional) {id: calculator id, values: {inputId: value}, label} adds a button that loads the case values into a calculator. */
+
+const CASES = []; /* teaching cases live in the site's Educational cases section */
+
+/* ======================= REFERENCES ======================= */
+/* s = short label, a = authors, t = title, j = journal/year/pages, url = optional direct link (default: PubMed title search) */
+const REFERENCES = {
+  kane1977: { s: 'Kane 1977', a: 'Kane WJ.', t: 'Scoliosis prevalence: a call for a statement of terms.', j: 'Clin Orthop Relat Res. 1977;(126):43-46.' },
+  cobb1948: { s: 'Cobb 1948', a: 'Cobb JR.', t: 'Outline for the study of scoliosis.', j: 'Instr Course Lect. 1948;5:261-275.' },
+  weinstein2008: { s: 'Weinstein 2008', a: 'Weinstein SL, Dolan LA, Cheng JC, Danielsson A, Morcuende JA.', t: 'Adolescent idiopathic scoliosis.', j: 'Lancet. 2008;371(9623):1527-1537.' },
+  weinstein1983: { s: 'Weinstein 1983', a: 'Weinstein SL, Ponseti IV.', t: 'Curve progression in idiopathic scoliosis.', j: 'J Bone Joint Surg Am. 1983;65(4):447-455.' },
+  weinstein2013: { s: 'BrAIST 2013', a: 'Weinstein SL, Dolan LA, Wright JG, Dobbs MB.', t: 'Effects of bracing in adolescents with idiopathic scoliosis.', j: 'N Engl J Med. 2013;369(16):1512-1521.' },
+  lonstein1984: { s: 'Lonstein 1984', a: 'Lonstein JE, Carlson JM.', t: 'The prediction of curve progression in untreated idiopathic scoliosis during growth.', j: 'J Bone Joint Surg Am. 1984;66(7):1061-1071.' },
+  morrissy1990: { s: 'Morrissy 1990', a: 'Morrissy RT, Goldsmith GS, Hall EC, Kehl D, Cowie GH.', t: 'Measurement of the Cobb angle on radiographs of patients who have scoliosis. Evaluation of intrinsic error.', j: 'J Bone Joint Surg Am. 1990;72(3):320-327.' },
+  carman1990: { s: 'Carman 1990', a: 'Carman DL, Browne RH, Birch JG.', t: 'Measurement of scoliosis and kyphosis radiographs. Intraobserver and interobserver variation.', j: 'J Bone Joint Surg Am. 1990;72(3):328-333.' },
+  richards2005: { s: 'Richards 2005', a: 'Richards BS, Bernstein RM, D\'Amato CR, Thompson GH.', t: 'Standardization of criteria for adolescent idiopathic scoliosis brace studies: SRS Committee on Bracing and Nonoperative Management.', j: 'Spine. 2005;30(18):2068-2075.' },
+  risser1958: { s: 'Risser 1958', a: 'Risser JC.', t: 'The iliac apophysis; an invaluable sign in the management of scoliosis.', j: 'Clin Orthop. 1958;11:111-119.' },
+  nashmoe1969: { s: 'Nash & Moe 1969', a: 'Nash CL Jr, Moe JH.', t: 'A study of vertebral rotation.', j: 'J Bone Joint Surg Am. 1969;51(2):223-229.' },
+  fon1980: { s: 'Fon 1980', a: 'Fon GT, Pitt MJ, Thies AC Jr.', t: 'Thoracic kyphosis: range in normal subjects.', j: 'AJR Am J Roentgenol. 1980;134(5):979-983.' },
+  bernhardt1989: { s: 'Bernhardt 1989', a: 'Bernhardt M, Bridwell KH.', t: 'Segmental analysis of the sagittal plane alignment of the normal thoracic and lumbar spines and thoracolumbar junction.', j: 'Spine. 1989;14(7):717-721.' },
+  sorensen1964: { s: 'Sørensen 1964', a: 'Sørensen KH.', t: 'Scheuermann\'s juvenile kyphosis: clinical appearances, radiography, aetiology, and prognosis.', j: 'Copenhagen: Munksgaard; 1964.' },
+  schwab2012: { s: 'Schwab 2012', a: 'Schwab F, Ungar B, Blondel B, et al.', t: 'Scoliosis Research Society-Schwab adult spinal deformity classification: a validation study.', j: 'Spine. 2012;37(12):1077-1082.' },
+  legaye1998: { s: 'Legaye 1998', a: 'Legaye J, Duval-Beaupère G, Hecquet J, Marty C.', t: 'Pelvic incidence: a fundamental pelvic parameter for three-dimensional regulation of spinal sagittal curves.', j: 'Eur Spine J. 1998;7(2):99-103.' },
+  obrien2008: { s: 'SDSG manual 2008', a: 'O\'Brien MF, Kuklo TR, Blanke KM, Lenke LG, eds.', t: 'Spinal Deformity Study Group Radiographic Measurement Manual.', j: 'Memphis, TN: Medtronic Sofamor Danek; 2008.' },
+  glassman2005: { s: 'Glassman 2005', a: 'Glassman SD, Berven S, Bridwell K, Horton W, Dimar JR.', t: 'Correlation of radiographic parameters and clinical symptoms in adult scoliosis.', j: 'Spine. 2005;30(6):682-688.' },
+  mehta1972: { s: 'Mehta 1972', a: 'Mehta MH.', t: 'The rib-vertebra angle in the early diagnosis between resolving and progressive infantile scoliosis.', j: 'J Bone Joint Surg Br. 1972;54(2):230-243.' },
+
+  hinck1960: { s: 'Hinck 1960', a: 'Hinck VC, Hopkins CE.', t: 'Measurement of the atlanto-dental interval in the adult.', j: 'Am J Roentgenol Radium Ther Nucl Med. 1960;84:945-951.' },
+  locke1966: { s: 'Locke 1966', a: 'Locke GR, Gardner JI, Van Epps EF.', t: 'Atlas-dens interval (ADI) in children: a survey based on 200 normal cervical spines.', j: 'Am J Roentgenol Radium Ther Nucl Med. 1966;97(1):135-140.' },
+  fielding1974: { s: 'Fielding 1974', a: 'Fielding JW, Cochran GB, Lawsing JF 3rd, Hohl M.', t: 'Tears of the transverse ligament of the atlas. A clinical and biomechanical study.', j: 'J Bone Joint Surg Am. 1974;56(8):1683-1691.' },
+  boden1993: { s: 'Boden 1993', a: 'Boden SD, Dodge LD, Bohlman HH, Rechtine GR.', t: 'Rheumatoid arthritis of the cervical spine. A long-term analysis with predictors of paralysis and recovery.', j: 'J Bone Joint Surg Am. 1993;75(9):1282-1297.' },
+  harris1994: { s: 'Harris 1994', a: 'Harris JH Jr, Carson GC, Wagner LK.', t: 'Radiologic diagnosis of traumatic occipitovertebral dissociation: 1. Normal occipitovertebral relationships on lateral radiographs of supine subjects.', j: 'AJR Am J Roentgenol. 1994;162(4):881-886.' },
+  rojas2007: { s: 'Rojas 2007', a: 'Rojas CA, Bertozzi JC, Martinez CR, Whitlow J.', t: 'Reassessment of the craniocervical junction: normal values on CT.', j: 'AJNR Am J Neuroradiol. 2007;28(9):1819-1823.' },
+  powers1979: { s: 'Powers 1979', a: 'Powers B, Miller MD, Kramer RS, Martinez S, Gehweiler JA Jr.', t: 'Traumatic anterior atlanto-occipital dislocation.', j: 'Neurosurgery. 1979;4(1):12-17.' },
+  pang2007: { s: 'Pang 2007', a: 'Pang D, Nemzek WR, Zovickian J.', t: 'Atlanto-occipital dislocation: part 1--normal occipital condyle-C1 interval in 89 children.', j: 'Neurosurgery. 2007;61(3):514-521.' },
+  spence1970: { s: 'Spence 1970', a: 'Spence KF Jr, Decker S, Sell KW.', t: 'Bursting atlantal fracture associated with rupture of the transverse ligament.', j: 'J Bone Joint Surg Am. 1970;52(3):543-549.' },
+  heller2001: { s: 'Heller 1993', a: 'Heller JG, Viroslav S, Hudson T.', t: 'Jefferson fractures: the role of magnification artifact in assessing transverse ligament integrity.', j: 'J Spinal Disord. 1993;6(5):392-396.' },
+
+  zajick2005: { s: 'Zajick 2005', a: 'Zajick DC Jr, Morrison WB, Schweitzer ME, Parellada JA, Carrino JA.', t: 'Benign and malignant processes: normal values and differentiation with chemical shift MR imaging in vertebral marrow.', j: 'Radiology. 2005;237(2):590-596.' },
+  disler1997: { s: 'Disler 1997', a: 'Disler DG, McCauley TR, Ratner LM, Kesack CD, Cooper JA.', t: 'In-phase and out-of-phase MR imaging of bone marrow: prediction of neoplasia based on the detection of coexistent fat and water.', j: 'AJR Am J Roentgenol. 1997;169(5):1439-1447.' },
+
+  fujiyoshi2003: { s: 'Fujiyoshi 2003', a: 'Fujiyoshi F, Nakajo M, Fukukura Y, Tsuchimochi S.', t: 'Characterization of adrenal tumors by chemical shift fast low-angle shot MR imaging: comparison of four methods of quantitative evaluation.', j: 'AJR Am J Roentgenol. 2003;180(6):1649-1657.' },
+  mayosmith1995: { s: 'Mayo-Smith 1995', a: 'Mayo-Smith WW, Lee MJ, McNicholas MM, Hahn PF, Boland GW, Saini S.', t: 'Characterization of adrenal masses (< 5 cm) by use of chemical shift MR imaging: observer performance versus quantitative measures.', j: 'AJR Am J Roentgenol. 1995;165(1):91-95.' },
+  israel2004: { s: 'Israel 2004', a: 'Israel GM, Korobkin M, Wang C, Hecht EN, Krinsky GA.', t: 'Comparison of unenhanced CT and chemical shift MRI in evaluating lipid-rich adrenal adenomas.', j: 'AJR Am J Roentgenol. 2004;183(1):215-219.' },
+  mayosmith2017: { s: 'ACR white paper 2017', a: 'Mayo-Smith WW, Song JH, Boland GL, et al.', t: 'Management of incidental adrenal masses: a white paper of the ACR Incidental Findings Committee.', j: 'J Am Coll Radiol. 2017;14(8):1038-1044.' },
+
+  bearden1973: { s: 'Bearden 1973', a: 'Bearden JM, Hughston JC, Whatley GS.', t: 'Acromioclavicular dislocation: method of treatment.', j: 'J Sports Med. 1973;1(4):5-17.' },
+  rockwood1984: { s: 'Rockwood 1984', a: 'Rockwood CA Jr.', t: 'Injuries to the acromioclavicular joint.', j: 'In: Rockwood CA Jr, Green DP, eds. Fractures in Adults. 2nd ed. Philadelphia: Lippincott; 1984:860-910.' },
+  petersson1983: { s: 'Petersson 1983', a: 'Petersson CJ, Redlund-Johnell I.', t: 'Radiographic joint space in normal acromioclavicular joints.', j: 'Acta Orthop Scand. 1983;54(3):431-433.' },
+  ernberg2003: { s: 'Ernberg 2003', a: 'Ernberg LA, Potter HG.', t: 'Radiographic evaluation of the acromioclavicular and sternoclavicular joints.', j: 'Clin Sports Med. 2003;22(2):255-275.' },
+  weiner1970: { s: 'Weiner & Macnab 1970', a: 'Weiner DS, Macnab I.', t: 'Superior migration of the humeral head. A radiological aid in the diagnosis of tears of the rotator cuff.', j: 'J Bone Joint Surg Br. 1970;52(3):524-527.' },
+  golding1962: { s: 'Golding 1962', a: 'Golding FC.', t: 'The shoulder--the forgotten joint.', j: 'Br J Radiol. 1962;35:149-158.' },
+  saupe2006: { s: 'Saupe 2006', a: 'Saupe N, Pfirrmann CW, Schmid MR, Jost B, Werner CM, Zanetti M.', t: 'Association between rotator cuff abnormalities and reduced acromiohumeral distance.', j: 'AJR Am J Roentgenol. 2006;187(2):376-382.' },
+  hamada1990: { s: 'Hamada 1990', a: 'Hamada K, Fukuda H, Mikasa M, Kobayashi Y.', t: 'Roentgenographic findings in massive rotator cuff tears. A long-term observation.', j: 'Clin Orthop Relat Res. 1990;(254):92-96.' },
+  yamamoto2007: { s: 'Yamamoto 2007', a: 'Yamamoto N, Itoi E, Abe H, et al.', t: 'Contact between the glenoid and the humeral head in abduction, external rotation, and horizontal extension: a new concept of glenoid track.', j: 'J Shoulder Elbow Surg. 2007;16(5):649-656.' },
+  digiacomo2014: { s: 'Di Giacomo 2014', a: 'Di Giacomo G, Itoi E, Burkhart SS.', t: 'Evolving concept of bipolar bone loss and the Hill-Sachs lesion: from "engaging/non-engaging" lesion to "on-track/off-track" lesion.', j: 'Arthroscopy. 2014;30(1):90-98.' },
+  metzger2013: { s: 'Metzger 2013', a: 'Metzger PD, Barlow B, Leonardelli D, Peace W, Solomon DJ, Provencher MT.', t: 'Clinical application of the "glenoid track" concept for defining humeral head engagement in anterior shoulder instability: a preliminary report.', j: 'Orthop J Sports Med. 2013;1(2):2325967113496213.' },
+  gyftopoulos2015: { s: 'Gyftopoulos 2015', a: 'Gyftopoulos S, Beltran LS, Bookman J, Rokito A.', t: 'MRI evaluation of bipolar bone loss using the on-track off-track method: a feasibility study.', j: 'AJR Am J Roentgenol. 2015;205(4):848-852.', url: 'https://pubmed.ncbi.nlm.nih.gov/26397335/' },
+  shaha2015: { s: 'Shaha 2015', a: 'Shaha JS, Cook JB, Song DJ, et al.', t: 'Redefining "critical" bone loss in shoulder instability: functional outcomes worsen with "subcritical" bone loss.', j: 'Am J Sports Med. 2015;43(7):1719-1725.' },
+  dtd2022: { s: 'Distance to dislocation 2022', a: '', t: '"Distance to dislocation" as a predictor of failure after arthroscopic anterior labral repair: rethinking the glenoid track concept.', j: 'Am J Sports Med. 2022.', url: 'https://pubmed.ncbi.nlm.nih.gov/36472485/' },
+  hamada2011: { s: 'Hamada 2011', a: 'Hamada K, Yamanaka K, Uchiyama Y, Mikasa T, Mikasa M.', t: 'A radiographic classification of massive rotator cuff tear arthritis.', j: 'Clin Orthop Relat Res. 2011;469(9):2452-2460.' },
+
+  siegel2008: { s: 'Siegel 2008', a: 'Siegel J, Templeman DC, Tornetta P 3rd.', t: 'Single-leg-stance radiographs in the diagnosis of pelvic instability.', j: 'J Bone Joint Surg Am. 2008;90(10):2119-2125.' },
+  garras2008: { s: 'Garras 2008', a: 'Garras DN, Carothers JT, Olson SA.', t: 'Single-leg-stance (flamingo) radiographs to assess pelvic instability: how much motion is normal?', j: 'J Bone Joint Surg Am. 2008;90(10):2114-2118.' },
+  vix1971: { s: 'Vix & Ryu 1971', a: 'Vix VA, Ryu CY.', t: 'The adult symphysis pubis: normal and abnormal.', j: 'Am J Roentgenol Radium Ther Nucl Med. 1971;112(3):517-525.' },
+  wiberg1939: { s: 'Wiberg 1939', a: 'Wiberg G.', t: 'Studies on dysplastic acetabula and congenital subluxation of the hip joint.', j: 'Acta Chir Scand. 1939;83(Suppl 58):1-135.' },
+  tonnis1976: { s: 'Tönnis 1976', a: 'Tönnis D.', t: 'Normal values of the hip joint for the evaluation of X-rays in children and adults.', j: 'Clin Orthop Relat Res. 1976;(119):39-47.' },
+  heyman1950: { s: 'Heyman 1950', a: 'Heyman CH, Herndon CH.', t: 'Legg-Perthes disease; a method for the measurement of the roentgenographic result.', j: 'J Bone Joint Surg Am. 1950;32(4):767-778.' },
+  lequesne1961: { s: 'Lequesne 1961', a: 'Lequesne M, de Seze S.', t: 'Le faux profil du bassin. Nouvelle incidence radiographique pour l\'étude de la hanche.', j: 'Rev Rhum Mal Osteoartic. 1961;28:643-652.' },
+  tannast2007: { s: 'Tannast 2007', a: 'Tannast M, Siebenrock KA, Anderson SE.', t: 'Femoroacetabular impingement: radiographic diagnosis--what the radiologist should know.', j: 'AJR Am J Roentgenol. 2007;188(6):1540-1552.' },
+  tannast2015: { s: 'Tannast 2015', a: 'Tannast M, Hanke MS, Zheng G, Steppacher SD, Siebenrock KA.', t: 'What are the radiographic reference values for acetabular under- and overcoverage?', j: 'Clin Orthop Relat Res. 2015;473(4):1234-1246.' },
+  notzli2002: { s: 'Nötzli 2002', a: 'Nötzli HP, Wyss TF, Stoecklin CH, Schmid MR, Treiber K, Hodler J.', t: 'The contour of the femoral head-neck junction as a predictor for the risk of anterior impingement.', j: 'J Bone Joint Surg Br. 2002;84(4):556-560.' },
+  agricola2013: { s: 'Agricola 2013', a: 'Agricola R, Heijboer MP, Bierma-Zeinstra SM, Verhaar JA, Weinans H, Waarsing JH.', t: 'Cam impingement causes osteoarthritis of the hip: a nationwide prospective cohort study (CHECK).', j: 'Ann Rheum Dis. 2013;72(6):918-923.' },
+
+  mann1992: { s: 'Mann 1992', a: 'Mann FA, Wilson AJ, Gilula LA.', t: 'Radiographic evaluation of the wrist: what does the hand surgeon want to know?', j: 'Radiology. 1992;184(1):15-24.' },
+  goldfarb2001: { s: 'Goldfarb 2001', a: 'Goldfarb CA, Yin Y, Gilula LA, Fisher AJ, Boyer MI.', t: 'Wrist fractures: what the clinician wants to know.', j: 'Radiology. 2001;219(1):11-28.' },
+  lichtman2010: { s: 'AAOS guideline 2010', a: 'Lichtman DM, Bindra RR, Boyer MI, et al.', t: 'Treatment of distal radius fractures.', j: 'J Am Acad Orthop Surg. 2010;18(3):180-189.' },
+  graham1997: { s: 'Graham 1997', a: 'Graham TJ.', t: 'Surgical correction of malunited fractures of the distal radius.', j: 'J Am Acad Orthop Surg. 1997;5(5):270-281.' },
+  knirk1986: { s: 'Knirk & Jupiter 1986', a: 'Knirk JL, Jupiter JB.', t: 'Intra-articular fractures of the distal end of the radius in young adults.', j: 'J Bone Joint Surg Am. 1986;68(5):647-659.' },
+  lafontaine1989: { s: 'Lafontaine 1989', a: 'Lafontaine M, Hardy D, Delince P.', t: 'Stability assessment of distal radius fractures.', j: 'Injury. 1989;20(4):208-210.' },
+  medoff2005: { s: 'Medoff 2005', a: 'Medoff RJ.', t: 'Essential radiographic evaluation for distal radius fractures.', j: 'Hand Clin. 2005;21(3):279-288.' },
+  arora2011: { s: 'Arora 2011', a: 'Arora R, Lutz M, Deml C, Krappinger D, Haug L, Gabl M.', t: 'A prospective randomized trial comparing nonoperative treatment with volar locking plate fixation for displaced and unstable distal radial fractures in patients sixty-five years of age and older.', j: 'J Bone Joint Surg Am. 2011;93(23):2146-2153.' },
+
+  coughlin2007: { s: 'Coughlin 2007', a: 'Coughlin MJ, Jones CP.', t: 'Hallux valgus: demographics, etiology, and radiographic assessment.', j: 'Foot Ankle Int. 2007;28(7):759-777.' },
+  robinson2005: { s: 'Robinson 2005', a: 'Robinson AH, Limbers JP.', t: 'Modern concepts in the treatment of hallux valgus.', j: 'J Bone Joint Surg Br. 2005;87(8):1038-1045.' },
+  saltzman1995: { s: 'Saltzman 1995', a: 'Saltzman CL, el-Khoury GY.', t: 'The hindfoot alignment view.', j: 'Foot Ankle Int. 1995;16(9):572-576.' },
+  younger2005: { s: 'Younger 2005', a: 'Younger AS, Sawatzky B, Dryden P.', t: 'Radiographic assessment of adult flatfoot.', j: 'Foot Ankle Int. 2005;26(10):820-825.' },
+
+  yekeler2006: { s: 'Yekeler 2006', a: 'Yekeler E, Tunaci M, Tunaci A, Dursun M, Acunas G.', t: 'Frequency of sternal variations and anomalies evaluated by MDCT.', j: 'AJR Am J Roentgenol. 2006;186(4):956-960.', url: 'https://doi.org/10.2214/AJR.04.1779' },
+  gossner2013: { s: 'Gossner 2013', a: 'Gossner J.', t: 'Relationship of sternal foramina to vital structures of the chest: a computed tomographic study.', j: 'Anat Res Int. 2013;2013:780193.', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3810316/' },
+  choi2017: { s: 'Choi 2017', a: 'Choi PJ, Iwanaga J, Tubbs RS.', t: 'A comprehensive review of the sternal foramina and its clinical significance.', j: 'Cureus. 2017;9(12):e1929.', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5805319/' },
+  sfmeta2023: { s: 'Meta-analysis 2023', a: '', t: 'Prevalence and morphometry of sternal and xiphoid foramen: a meta-analysis on 16,666 subjects.', j: 'Surg Radiol Anat. 2023.', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10129975/' },
+  restrepo2009: { s: 'Restrepo 2009', a: 'Restrepo CS, Martinez S, Lemos DF, et al.', t: 'Imaging appearances of the sternum and sternoclavicular joints.', j: 'RadioGraphics. 2009;29(3):839-859.', url: 'https://doi.org/10.1148/rg.293055136' },
+  cooper1988: { s: 'Cooper 1988', a: 'Cooper PD, Stewart JH, McCormick WF.', t: 'Development and morphology of the sternal foramen.', j: 'Am J Forensic Med Pathol. 1988;9(4):342-347.', url: 'https://doi.org/10.1097/00000433-198812000-00016' },
+  halvorsen1995: { s: 'Halvorsen 1995', a: 'Halvorsen TB, Anda SS, Naess AB, Levang OW.', t: 'Fatal cardiac tamponade after acupuncture through congenital sternal foramen.', j: 'Lancet. 1995;345(8958):1175.', url: 'https://doi.org/10.1016/s0140-6736(95)91004-2' },
+  vanmarum2001: { s: 'van Marum 2001', a: 'van Marum RJ, te Velde L.', t: 'Cardiac tamponade following sternal puncture in two patients.', j: 'Neth J Med. 2001;59(1):39-40.', url: 'https://doi.org/10.1016/s0300-2977(01)00126-7' },
+  santavy2013: { s: 'Santavy 2013', a: 'Santavy P, Troubil M, Lonsky V.', t: 'Pericardial tamponade: a rare complication of sternal bone marrow biopsy.', j: 'Hematol Rep. 2013;5(3):e13.', url: 'https://doi.org/10.4081/hr.2013.e13' },
+  bardaa2020: { s: 'Bardaa 2020', a: 'Bardaa S, Karray N, Hammami Z, Maatoug S.', t: 'Professional accountability in a sternal bone marrow aspiration: a forensic case report.', j: 'Pan Afr Med J. 2020;36:255.', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7519791/' },
+  babinski2012: { s: 'Babinski 2012', a: 'Babinski MA, Rafael FA, Steil AD, et al.', t: 'High prevalence of sternal foramen: quantitative, anatomical analysis and its clinical implication in acupuncture practice.', j: 'Int J Morphol. 2012;30(3):1042-1049.' },
+
+  ejindu2007: { s: 'Ejindu 2007', a: 'Ejindu VC, Hine AL, Mashayekhi M, Shorvon PJ, Misra RR.', t: 'Musculoskeletal manifestations of sickle cell disease.', j: 'RadioGraphics. 2007;27(4):1005-1021.' },
+  lonergan2001: { s: 'Lonergan 2001', a: 'Lonergan GJ, Cline DB, Abbondanzo SL.', t: 'Sickle cell anemia.', j: 'RadioGraphics. 2001;21(4):971-994.' },
+  marlow1998: { s: 'Marlow 1998', a: 'Marlow TJ, Brunson CY, Jackson S, Schabel SI.', t: '"Tower vertebra": a new observation in sickle cell disease.', j: 'Skeletal Radiol. 1998;27(4):195-198.' },
+  schwartz1979: { s: 'Schwartz 1979', a: 'Schwartz AM, Homer MJ, McCauley RG.', t: '"Step-off" vertebral body: Gaucher\'s disease versus sickle cell hemoglobinopathy.', j: 'AJR Am J Roentgenol. 1979;132(1):81-85.' },
+  milner1991: { s: 'Milner 1991', a: 'Milner PF, Kraus AP, Sebes JI, et al.', t: 'Sickle cell disease as a cause of osteonecrosis of the femoral head.', j: 'N Engl J Med. 1991;325(21):1476-1481.' },
+  hernigou2003: { s: 'Hernigou 2003', a: 'Hernigou P, Bachir D, Galacteros F.', t: 'The natural history of symptomatic osteonecrosis in adults with sickle-cell disease.', j: 'J Bone Joint Surg Am. 2003;85(3):500-504.' },
+  yoon2020: { s: 'ARCO 2019', a: 'Yoon BH, Mont MA, Koo KH, et al.', t: 'The 2019 revised version of Association Research Circulation Osseous staging system of osteonecrosis of the femoral head.', j: 'J Arthroplasty. 2020;35(4):933-940.' },
+
+  schweitzer1993: { s: 'Schweitzer 1993', a: 'Schweitzer ME, Levine C, Mitchell DG, Gannon FH, Gomella LG.', t: 'Bull\'s-eyes and halos: useful MR discriminators of osseous metastases.', j: 'Radiology. 1993;188(1):249-252.', url: 'https://doi.org/10.1148/radiology.188.1.8511306' },
+  ulano2016: { s: 'Ulano 2016', a: 'Ulano A, Bredella MA, Burke P, et al.', t: 'Distinguishing untreated osteoblastic metastases from enostoses using CT attenuation measurements.', j: 'AJR Am J Roentgenol. 2016;207(2):362-368.' },
+  greenspan1995: { s: 'Greenspan 1995', a: 'Greenspan A.', t: 'Bone island (enostosis): current concept--a review.', j: 'Skeletal Radiol. 1995;24(2):111-115.' },
+
+  murphey2006: { s: 'Murphey 2006', a: 'Murphey MD, Gibson MS, Jennings BT, Crespo-Rodríguez AM, Fanburg-Smith J, Gajewski DA.', t: 'From the archives of the AFIP: Imaging of synovial sarcoma with radiologic-pathologic correlation.', j: 'RadioGraphics. 2006;26(5):1543-1565.' },
+  jones1993: { s: 'Jones 1993', a: 'Jones BC, Sundaram M, Kransdorf MJ.', t: 'Synovial sarcoma: MR imaging findings in 34 patients.', j: 'AJR Am J Roentgenol. 1993;161(4):827-830.' },
+  krieg2011: { s: 'Krieg 2011', a: 'Krieg AH, Hefti F, Speth BM, et al.', t: 'Synovial sarcomas usually metastasize after >5 years: a multicenter retrospective analysis with minimum follow-up of 10 years for survivors.', j: 'Ann Oncol. 2011;22(2):458-467.' },
+
+  rowe2018: { s: 'PSMA-RADS 2018', a: 'Rowe SP, Pienta KJ, Pomper MG, Gorin MA.', t: 'PSMA-RADS version 1.0: a step towards standardizing the interpretation and reporting of PSMA-targeted PET imaging studies.', j: 'Eur Urol Focus. 2018;4(5):686-693.' },
+  ceci2021: { s: 'E-PSMA 2021', a: 'Ceci F, Oprea-Lager DE, Emmett L, et al.', t: 'E-PSMA: the EANM standardized reporting guidelines v1.0 for PSMA-PET.', j: 'Eur J Nucl Med Mol Imaging. 2021;48(5):1626-1638.' },
+  rauscher2020: { s: 'Rauscher 2020', a: 'Rauscher I, Krönke M, König M, et al.', t: 'Matched-pair comparison of 68Ga-PSMA-11 PET/CT and 18F-PSMA-1007 PET/CT: frequency of pitfalls and detection efficacy in biochemical recurrence after radical prostatectomy.', j: 'J Nucl Med. 2020;61(1):51-57.' },
+  carroll1997: { s: 'Carroll 1997', a: 'Carroll KW, Feller JF, Tirman PF.', t: 'Useful internal standards for distinguishing infiltrative marrow pathology from hematopoietic marrow at MRI.', j: 'J Magn Reson Imaging. 1997;7(2):394-398.' },
+
+  murphey2013: { s: 'Murphey 2013', a: 'Murphey MD, Senchak LT, Mambalam PK, Logie CI, Klassen-Fischer MK, Kransdorf MJ.', t: 'From the radiologic pathology archives: Ewing sarcoma family of tumors: radiologic-pathologic correlation.', j: 'RadioGraphics. 2013;33(3):803-831.' },
+  widhe2000: { s: 'Widhe 2000', a: 'Widhe B, Widhe T.', t: 'Initial symptoms and clinical features in osteosarcoma and Ewing sarcoma.', j: 'J Bone Joint Surg Am. 2000;82(5):667-674.' },
+
+  melenevsky2015: { s: 'Melenevsky 2015', a: 'Melenevsky Y, Mackey RA, Abrahams RB, Thomson NB 3rd.', t: 'Talar fractures and dislocations: a radiologist\'s guide to timely diagnosis and classification.', j: 'RadioGraphics. 2015;35(3):765-779.' },
+  shepherd1882: { s: 'Shepherd 1882', a: 'Shepherd FJ.', t: 'A hitherto undescribed fracture of the astragalus.', j: 'J Anat Physiol. 1882;17(Pt 1):79-81.' },
+  cedell1974: { s: 'Cedell 1974', a: 'Cedell CA.', t: 'Rupture of the posterior talotibial ligament with the avulsion of a bone fragment from the talus.', j: 'Acta Orthop Scand. 1974;45(3):454-461.' },
+  nyska1998: { s: 'Nyska 1998', a: 'Nyska M, Howard CB, Matan Y, et al.', t: 'Fracture of the posterior body of the talus--the hidden fracture.', j: 'Arch Orthop Trauma Surg. 1998;117(1-2):114-117.' },
+  karasick1996: { s: 'Karasick 1996', a: 'Karasick D, Schweitzer ME.', t: 'The os trigonum syndrome: imaging features.', j: 'AJR Am J Roentgenol. 1996;166(1):125-129.' }
+};
+</script>
+
+<!-- =====================================================================
+     ENGINE — renders the data above. No clinical values live below.
+     ===================================================================== -->
+<script>
+(() => {
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const CALCS = {}; MODULES.forEach(m => m.calculators.forEach(c => { CALCS[c.id] = c; c.module = m.id; }));
+const main = $('#main');
+if (!TOOLKIT_META.showCases) $('#subcases').remove();
+$('#ver').textContent = `v${TOOLKIT_META.version} · reviewed ${TOOLKIT_META.reviewed}`;
+
+/* ---------- references ---------- */
+const refUrl = k => { const r = REFERENCES[k]; if (!r) return '#'; return r.url || 'https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(r.t.replace(/["“”]/g, '')); };
+const refFull = k => { const r = REFERENCES[k]; return r ? `${r.a ? r.a + ' ' : ''}${r.t} ${r.j}` : k; };
+const refLink = k => REFERENCES[k] ? `<a href="${esc(refUrl(k))}" target="_blank" rel="noopener" title="${esc(refFull(k))}">${esc(REFERENCES[k].s)}</a>` : `<span title="missing reference">${esc(k)}?</span>`;
+
+/* ---------- tabs ---------- */
+const VIEWS = [...MODULES.map(m => ({ id: m.id, label: m.tab })), { sep: true }, { id: 'measure', label: 'Measure on image' }, ...(TOOLKIT_META.showCases ? [{ id: 'cases', label: 'Cases' }] : []), { id: 'refs', label: 'References' }];
+const tabs = $('#tabs');
+tabs.innerHTML = VIEWS.map(v => v.sep ? '<span class="sep" aria-hidden="true"></span>' : `<button role="tab" data-view="${v.id}" aria-selected="false">${esc(v.label)}</button>`).join('');
+tabs.addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (b) go(b.dataset.view); });
+let current = null;
+function go(id, opts = {}) {
+  if (!VIEWS.some(v => v.id === id)) id = MODULES[0].id;
+  current = id;
+  $$('button[data-view]', tabs).forEach(b => b.setAttribute('aria-selected', b.dataset.view === id));
+  $$('.view').forEach(s => s.hidden = s.dataset.view !== id);
+  const btn = $(`button[data-view="${id}"]`, tabs); btn && btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
+  if (id === 'measure') M.resize();
+  if (!opts.keepScroll) window.scrollTo({ top: 0 });
+}
+window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+
+/* ---------- calculators ---------- */
+const state = {};
+function inputHTML(c, i) {
+  const id = `in-${c.id}-${i.id}`;
+  const opt = i.optional ? ' <em>optional</em>' : '';
+  if (i.type === 'check') return `<div class="field check"><input type="checkbox" id="${id}" data-c="${c.id}" data-i="${i.id}" ${i.value ? 'checked' : ''}><label for="${id}">${esc(i.label)}</label></div>`;
+  if (i.type === 'select') return `<div class="field"><label for="${id}">${esc(i.label)}${opt}</label><div class="ctl"><select id="${id}" data-c="${c.id}" data-i="${i.id}">${i.options.map(([v, l]) => `<option value="${esc(v)}" ${String(i.value) === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div></div>`;
+  return `<div class="field"><label for="${id}" ${i.help ? `title="${esc(i.help)}"` : ''}>${esc(i.label)}${opt}</label><div class="ctl"><input type="number" inputmode="decimal" step="${i.step || 'any'}" id="${id}" data-c="${c.id}" data-i="${i.id}" value="${i.value ?? ''}">${i.unit ? `<span class="unit">${esc(i.unit)}</span>` : ''}${i.measure ? `<button type="button" class="meas" data-c="${c.id}" data-i="${i.id}" title="Measure on an image">Measure</button>` : ''}</div></div>`;
+}
+function readValues(c) {
+  const v = {};
+  c.inputs.forEach(i => {
+    const el = document.getElementById(`in-${c.id}-${i.id}`);
+    if (!el) { v[i.id] = null; return; }
+    if (i.type === 'check') v[i.id] = el.checked;
+    else if (i.type === 'select') v[i.id] = el.value === '' ? null : (isFinite(el.value) && el.value.trim() !== '' ? Number(el.value) : el.value);
+    else v[i.id] = el.value === '' ? null : parseFloat(el.value);
+  });
+  return v;
+}
+const fmtNum = (x, d = 0, signed = false) => { const s = Number(x).toFixed(d); return signed && x > 0 ? '+' + s : s; };
+const bandFor = (bands, x) => bands.find(b => b.upTo === undefined || (b.incl ? x <= b.upTo : x < b.upTo));
+function barHTML(res, bands, x) {
+  const [lo, hi] = res.scale, span = hi - lo, pos = t => (Math.min(hi, Math.max(lo, t)) - lo) / span * 100;
+  let prev = lo, segs = '', ticks = '';
+  bands.forEach(b => {
+    const end = b.upTo === undefined ? hi : b.upTo, s = pos(prev), e = pos(end);
+    if (e > s) segs += `<span class="seg-${b.sev}" style="width:${e - s}%" title="${esc(b.label)}"></span>`;
+    if (b.upTo !== undefined && b.upTo > lo && b.upTo < hi) ticks += `<span class="tk" style="left:${pos(b.upTo)}%">${esc(res.scaleLabel ? res.scaleLabel(b.upTo) : b.upTo)}</span>`;
+    prev = end;
+  });
+  return `<div class="bar" aria-hidden="true"><div class="segs">${segs}</div>${ticks}<span class="mk" style="left:${pos(x)}%"></span></div>`;
+}
+function compute(c) {
+  const v = readValues(c), r = {};
+  const card = document.getElementById('card-' + c.id);
+  const parts = [], summary = [c.title];
+  c.results.forEach(res => {
+    let x = null; try { x = res.calc(v); } catch (e) { x = null; }
+    if (typeof x === 'boolean') x = x ? 1 : 0;
+    r[res.id] = has(x) && isFinite(x) ? x : null;
+    if (r[res.id] === null) { parts.push(`<div class="res"><span class="rl">${esc(res.label)}</span><span class="empty">Enter the ${res.id === 'delta' ? 'prior value' : 'values above'} to calculate.</span></div>`); return; }
+    const bands = res.bandSets ? res.bandSets[res.bandsBy(v)] : res.bands;
+    let cls = null;
+    try { cls = res.classify ? res.classify(x, v) : bands ? bandFor(bands, x) : null; } catch (e) { cls = null; }
+    const val = res.hideValue ? '' : res.format ? esc(res.format(x)) : `${fmtNum(x, res.decimals ?? 0, res.signed)}${res.unit ? `<small> ${esc(res.unit)}</small>` : ''}`;
+    parts.push(`<div class="res"><span class="rl">${esc(res.label)}</span><span class="rv">${val}</span>${cls ? `<span class="pill sev-${cls.sev}">${esc(cls.label)}</span>` : '<span></span>'}${cls && cls.note ? `<p class="note">${esc(cls.note)}</p>` : ''}${bands && res.scale ? barHTML(res, bands, x) : ''}</div>`);
+    summary.push(`${res.label}: ${res.hideValue ? '' : (res.format ? res.format(x) : fmtNum(x, res.decimals ?? 0, res.signed) + (res.unit ? ' ' + res.unit : ''))}${cls ? (res.hideValue ? '' : ' — ') + cls.label : ''}`);
+  });
+  $('.results', card).innerHTML = parts.join('');
+  const flags = (c.flags || []).filter(f => { try { return f.when(v, r); } catch (e) { return false; } });
+  $('.flags', card).innerHTML = flags.map(f => { const t = typeof f.text === 'function' ? f.text(v, r) : f.text; summary.push('• ' + t); return `<li class="sev-${f.sev}"><span>${esc(t)}</span>${f.refs ? ' <span class="srcs">(' + f.refs.map(refLink).join(', ') + ')</span>' : ''}</li>`; }).join('');
+  state[c.id] = { summary: summary.join('\n') };
+}
+function cardHTML(c) {
+  return `<article class="card" id="card-${c.id}">
+    <div class="card-head"><h3>${esc(c.title)}</h3>${c.vary ? '<span class="chip vary" title="Published cutoffs differ between studies; see sources">cutoffs vary</span>' : ''}</div>
+    <div class="how">${c.diagram ? `<svg viewBox="0 0 200 140" class="dg" role="img" aria-label="How to measure: ${esc(c.title)}">${c.diagram}</svg>` : ''}<p>${esc(c.howTo)}</p></div>
+    <div class="inputs">${c.inputs.map(i => inputHTML(c, i)).join('')}</div>
+    <div class="results" aria-live="polite"></div>
+    <ul class="flags"></ul>
+    ${c.pitfalls ? `<details class="pit"><summary>Pitfalls</summary><ul>${c.pitfalls.map(p => `<li>${esc(p)}</li>`).join('')}</ul></details>` : ''}
+    ${(c.tables || []).map(t => `<details class="pit"><summary>${esc(t.title)}</summary><div class="tbl-wrap"><table class="ref"><thead><tr>${t.head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r => `<tr>${r.map(d => `<td>${esc(d)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`).join('')}
+    <div class="card-foot"><span class="srcs">Sources: ${c.refs.map(refLink).join(', ')}</span><button type="button" class="btn" data-copy="${c.id}">Copy summary</button></div>
+  </article>`;
+}
+MODULES.forEach(m => {
+  const sec = document.createElement('section');
+  sec.className = 'view'; sec.dataset.view = m.id; sec.hidden = true;
+  sec.innerHTML = `<div class="view-head"><h2>${esc(m.title)}</h2><p>${esc(m.blurb)}</p></div>
+    <p class="example">Fields start with example values so you can see how each calculator reads. Replace them with your measurements.</p>
+    <div class="grid">${m.calculators.map(cardHTML).join('')}</div>`;
+  main.appendChild(sec);
+});
+$$('.example').forEach(e => e.style.marginBottom = '14px');
+Object.values(CALCS).forEach(compute);
+main.addEventListener('input', e => { const c = e.target.dataset && e.target.dataset.c; if (c && CALCS[c]) compute(CALCS[c]); });
+main.addEventListener('change', e => { const c = e.target.dataset && e.target.dataset.c; if (c && CALCS[c]) compute(CALCS[c]); });
+main.addEventListener('click', e => {
+  const cp = e.target.closest('[data-copy]');
+  if (cp) {
+    const text = (state[cp.dataset.copy] || {}).summary || '';
+    const done = () => { cp.textContent = 'Copied'; setTimeout(() => cp.textContent = 'Copy summary', 1400); };
+    const fallback = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (er) { cp.textContent = 'Select and copy manually'; } ta.remove(); };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (er) { fallback(); }
+    return;
+  }
+  const ms = e.target.closest('button.meas');
+  if (ms) { M.setTarget(ms.dataset.c + '.' + ms.dataset.i); go('measure'); }
+});
+
+/* ---------- measure on image ---------- */
+const mv = document.createElement('section');
+mv.className = 'view'; mv.dataset.view = 'measure'; mv.hidden = true;
+mv.innerHTML = `<div class="view-head"><h2>Measure on image</h2><p>Drag and drop, paste (Ctrl/⌘+V) or open a PNG or JPEG exported from PACS (DICOM files are not supported). Images stay in your browser and are never uploaded. A synthetic spine is loaded so you can try the tools.</p>
+<p class="example" style="flex-basis:100%"><b>What is automatic:</b> edge snapping of your points, the angle and length math, grading against the literature cutoffs, and labeling the result on the image for copy or download. <b>What is not:</b> you choose the landmarks; the tool does not detect anatomy on its own.</p></div>
+<div class="measure">
+  <div class="stage" id="stage"><canvas id="cv"></canvas><div class="hint" id="hint"></div></div>
+  <div class="side">
+    <div class="panel"><h3>Image</h3>
+      <div class="rowc"><label class="btn primary" for="file" style="cursor:pointer">Open image…</label><input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn" id="sample" type="button">Synthetic sample</button></div>
+      <small>Or drop an image on the viewer, or paste one from the clipboard.</small>
+      <label class="rowc" for="snap" style="font-size:13px"><input type="checkbox" id="snap" checked style="accent-color:var(--accent)"> Snap points to nearby edges</label>
+      <div class="rowc"><button class="btn" id="zin" type="button">Zoom in</button><button class="btn" id="zout" type="button">Zoom out</button><button class="btn" id="zfit" type="button">Fit</button><button class="btn" id="inv" type="button" aria-pressed="false">Invert</button></div>
+      <label for="bri"><small>Brightness</small></label><input type="range" id="bri" min="40" max="200" value="100">
+      <label for="con"><small>Contrast</small></label><input type="range" id="con" min="40" max="250" value="100">
+    </div>
+    <div class="panel"><h3>Tool</h3>
+      <div class="toolrow" id="tools">
+        <button class="btn" data-tool="angle" type="button">Angle</button><button class="btn" data-tool="tilt" type="button">Tilt</button><button class="btn" data-tool="length" type="button">Length</button><button class="btn" data-tool="calib" type="button">Calibrate</button><button class="btn" data-tool="pan" type="button">Pan</button>
+      </div>
+      <small id="tooltip"></small>
+      <div class="field"><label for="mmpx">Pixel spacing (mm per pixel)</label><div class="ctl"><input id="mmpx" type="number" step="any" placeholder="not calibrated"><span class="unit">mm/px</span></div></div>
+      <div class="rowc" id="calrow" hidden><div class="field" style="flex:1"><label for="calmm">Known length of the calibration line</label><div class="ctl"><input id="calmm" type="number" step="any" value="10"><span class="unit">mm</span></div></div><button class="btn primary" id="calok" type="button">Apply</button></div>
+      <small>Radiographs are magnified about 10–20% at the detector. Calibrate on a marker or ruler at the level of the anatomy, or use the DICOM pixel spacing.</small>
+    </div>
+    <div class="panel"><h3>Measurements</h3>
+      <div class="field"><label for="target">Send results to</label><div class="ctl"><select id="target"></select></div></div>
+      <ul class="mlist" id="mlist"></ul>
+      <div class="rowc"><button class="btn" id="undo" type="button">Undo last</button><button class="btn" id="clear" type="button">Clear all</button></div>
+    </div>
+    <div class="panel"><h3>Share</h3>
+      <small>Exports the image with your measurements and their grading drawn on it.</small>
+      <div class="rowc"><button class="btn primary" id="xcopy" type="button">Copy annotated image</button><button class="btn" id="xdl" type="button">Download PNG</button><button class="btn" id="xtxt" type="button">Copy report text</button></div>
+      <small id="xmsg" aria-live="polite"></small>
+    </div>
+  </div>
+</div>`;
+main.appendChild(mv);
+
+const M = (() => {
+  const cv = $('#cv', mv), stage = $('#stage', mv), ctx = cv.getContext('2d');
+  const S = { img: null, sample: true, scale: 1, ox: 0, oy: 0, tool: 'angle', shapes: [], pending: [], cursor: null, mmPerPx: null, drag: null, inv: false, bri: 100, con: 100, target: '' };
+  const NEED = { angle: 4, tilt: 4, length: 2, calib: 2 };
+  const TIPS = {
+    angle: 'Click two points along the first line, then two along the second (e.g. two endplates for a Cobb angle).',
+    tilt: 'First line: the reference axis (e.g. radial shaft). Second line: the surface (e.g. articular rim). Result is the angle from the perpendicular to the axis.',
+    length: 'Click the two ends. Calibrate first for millimetres.',
+    calib: 'Draw a line over an object of known length, then enter its length.',
+    pan: 'Drag to move the image. Use the zoom buttons or scroll wheel to zoom.'
+  };
+  const targets = [];
+  MODULES.forEach(m => m.calculators.forEach(c => c.inputs.filter(i => i.measure).forEach(i => targets.push({ key: c.id + '.' + i.id, kind: i.measure, label: `${m.tab} › ${c.title} › ${i.label}` }))));
+  $('#target', mv).innerHTML = '<option value="">Choose a field…</option>' + targets.map(t => `<option value="${t.key}">${esc(t.label)}</option>`).join('');
+
+  function makeSample() {
+    const w = 560, h = 900, c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d');
+    const bg = g.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, 520); bg.addColorStop(0, '#2a2f35'); bg.addColorStop(1, '#0b0d10');
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    const cx = y => 280 + 40 * Math.sin(Math.PI * (y - 80) / 380), slope = y => 40 * Math.PI / 380 * Math.cos(Math.PI * (y - 80) / 380);
+    // ribs
+    g.strokeStyle = 'rgba(190,198,206,.22)'; g.lineWidth = 9; g.lineCap = 'round';
+    for (let k = 0; k < 11; k++) { const y = 95 + k * 38, x = cx(y); [-1, 1].forEach(s => { g.beginPath(); g.moveTo(x + s * 26, y); g.quadraticCurveTo(x + s * 170, y - 30, x + s * 230, y + 70 + k * 4); g.stroke(); }); }
+    // pelvis hint
+    g.fillStyle = 'rgba(200,205,210,.28)'; g.beginPath(); g.ellipse(280, 905, 210, 70, 0, Math.PI, 2 * Math.PI); g.fill();
+    const verts = []; let y = 80;
+    for (let k = 0; k < 17; k++) { const hgt = 30 + k * 1.1; const yc = y + hgt / 2; verts.push({ y: yc, x: cx(yc), a: -Math.atan(slope(yc)), h: hgt, w: 52 + k * 2.2 }); y += hgt + 11; }
+    verts.forEach(v => { g.save(); g.translate(v.x, v.y); g.rotate(v.a); const gr = g.createLinearGradient(-v.w / 2, 0, v.w / 2, 0); gr.addColorStop(0, '#9aa3ab'); gr.addColorStop(.5, '#d9dee2'); gr.addColorStop(1, '#9aa3ab'); g.fillStyle = gr; g.beginPath(); g.roundRect ? g.roundRect(-v.w / 2, -v.h / 2, v.w, v.h, 5) : g.rect(-v.w / 2, -v.h / 2, v.w, v.h); g.fill(); g.fillStyle = 'rgba(120,128,136,.6)'; [-1, 1].forEach(s => { g.beginPath(); g.ellipse(s * v.w * 0.28, -v.h * 0.15, 5, 8, 0, 0, 7); g.fill(); }); g.restore(); });
+    const id = g.getImageData(0, 0, w, h), d = id.data; for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - .5) * 18; d[i] += n; d[i + 1] += n; d[i + 2] += n; } g.putImageData(id, 0, 0);
+    g.fillStyle = 'rgba(255,255,255,.55)'; g.font = '600 15px system-ui, sans-serif'; g.fillText('SYNTHETIC SAMPLE · NOT PATIENT DATA', 16, 28);
+    // preset Cobb lines on most tilted vertebrae of the upper curve
+    const upper = verts.filter(v => v.y < 470), top = upper.reduce((a, b) => b.a > a.a ? b : a), bot = upper.reduce((a, b) => b.a < a.a ? b : a);
+    const edge = (v, s) => { const ex = v.x + Math.sin(-v.a) * 0 - Math.sin(v.a) * (s * v.h / 2) * -1, ey = v.y + Math.cos(v.a) * (s * v.h / 2); const L = v.w * 0.85, dx = Math.cos(v.a) * L, dy = Math.sin(v.a) * L; return [{ x: ex - dx, y: ey - dy }, { x: ex + dx, y: ey + dy }]; };
+    return { canvas: c, preset: [...edge(top, -1), ...edge(bot, 1)] };
+  }
+  function computeGrad() {
+    S.grad = null; if (!S.img) return;
+    const w = iw(), h = ih(), k = Math.min(1, 1600 / Math.max(w, h)), W = Math.max(2, Math.round(w * k)), H = Math.max(2, Math.round(h * k));
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d', { willReadFrequently: true });
+    g.drawImage(S.img, 0, 0, W, H); let d; try { d = g.getImageData(0, 0, W, H).data; } catch (e) { return; }
+    const L = new Float32Array(W * H); for (let i = 0; i < W * H; i++) L[i] = d[i * 4] * .3 + d[i * 4 + 1] * .59 + d[i * 4 + 2] * .11;
+    const G = new Float32Array(W * H);
+    for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = y * W + x; const gx = L[i + 1] - L[i - 1], gy = L[i + W] - L[i - W]; G[i] = gx * gx + gy * gy; }
+    S.grad = { G, W, H, k };
+  }
+  function snap(p) {
+    if (!S.grad || !$('#snap', mv).checked) return p;
+    const { G, W, H, k } = S.grad, cx = Math.round(p.x * k), cy = Math.round(p.y * k), r = Math.max(2, Math.round(7 / S.scale * k));
+    let best = -1, bx = cx, by = cy;
+    for (let y = Math.max(1, cy - r); y <= Math.min(H - 2, cy + r); y++) for (let x = Math.max(1, cx - r); x <= Math.min(W - 2, cx + r); x++) {
+      const dd = (x - cx) ** 2 + (y - cy) ** 2; if (dd > r * r) continue; const v = G[y * W + x] / (1 + dd * 0.08); if (v > best) { best = v; bx = x; by = y; }
+    }
+    return best > 400 ? { x: bx / k, y: by / k } : p;
+  }
+  function load(src, isSample, preset) {
+    S.img = src; S.sample = isSample; computeGrad(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
+    if (preset) S.shapes.push({ type: 'angle', pts: preset });
+    fit(); list(); draw();
+  }
+  function useSample() { const s = makeSample(); load(s.canvas, true, s.preset); }
+  const iw = () => S.img ? (S.img.naturalWidth || S.img.width) : 1, ih = () => S.img ? (S.img.naturalHeight || S.img.height) : 1;
+  function resize() { const r = stage.getBoundingClientRect(); if (!r.width) return; const dpr = window.devicePixelRatio || 1; cv.width = r.width * dpr; cv.height = r.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (!S.fitted) fit(); draw(); }
+  function fit() { const r = stage.getBoundingClientRect(); if (!r.width) return; S.scale = Math.min(r.width / iw(), r.height / ih()) * 0.96; S.ox = (r.width - iw() * S.scale) / 2; S.oy = (r.height - ih() * S.scale) / 2; S.fitted = true; }
+  const toImg = p => ({ x: (p.x - S.ox) / S.scale, y: (p.y - S.oy) / S.scale });
+  const toScr = p => ({ x: p.x * S.scale + S.ox, y: p.y * S.scale + S.oy });
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const dirAng = (a, b) => Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+  const lineAngle = (p) => { let d = Math.abs(dirAng(p[0], p[1]) - dirAng(p[2], p[3])) % 180; return Math.min(d, 180 - d); };
+  function value(sh) {
+    if (sh.type === 'angle') return { v: lineAngle(sh.pts), unit: '°', kind: 'angle' };
+    if (sh.type === 'tilt') return { v: 90 - lineAngle(sh.pts), unit: '°', kind: 'tilt' };
+    const px = dist(sh.pts[0], sh.pts[1]);
+    if (sh.type === 'calib') return { v: px, unit: 'px', kind: 'calib' };
+    return S.mmPerPx ? { v: px * S.mmPerPx, unit: 'mm', kind: 'length' } : { v: px, unit: 'px', kind: 'length' };
+  }
+  const NAMES = { angle: 'Angle', tilt: 'Tilt', length: 'Length', calib: 'Calibration' };
+  const fmtV = val => `${val.v.toFixed(val.unit === 'px' ? 0 : 1)}${val.unit === '°' ? '°' : ' ' + val.unit}`;
+  const shapeText = (sh, n) => `${n + 1}. ${fmtV(value(sh))}${sh.note ? ' · ' + sh.note : ''}`;
+  function exportCanvas() {
+    if (!S.img) return null;
+    const w = iw(), h = ih(), k = Math.min(1, 2400 / Math.max(w, h)), W = Math.round(w * k), H = Math.round(h * k), foot = Math.round(Math.max(26, W * 0.035));
+    const c = document.createElement('canvas'); c.width = W; c.height = H + foot; const g = c.getContext('2d');
+    g.fillStyle = '#070a0e'; g.fillRect(0, 0, W, H + foot);
+    g.filter = `brightness(${S.bri}%) contrast(${S.con}%)${S.inv ? ' invert(1)' : ''}`; g.drawImage(S.img, 0, 0, W, H); g.filter = 'none';
+    const u = Math.max(1, W / 900), P = p => ({ x: p.x * k, y: p.y * k });
+    S.shapes.forEach((sh, n) => {
+      const col = sh.type === 'calib' ? '#ffd166' : '#4fd3be';
+      g.strokeStyle = col; g.lineWidth = 2.2 * u; g.lineCap = 'round';
+      for (let i = 0; i < sh.pts.length; i += 2) { const A = P(sh.pts[i]), B = P(sh.pts[i + 1]); g.beginPath(); g.moveTo(A.x, A.y); g.lineTo(B.x, B.y); g.stroke(); }
+      g.fillStyle = col; sh.pts.forEach(p => { const Q = P(p); g.beginPath(); g.arc(Q.x, Q.y, 3.5 * u, 0, 7); g.fill(); });
+      const t = shapeText(sh, n), Q = P(sh.pts[sh.pts.length - 1]); g.font = `600 ${Math.round(13 * u)}px "IBM Plex Mono", monospace`;
+      const tw = g.measureText(t).width, x = Math.min(Q.x + 8 * u, W - tw - 12 * u), y = Math.max(Q.y - 6 * u, 20 * u);
+      g.fillStyle = 'rgba(7,10,14,.82)'; g.fillRect(x, y - 16 * u, tw + 10 * u, 21 * u); g.fillStyle = '#fff'; g.fillText(t, x + 5 * u, y);
+    });
+    g.fillStyle = '#121920'; g.fillRect(0, H, W, foot); g.fillStyle = '#b9c6d2'; g.font = `${Math.round(foot * 0.42)}px system-ui, sans-serif`;
+    g.fillText('MSK Measurement Toolkit · research and education only · not for clinical use', 10, H + foot * 0.66);
+    return c;
+  }
+  function reportText() { return S.shapes.filter(s => s.type !== 'calib').map((sh, n) => shapeText(sh, n)).join('\n') + (S.mmPerPx ? `\nPixel spacing ${S.mmPerPx.toPrecision(4)} mm/px` : ''); }
+  const xmsg = t => { $('#xmsg', mv).textContent = t; };
+  function draw() {
+    const r = stage.getBoundingClientRect(); ctx.clearRect(0, 0, r.width, r.height);
+    ctx.fillStyle = '#070a0e'; ctx.fillRect(0, 0, r.width, r.height);
+    if (S.img) { ctx.save(); ctx.filter = `brightness(${S.bri}%) contrast(${S.con}%)${S.inv ? ' invert(1)' : ''}`; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(S.img, S.ox, S.oy, iw() * S.scale, ih() * S.scale); ctx.restore(); }
+    const col = '#4fd3be', col2 = '#ffd166';
+    const seg = (a, b, c) => { const A = toScr(a), B = toScr(b); ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke(); };
+    const dot = (p, c) => { const P = toScr(p); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(P.x, P.y, 4, 0, 7); ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 1; ctx.stroke(); };
+    const label = (p, t) => { const P = toScr(p); ctx.font = '600 13px "IBM Plex Mono", monospace'; const w = ctx.measureText(t).width; ctx.fillStyle = 'rgba(7,10,14,.8)'; ctx.fillRect(P.x + 8, P.y - 18, w + 10, 20); ctx.fillStyle = '#fff'; ctx.fillText(t, P.x + 13, P.y - 4); };
+    S.shapes.forEach((sh, n) => {
+      const c = sh.type === 'calib' ? col2 : col;
+      for (let i = 0; i < sh.pts.length; i += 2) seg(sh.pts[i], sh.pts[i + 1], c);
+      sh.pts.forEach(p => dot(p, c));
+      label(sh.pts[sh.pts.length - 1], shapeText(sh, n));
+    });
+    const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); P.forEach(p => dot(p, c)); }
+    $('#hint', mv).textContent = S.pending.length ? `Point ${S.pending.length + 1} of ${NEED[S.tool]} · Esc cancels` : TIPS[S.tool];
+  }
+  function list() {
+    const ul = $('#mlist', mv), tgt = targets.find(t => t.key === S.target);
+    ul.innerHTML = S.shapes.length ? S.shapes.map((sh, n) => {
+      const val = value(sh), ok = tgt && sh.type !== 'calib' && (tgt.kind === sh.type || (tgt.kind === 'tilt' && sh.type === 'angle'));
+      return `<li><span class="grow">${n + 1}. ${NAMES[sh.type]} <b>${val.v.toFixed(1)} ${val.unit}</b>${sh.note ? `<br><small>${esc(sh.note)}</small>` : ''}</span>${ok ? `<button class="btn primary" data-send="${n}" type="button">Send</button>` : ''}<button class="btn" data-del="${n}" type="button" aria-label="Delete measurement ${n + 1}">Delete</button></li>`;
+    }).join('') : '<li><small>No measurements yet.</small></li>';
+    if (tgt && S.shapes.length && !S.shapes.some(sh => sh.type === tgt.kind || (tgt.kind === 'tilt' && sh.type === 'angle'))) ul.insertAdjacentHTML('beforeend', `<li><small>Draw a ${tgt.kind} measurement to send to this field.</small></li>`);
+  }
+  function setTool(t) { S.tool = t; S.pending = []; $$('#tools button', mv).forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t)); $('#tooltip', mv).textContent = TIPS[t]; $('#calrow', mv).hidden = !(t === 'calib' && S.shapes.some(s => s.type === 'calib')); cv.style.cursor = t === 'pan' ? 'grab' : 'crosshair'; draw(); }
+  function setTarget(key) { S.target = key; $('#target', mv).value = key; const t = targets.find(x => x.key === key); if (t) setTool(t.kind === 'length' ? 'length' : t.kind); list(); }
+  const pt = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  cv.addEventListener('pointerdown', e => {
+    cv.setPointerCapture(e.pointerId); const p = pt(e);
+    if (S.tool === 'pan' || e.button === 1) { S.drag = { pan: true, x: p.x, y: p.y, ox: S.ox, oy: S.oy }; return; }
+    if (!S.pending.length) for (const sh of S.shapes) for (let i = 0; i < sh.pts.length; i++) if (dist(toScr(sh.pts[i]), p) < 10) { S.drag = { sh, i }; return; }
+    S.pending.push(snap(toImg(p)));
+    if (S.pending.length === NEED[S.tool]) {
+      if (S.tool === 'calib') { S.shapes = S.shapes.filter(s => s.type !== 'calib'); $('#calrow', mv).hidden = false; $('#calmm', mv).focus(); }
+      S.shapes.push({ type: S.tool, pts: S.pending }); S.pending = []; list();
+    }
+    draw();
+  });
+  cv.addEventListener('pointermove', e => {
+    const p = pt(e); S.cursor = p;
+    if (S.drag && S.drag.pan) { S.ox = S.drag.ox + p.x - S.drag.x; S.oy = S.drag.oy + p.y - S.drag.y; }
+    else if (S.drag) { S.drag.sh.pts[S.drag.i] = toImg(p); S.drag.moved = true; list(); }
+    draw();
+  });
+  cv.addEventListener('pointerup', () => { if (S.drag && S.drag.sh && S.drag.moved) { S.drag.sh.pts[S.drag.i] = snap(S.drag.sh.pts[S.drag.i]); S.drag.sh.note = null; list(); draw(); } S.drag = null; });
+  cv.addEventListener('wheel', e => { e.preventDefault(); zoom(e.deltaY < 0 ? 1.15 : 1 / 1.15, pt(e)); }, { passive: false });
+  function zoom(f, at) { const r = stage.getBoundingClientRect(); at = at || { x: r.width / 2, y: r.height / 2 }; const ip = toImg(at); S.scale *= f; S.ox = at.x - ip.x * S.scale; S.oy = at.y - ip.y * S.scale; draw(); }
+  document.addEventListener('keydown', e => { if (current === 'measure' && e.key === 'Escape') { S.pending = []; draw(); } });
+  $('#tools', mv).addEventListener('click', e => { const b = e.target.closest('[data-tool]'); if (b) setTool(b.dataset.tool); });
+  $('#zin', mv).onclick = () => zoom(1.25); $('#zout', mv).onclick = () => zoom(0.8); $('#zfit', mv).onclick = () => { fit(); draw(); };
+  $('#inv', mv).onclick = e => { S.inv = !S.inv; e.target.setAttribute('aria-pressed', S.inv); draw(); };
+  $('#bri', mv).oninput = e => { S.bri = +e.target.value; draw(); }; $('#con', mv).oninput = e => { S.con = +e.target.value; draw(); };
+  $('#sample', mv).onclick = useSample;
+  function loadFile(f) { if (!f || !/^image\//.test(f.type)) { xmsg('That file is not an image. Use PNG or JPEG.'); return; } const url = URL.createObjectURL(f); const im = new Image(); im.onload = () => { S.fitted = false; load(im, false); xmsg(''); }; im.onerror = () => xmsg('Could not read that image. DICOM files need to be exported as PNG or JPEG first.'); im.src = url; }
+  $('#file', mv).onchange = e => loadFile(e.target.files[0]);
+  ['dragenter', 'dragover'].forEach(t => document.addEventListener(t, e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); stage.style.outline = '3px dashed var(--accent)'; } }));
+  ['dragleave', 'drop'].forEach(t => document.addEventListener(t, () => { stage.style.outline = ''; }));
+  document.addEventListener('drop', e => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return; e.preventDefault(); if (current !== 'measure') go('measure'); loadFile(f); });
+  document.addEventListener('paste', e => { const it = [...(e.clipboardData ? e.clipboardData.items : [])].find(i => i.type.startsWith('image/')); if (!it) return; e.preventDefault(); if (current !== 'measure') go('measure'); loadFile(it.getAsFile()); });
+  $('#xdl', mv).onclick = () => { const c = exportCanvas(); if (!c) return; c.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'msk-measurement.png'; document.body.appendChild(a); a.click(); a.remove(); xmsg('Download started. If nothing happened, use Copy annotated image.'); }); };
+  $('#xcopy', mv).onclick = () => { const c = exportCanvas(); if (!c) return; try { const p = new Promise(r => c.toBlob(r)); navigator.clipboard.write([new ClipboardItem({ 'image/png': p })]).then(() => xmsg('Annotated image copied. Paste it into a report, email or slide.'), () => xmsg('This browser blocked image copying. Use Download PNG instead.')); } catch (e) { xmsg('This browser cannot copy images. Use Download PNG instead.'); } };
+  $('#xtxt', mv).onclick = () => { const t = reportText(); if (!t) { xmsg('No measurements yet.'); return; } try { navigator.clipboard.writeText(t).then(() => xmsg('Report text copied.'), () => xmsg(t)); } catch (e) { xmsg(t); } };
+  $('#mmpx', mv).oninput = e => { const v = parseFloat(e.target.value); S.mmPerPx = v > 0 ? v : null; list(); draw(); };
+  $('#calok', mv).onclick = () => { const c = S.shapes.find(s => s.type === 'calib'), mm = parseFloat($('#calmm', mv).value); if (c && mm > 0) { S.mmPerPx = mm / dist(c.pts[0], c.pts[1]); $('#mmpx', mv).value = S.mmPerPx.toPrecision(4); $('#calrow', mv).hidden = true; list(); draw(); } };
+  $('#target', mv).onchange = e => setTarget(e.target.value);
+  $('#undo', mv).onclick = () => { if (S.pending.length) S.pending = []; else S.shapes.pop(); list(); draw(); };
+  $('#clear', mv).onclick = () => { S.shapes = []; S.pending = []; list(); draw(); };
+  $('#mlist', mv).addEventListener('click', e => {
+    const d = e.target.closest('[data-del]'); if (d) { S.shapes.splice(+d.dataset.del, 1); list(); draw(); return; }
+    const s = e.target.closest('[data-send]'); if (!s) return;
+    const sh = S.shapes[+s.dataset.send], val = value(sh), [cid, iid] = S.target.split('.');
+    const el = document.getElementById(`in-${cid}-${iid}`); if (!el) return;
+    el.value = val.v.toFixed(1); compute(CALCS[cid]);
+    const pill = document.querySelector(`#card-${cid} .pill`); sh.note = `${CALCS[cid].title}${pill ? ': ' + pill.textContent : ''}`; list(); draw();
+    go(CALCS[cid].module);
+    const card = document.getElementById('card-' + cid); card.scrollIntoView({ block: 'center' }); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
+    if (val.unit === 'px') { const f = el.closest('.field'); f && f.setAttribute('title', 'Sent in pixels: calibrate for millimetres'); }
+  });
+  window.addEventListener('resize', () => { if (current === 'measure') { S.fitted = false; resize(); } });
+  setTool('angle'); useSample();
+  return { resize: () => requestAnimationFrame(resize), setTarget };
+})();
+
+/* ---------- cases ---------- */
+const cv2 = document.createElement('section');
+cv2.className = 'view'; cv2.dataset.view = 'cases'; cv2.hidden = true;
+const inRegion = (c, r) => c.region === r || (c.alsoIn || []).includes(r);
+const counts = Object.fromEntries(REGIONS.map(r => [r, CASES.filter(c => inRegion(c, r)).length]));
+let regionFilter = 'All';
+function caseHTML(c) {
+  return `<article class="case" id="case-${c.id}">
+    <div><h4>${esc(c.title)}</h4>
+      <div class="meta"><span class="chip">${esc(c.region)}</span>${(c.alsoIn || []).map(r => `<span class="chip">${esc(r)}</span>`).join('')}<span class="chip">${esc(c.modality)}</span><span class="chip">${esc(c.added)}</span></div>
+      <p>${esc(c.findings)}</p>
+      ${c.calc && CALCS[c.calc.id] ? `<p><button type="button" class="btn primary" data-loadcalc="${c.id}">${esc(c.calc.label)}</button></p>` : ''}
+      <h5>Teaching points</h5><ul class="tp">${c.teaching.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+      <h5>References</h5><ol class="cr">${c.refs.map(k => `<li><a href="${esc(refUrl(k))}" target="_blank" rel="noopener">${esc(refFull(k))}</a></li>`).join('')}</ol>
+    </div>
+    <div class="gallery">${c.images.map((im, n) => `<figure data-case="${c.id}" data-n="${n}" tabindex="0" role="button" aria-label="Enlarge ${esc(im.caption)}"><img src="${esc(im.src)}" alt="${esc(im.caption)}" loading="lazy"><figcaption>${esc(im.caption)}</figcaption></figure>`).join('')}</div>
+  </article>`;
+}
+function renderCases() {
+  const regs = REGIONS.filter(r => counts[r] && (regionFilter === 'All' || regionFilter === r));
+  cv2.innerHTML = `<div class="view-head"><h2>Interesting cases</h2><p>Teaching cases by body region, each with key images, teaching points and references. Images are de-identified.</p></div>
+    <div class="regions" role="group" aria-label="Filter by region"><button aria-pressed="${regionFilter === 'All'}" data-r="All">All<span class="n">${CASES.length}</span></button>${REGIONS.map(r => `<button data-r="${esc(r)}" aria-pressed="${regionFilter === r}" ${counts[r] ? '' : 'disabled'}>${esc(r)}<span class="n">${counts[r]}</span></button>`).join('')}</div>
+    ${regs.map(r => `<div class="region-sec"><h3>${esc(r)}</h3>${CASES.filter(c => regionFilter === 'All' ? c.region === r : inRegion(c, r)).map(caseHTML).join('')}</div>`).join('')}`;
+}
+if (TOOLKIT_META.showCases) { renderCases(); main.appendChild(cv2); }
+cv2.addEventListener('click', e => {
+  const b = e.target.closest('[data-r]'); if (b && !b.disabled) { regionFilter = b.dataset.r; renderCases(); return; }
+  const lc = e.target.closest('[data-loadcalc]');
+  if (lc) {
+    const cs = CASES.find(x => x.id === lc.dataset.loadcalc), calc = CALCS[cs.calc.id];
+    Object.entries(cs.calc.values).forEach(([k, val]) => { const el = document.getElementById(`in-${calc.id}-${k}`); if (el) el.value = val; });
+    compute(calc); go(calc.module);
+    const card = document.getElementById('card-' + calc.id); card.scrollIntoView({ block: 'center' }); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
+    return;
+  }
+  const f = e.target.closest('figure[data-case]'); if (f) openLB(f.dataset.case, +f.dataset.n);
+});
+cv2.addEventListener('keydown', e => { const f = e.target.closest('figure[data-case]'); if (f && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openLB(f.dataset.case, +f.dataset.n); } });
+let LB = null;
+function openLB(cid, n) {
+  const c = CASES.find(x => x.id === cid); if (!c) return;
+  closeLB();
+  LB = document.createElement('div'); LB.className = 'lightbox'; LB.setAttribute('role', 'dialog'); LB.setAttribute('aria-label', c.title);
+  const show = () => { const im = c.images[n]; LB.innerHTML = `<img src="${esc(im.src)}" alt="${esc(im.caption)}"><p>${esc(c.title)} · ${esc(im.caption)} (${n + 1}/${c.images.length})</p><div class="row"><button class="btn" data-lb="prev" type="button">Previous</button><button class="btn" data-lb="close" type="button">Close</button><button class="btn" data-lb="next" type="button">Next</button></div>`; $('[data-lb="close"]', LB).focus(); };
+  LB.addEventListener('click', e => { const a = e.target.closest('[data-lb]'); if (a) { if (a.dataset.lb === 'close') return closeLB(); n = (n + (a.dataset.lb === 'next' ? 1 : -1) + c.images.length) % c.images.length; show(); } else if (e.target === LB) closeLB(); });
+  LB._key = e => { if (e.key === 'Escape') closeLB(); if (e.key === 'ArrowRight') { n = (n + 1) % c.images.length; show(); } if (e.key === 'ArrowLeft') { n = (n - 1 + c.images.length) % c.images.length; show(); } };
+  document.addEventListener('keydown', LB._key);
+  document.body.appendChild(LB); show();
+}
+function closeLB() { if (LB) { document.removeEventListener('keydown', LB._key); LB.remove(); LB = null; } }
+
+/* ---------- references view ---------- */
+const rv = document.createElement('section');
+rv.className = 'view refs-list'; rv.dataset.view = 'refs'; rv.hidden = true;
+const groups = [...MODULES.map(m => ({ title: m.title, keys: [...new Set(m.calculators.flatMap(c => [...c.refs, ...(c.flags || []).flatMap(f => f.refs || [])]))] })), ...(TOOLKIT_META.showCases ? [{ title: 'Interesting cases', keys: [...new Set(CASES.flatMap(c => c.refs))] }] : [])];
+rv.innerHTML = `<div class="view-head"><h2>References</h2><p>Links open the article (DOI or PubMed Central) where known, otherwise a PubMed search for the title.</p></div>` +
+  groups.map(g => `<h3>${esc(g.title)}</h3><ol>${g.keys.map(k => `<li><a href="${esc(refUrl(k))}" target="_blank" rel="noopener">${esc(refFull(k))}</a></li>`).join('')}</ol>`).join('') +
+  `<p class="disclaimer">For research and education only. Not a medical device and not for clinical decision-making. Thresholds come from the cited literature, vary between populations, techniques and modalities, and should be interpreted with the full imaging and clinical picture. Toolkit v${esc(TOOLKIT_META.version)}, content reviewed ${esc(TOOLKIT_META.reviewed)}.</p>`;
+main.appendChild(rv);
+
+const foot = document.createElement('p'); foot.className = 'disclaimer';
+foot.textContent = 'For research and education only. Not a medical device; not for clinical decision-making. Always interpret measurements with the full imaging and clinical picture.';
+main.after(Object.assign(document.createElement('div'), { className: 'wrap' })); main.nextElementSibling.appendChild(foot);
+
+go(location.hash.slice(1) || MODULES[0].id, { keepScroll: true });
+})();
+</script>
+
+</body>
+</html>
