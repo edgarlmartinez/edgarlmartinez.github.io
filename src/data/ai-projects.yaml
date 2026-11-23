@@ -35,3 +35,21 @@ projects:
       yet usable.
     year: 2026
     tags: [MSK, Oncology, MRI, CT, Radiomics, Segmentation]
+  - title: Lisfranc interval measurement review (offline demo and OHIF extension)
+    author: Ibraheem Shaikh
+    author_url: https://github.com/rightawayileft
+    repo: https://github.com/rightawayileft/lisfranc-measurement
+    demo_url: https://github.com/rightawayileft/lisfranc-measurement/tree/main/demo
+    dataset: UNIFESP X-ray body part (foot AP/lateral pairs) and HVAngleEst
+    dataset_url: https://www.kaggle.com/datasets/felipekitamura/unifesp-xray-bodypart-classification
+    license: CC BY-NC-SA 4.0 and CC BY 4.0
+    model: Measurement review tool, OHIF extension v0.2
+    status: >-
+      Offline measurement demo that runs in Chrome or Edge with no install,
+      using public foot radiographs. Readers place C1 and M2 landmarks to
+      measure the Lisfranc interval and export their reviews as JSON or CSV.
+      A companion review extension for the OHIF DICOM viewer (v0.2, for OHIF
+      3.7 and 3.11) brings the same workflow into the viewer, with test
+      studies built from synthetic DICOM.
+    year: 2026
+    tags: [Foot and ankle, Radiographs, Lisfranc, Measurement, OHIF]
