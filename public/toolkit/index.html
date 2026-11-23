@@ -289,7 +289,7 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
      REGIONS), put its images in the cases/ folder next to this file.
      ===================================================================== -->
 <script>
-const TOOLKIT_META = { version: '1.2', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
+const TOOLKIT_META = { version: '1.3', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
 
 const has = x => x !== null && x !== undefined && !(typeof x === 'number' && isNaN(x));
 const sum = (...a) => a.reduce((s, x) => s + (x || 0), 0);
@@ -1000,8 +1000,8 @@ const MODULES = [
     ],
     refs: ['coughlin2007', 'robinson2005'] },
 
-  { id: 'hind', title: 'Hindfoot alignment (Saltzman view)', vary: true,
-    howTo: 'Weight-bearing hindfoot alignment view. Draw the tibial shaft axis and the calcaneal axis (bisecting the calcaneal tuberosity). The angle between them is the hindfoot alignment angle; heel lateral to the tibial axis = valgus.',
+  { id: 'hind', title: 'Hindfoot valgus / varus (hindfoot alignment view)', vary: true,
+    howTo: 'Weight-bearing hindfoot alignment (Saltzman) view, or the long axial view. Draw the tibial shaft axis and the calcaneal axis (bisecting the calcaneal tuberosity). The angle between them is the hindfoot alignment angle; heel lateral to the tibial axis = valgus. The moment arm is the horizontal distance from the tibial axis to the lowest point of the calcaneus.',
     diagram: `
       <path d="M100,0 L100,58" class="bs" stroke-width="22"/>
       <ellipse cx="100" cy="70" rx="24" ry="12" class="bn"/>
@@ -1010,14 +1010,32 @@ const MODULES = [
       <text x="126" y="130" class="m">valgus</text><text x="8" y="130" class="s">medial</text><text x="160" y="16" class="s">lateral</text>`,
     inputs: [
       { id: 'a', label: 'Hindfoot alignment angle', unit: '°', value: 14, measure: 'angle' },
-      { id: 'dir', label: 'Direction', type: 'select', value: 'valgus', options: [['valgus', 'Valgus'], ['varus', 'Varus']] }
+      { id: 'dir', label: 'Direction', type: 'select', value: 'valgus', options: [['valgus', 'Valgus (heel lateral)'], ['varus', 'Varus (heel medial)']] },
+      { id: 'ma', label: 'Hindfoot moment arm', unit: 'mm', optional: true, value: 12, measure: 'length', help: 'Horizontal distance from the tibial axis to the lowest point of the calcaneus' },
+      { id: 'madir', label: 'Lowest calcaneal point is', type: 'select', value: 'lat', options: [['lat', 'Lateral to the tibial axis (valgus)'], ['med', 'Medial to the tibial axis (varus)']] }
     ],
     results: [{ id: 's', label: 'Hindfoot alignment', unit: '°', calc: v => has(v.a) ? (v.dir === 'varus' ? -v.a : v.a) : null,
       format: x => `${Math.abs(Math.round(x))}° ${x < 0 ? 'varus' : x > 0 ? 'valgus' : 'neutral'}`, scale: [-20, 30], scaleLabel: x => x < 0 ? `${-x}var` : x > 0 ? `${x}val` : '0', bands: [
       { upTo: 0, label: 'Hindfoot varus', sev: 'warn', note: 'Seen with cavovarus foot; check for peroneal and lateral ankle pathology.' },
       { upTo: 10, incl: true, label: 'Physiologic valgus (0–10°)', sev: 'ok' },
-      { label: 'Increased valgus (over 10°)', sev: 'warn', note: 'Seen with progressive collapsing foot (adult flatfoot) deformity.' } ] }],
-    refs: ['saltzman1995'] },
+      { label: 'Increased valgus (over 10°)', sev: 'warn', note: 'Seen with progressive collapsing foot (adult flatfoot) deformity.' } ] },
+      { id: 'ma', label: 'Hindfoot moment arm', unit: 'mm', calc: v => has(v.ma) ? (v.madir === 'med' ? -v.ma : v.ma) : null,
+        format: x => `${Math.abs(x).toFixed(1)} mm ${x < 0 ? 'medial (varus)' : x > 0 ? 'lateral (valgus)' : ''}`.trim(), scale: [-20, 30], scaleLabel: x => x < 0 ? `${-x}med` : x > 0 ? `${x}lat` : '0', bands: [
+        { upTo: -4.3, label: 'Varus beyond the asymptomatic range', sev: 'warn' },
+        { upTo: 16.6, incl: true, label: 'Within ±2 SD of asymptomatic adults', sev: 'ok', note: 'Reference 6.1 ± 5.2 mm of valgus (lateral) in 1,128 asymptomatic adults.' },
+        { label: 'Valgus beyond the asymptomatic range', sev: 'warn' } ] }],
+    pitfalls: [
+      'The hindfoot alignment view is sensitive to foot rotation and to how the calcaneal axis is drawn. The long axial view was more reliable between observers in one comparison.',
+      'Normal adults stand in slight valgus; older women show the most valgus.',
+      'The image tool reports the size of the angle only; set the direction by whether the heel sits lateral (valgus) or medial (varus) to the tibial axis.'
+    ],
+    tables: [
+      { title: 'Adult reference values (hindfoot alignment view)', head: ['Measure', 'Mean ± SD', 'Population'], rows: [
+        ['Hindfoot alignment angle', '4.1 ± 3.5° valgus', '1,128 asymptomatic adults'],
+        ['Hindfoot alignment angle', '7.1 ± 6.3° valgus', 'Women aged 45 or older'],
+        ['Hindfoot moment arm', '6.1 ± 5.2 mm valgus (lateral)', '1,128 asymptomatic adults'] ] }
+    ],
+    refs: ['saltzman1995', 'choi2020', 'reilingh2010'] },
 
   { id: 'arch', title: "Meary's angle & calcaneal pitch", vary: true,
     howTo: "Weight-bearing lateral. Meary's angle: long axis of the talus vs long axis of the first metatarsal (apex plantar = planus, apex dorsal = cavus). Calcaneal pitch: line along the plantar calcaneus vs the floor.",
@@ -1047,6 +1065,148 @@ const MODULES = [
         { label: 'High (over 30°): cavus', sev: 'warn' } ] }
     ],
     refs: ['younger2005'] }
+  ] },
+
+{ id: 'pedfoot', tab: 'Pediatric foot', title: 'Pediatric foot alignment & terminology',
+  blurb: 'Weight-bearing (or simulated weight-bearing) AP and lateral views, with the ankle as close to neutral dorsiflexion as possible. Normal angles change with age, and values outside ±2 SD are not necessarily abnormal; read the angles together with the clinical findings.',
+  calculators: [
+  { id: 'ptc', title: 'Talocalcaneal (Kite) angles: hindfoot valgus or varus', vary: true,
+    howTo: 'AP view: angle between the talar axis (through the middle of the talar head and neck) and the calcaneal axis (along its lateral border). Lateral view: talar axis vs the line along the plantar surface of the calcaneus. Both angles increase with hindfoot valgus and decrease with varus (the talus and calcaneus become parallel).',
+    diagram: `
+      <ellipse cx="86" cy="84" rx="14" ry="34" class="bn" transform="rotate(-12 86 84)"/>
+      <ellipse cx="118" cy="98" rx="16" ry="38" class="bn" transform="rotate(14 118 98)"/>
+      <line x1="98" y1="140" x2="70" y2="10" class="ms"/><line x1="104" y1="140" x2="140" y2="10" class="ms"/>
+      <text x="92" y="34" class="m">AP TC</text><text x="26" y="20" class="s">talus</text><text x="146" y="22" class="s">calcaneus</text><text x="8" y="132" class="s">AP view</text>`,
+    inputs: [
+      { id: 'ap', label: 'AP talocalcaneal angle', unit: '°', value: 30, measure: 'angle' },
+      { id: 'lat', label: 'Lateral talocalcaneal angle', unit: '°', value: 40, measure: 'angle' },
+      { id: 'age', label: 'Age', type: 'select', value: 'u5', options: [['u5', '5 years or younger'], ['o5', 'Older than 5 years']] }
+    ],
+    results: [
+      { id: 'ap', label: 'AP talocalcaneal angle', unit: '°', calc: v => v.ap, scale: [0, 70], bandsBy: v => v.age, bandSets: {
+        u5: [ { upTo: 20, label: 'Decreased: hindfoot varus', sev: 'warn', note: 'Talus and calcaneus approach parallel, as in clubfoot.' },
+              { upTo: 40, incl: true, label: 'Normal (20–40°)', sev: 'ok' },
+              { upTo: 56, incl: true, label: 'Above 40° but within ±2 SD (to 56°)', sev: 'info' },
+              { label: 'Increased: hindfoot valgus', sev: 'warn' } ],
+        o5: [ { upTo: 10, label: 'Decreased: hindfoot varus', sev: 'warn', note: 'Talus and calcaneus approach parallel, as in clubfoot.' },
+              { upTo: 20, label: 'Below the classic 20–40° but within ±2 SD for age', sev: 'info', note: 'The AP angle falls with age; the classic range reflects children under 5.' },
+              { upTo: 40, incl: true, label: 'Normal (20–40°)', sev: 'ok' },
+              { upTo: 56, incl: true, label: 'Above 40° but within ±2 SD (to 56°)', sev: 'info' },
+              { label: 'Increased: hindfoot valgus', sev: 'warn' } ] } },
+      { id: 'lat', label: 'Lateral talocalcaneal angle', unit: '°', calc: v => v.lat, scale: [0, 70], bands: [
+        { upTo: 25, label: 'Decreased: hindfoot varus or equinus', sev: 'warn' },
+        { upTo: 35, label: 'Below the classic 35–50° but within ±2 SD (25–55°)', sev: 'info' },
+        { upTo: 50, incl: true, label: 'Normal (35–50°)', sev: 'ok' },
+        { upTo: 55, incl: true, label: 'Above 50° but within ±2 SD', sev: 'info' },
+        { label: 'Increased: hindfoot valgus or calcaneus', sev: 'warn' } ] },
+      { id: 'idx', label: 'Talocalcaneal index (AP + lateral)', unit: '°', calc: v => has(v.ap) && has(v.lat) ? v.ap + v.lat : null, scale: [0, 110], bands: [
+        { upTo: 40, label: 'Under 40°: hindfoot varus, as in uncorrected clubfoot', sev: 'alert' },
+        { label: '40° or more', sev: 'ok' } ] }
+    ],
+    flags: [
+      { when: v => has(v.ap) && has(v.lat) && v.ap < 20 && v.lat < 35, sev: 'warn', text: 'Both talocalcaneal angles are low (talocalcaneal parallelism): hindfoot varus. With equinus and forefoot adductus this is the clubfoot pattern.', refs: ['simons1978', 'thapa2010'] },
+      { when: v => has(v.ap) && has(v.lat) && v.ap > 40 && v.lat > 50, sev: 'warn', text: 'Both talocalcaneal angles are high: hindfoot valgus. Check the lateral view for equinus (vertical talus) and whether alignment corrects off weight-bearing (flexible flatfoot) or not (consider tarsal coalition).', refs: ['katz1997', 'thapa2010'] }
+    ],
+    pitfalls: [
+      'Inadequate ankle dorsiflexion (equinus) falsely lowers the talocalcaneal angles; a forced-dorsiflexion lateral view helps in clubfoot.',
+      'Foot rotation and non-standing views change the angles. In infants the talar axis is drawn through the ossified talar body because the head and neck are cartilaginous.',
+      'Angles outside ±2 SD do not by themselves mean a pathologic foot.'
+    ],
+    tables: [
+      { title: 'Normal ranges in children', head: ['Measurement', 'Classic range', '±2 SD (VanderWilde 1988)', 'Change with age'], rows: [
+        ['AP talocalcaneal', '20–40° (under 5 y)', '10–56° overall; 25–56° at 5 y or younger', 'Decreases'],
+        ['Lateral talocalcaneal', '35–50°', '25–55°', 'Decreases'],
+        ['AP talus–first metatarsal', '0–20°', '−10° (varus) to +30° (valgus)', '—'],
+        ['Lateral talus–first metatarsal', '0–20°', '—', '—'],
+        ['Tibiocalcaneal (lateral)', '60–90°', '55–95°', 'Decreases'],
+        ['Talocalcaneal index', '40° or more', '—', '—'] ] }
+    ],
+    refs: ['vanderwilde1988', 'katz1997', 'thapa2010', 'beatson1966', 'simons1978'] },
+
+  { id: 'ptm', title: 'Talus–first metatarsal & tibiocalcaneal angles: forefoot, arch and equinus', vary: true,
+    howTo: 'AP view: talar axis vs first metatarsal axis (forefoot adductus or abductus). Lateral view: talar axis vs first metatarsal axis (cavus or planus), and the tibial shaft axis vs the plantar line of the calcaneus (equinus or calcaneus).',
+    diagram: `
+      <path d="M100,0 L100,50" class="bs" stroke-width="18"/>
+      <polygon points="40,128 52,100 88,94 98,118 84,130" class="bn"/>
+      <ellipse cx="104" cy="82" rx="22" ry="12" class="bn" transform="rotate(18 104 82)"/>
+      <path d="M138,104 L190,124" class="bs" stroke-width="9"/>
+      <line x1="100" y1="0" x2="100" y2="104" class="rf"/><line x1="36" y1="132" x2="104" y2="110" class="ms"/>
+      <line x1="80" y1="74" x2="196" y2="126" class="ms"/>
+      <text x="106" y="20" class="s">tibia</text><text x="60" y="88" class="m">TiC</text><text x="150" y="100" class="m">T–1MT</text>`,
+    inputs: [
+      { id: 'apm', label: 'AP talus–first metatarsal angle', unit: '°', value: 10, measure: 'angle' },
+      { id: 'apdir', label: 'First metatarsal relative to the talar axis', type: 'select', value: 'abd', options: [['abd', 'Lateral (valgus, abductus)'], ['add', 'Medial (varus, adductus)']] },
+      { id: 'latm', label: 'Lateral talus–first metatarsal angle', unit: '°', optional: true, value: 8, measure: 'angle' },
+      { id: 'latdir', label: 'Apex', type: 'select', value: 'plantar', options: [['plantar', 'Plantar (planus)'], ['dorsal', 'Dorsal (cavus)']] },
+      { id: 'tic', label: 'Tibiocalcaneal angle (lateral)', unit: '°', optional: true, value: 75 }
+    ],
+    results: [
+      { id: 'apm', label: 'AP talus–first metatarsal', unit: '°', calc: v => has(v.apm) ? (v.apdir === 'add' ? -v.apm : v.apm) : null,
+        format: x => `${Math.abs(Math.round(x))}° ${x < 0 ? 'adductus' : x > 0 ? 'abductus' : ''}`.trim(), scale: [-30, 40], scaleLabel: x => x < 0 ? `${-x}add` : x > 0 ? `${x}abd` : '0', bands: [
+        { upTo: -10, label: 'Forefoot adductus (varus)', sev: 'warn', note: 'Seen in metatarsus adductus, skewfoot and clubfoot; the talocalcaneal angles separate them.' },
+        { upTo: 0, label: 'Medial, but within ±2 SD (to −10°)', sev: 'info' },
+        { upTo: 20, incl: true, label: 'Normal (0–20°)', sev: 'ok' },
+        { upTo: 30, incl: true, label: 'Lateral, but within ±2 SD (to +30°)', sev: 'info' },
+        { label: 'Forefoot abductus (valgus)', sev: 'warn', note: 'Seen with planovalgus feet and vertical talus.' } ] },
+      { id: 'latm', label: 'Lateral talus–first metatarsal', unit: '°', calc: v => has(v.latm) ? (v.latdir === 'dorsal' ? -v.latm : v.latm) : null,
+        format: x => `${Math.abs(Math.round(x))}° ${x < 0 ? 'apex dorsal' : x > 0 ? 'apex plantar' : ''}`.trim(), scale: [-30, 40], scaleLabel: x => x < 0 ? `${-x}D` : x > 0 ? `${x}P` : '0', bands: [
+        { upTo: 0, label: 'Cavus (apex dorsal)', sev: 'warn', note: 'Forefoot plantarflexed on the hindfoot. In clubfoot and neuromuscular cavus.' },
+        { upTo: 20, incl: true, label: 'Normal for a child (0–20°)', sev: 'ok', note: 'Children are physiologically flatter than adults.' },
+        { label: 'Planus (over 20°, apex plantar)', sev: 'warn', note: 'Forefoot dorsiflexed on the hindfoot. Very large values with a vertical talus suggest congenital vertical talus.' } ] },
+      { id: 'tic', label: 'Tibiocalcaneal angle', unit: '°', calc: v => v.tic, scale: [30, 130], bands: [
+        { upTo: 55, label: 'Calcaneus (heel dorsiflexed)', sev: 'warn' },
+        { upTo: 60, label: 'Below 60° but within ±2 SD', sev: 'info' },
+        { upTo: 90, incl: true, label: 'Normal (60–90°)', sev: 'ok' },
+        { upTo: 95, incl: true, label: 'Above 90° but within ±2 SD', sev: 'info' },
+        { label: 'Hindfoot equinus (over 90°)', sev: 'warn', note: 'Calcaneus plantarflexed relative to the tibia: clubfoot, vertical talus, or a tight heel cord.' } ] }
+    ],
+    pitfalls: [
+      'The tibiocalcaneal angle opens anteriorly and can exceed 90°, so enter it by hand (the image tool reports angles up to 90°).',
+      'Lateral views need the ankle in maximal dorsiflexion to assess equinus; a plantarflexed film overcalls it.',
+      'Adult cutoffs (for example Meary\'s angle 0 ± 4°) do not apply to young children, who are normally flatter.'
+    ],
+    refs: ['vanderwilde1988', 'katz1997', 'thapa2010'] },
+
+  { id: 'ppat', title: 'Deformity pattern and terminology',
+    howTo: 'Describe each segment (hindfoot, ankle, forefoot) from the angles above, then match the combination. Hindfoot valgus and varus come from the talocalcaneal angles; equinus and calcaneus from the tibiocalcaneal angle; adductus and abductus from the AP talus–first metatarsal angle.',
+    inputs: [
+      { id: 'hf', label: 'Hindfoot', type: 'select', value: 'valgus', options: [['normal', 'Normal'], ['valgus', 'Valgus (talocalcaneal angles increased)'], ['varus', 'Varus (talocalcaneal angles decreased)']] },
+      { id: 'eq', label: 'Ankle / heel', type: 'select', value: 'neutral', options: [['neutral', 'Neutral'], ['equinus', 'Equinus (tibiocalcaneal over 90°)'], ['calcaneus', 'Calcaneus (tibiocalcaneal under 60°)']] },
+      { id: 'ff', label: 'Forefoot', type: 'select', value: 'neutral', options: [['neutral', 'Neutral'], ['adductus', 'Adductus (talus–1st MT negative)'], ['abductus', 'Abductus (talus–1st MT increased)']] },
+      { id: 'vt', label: 'Talus vertical and talonavicular joint does not reduce on the plantar-flexion lateral', type: 'check', value: false },
+      { id: 'nav', label: 'Navicular subluxed laterally on the talar head (AP)', type: 'check', value: false },
+      { id: 'corr', label: 'Arch and heel correct off weight-bearing or on toe standing', type: 'check', value: true }
+    ],
+    results: [{ id: 'pat', label: 'Most consistent pattern', calc: () => 1, hideValue: true, classify: (x, v) => {
+      if (v.vt && v.hf !== 'varus') return { label: 'Congenital vertical talus (rocker-bottom foot)', sev: 'alert', note: 'Hindfoot equinus and valgus with fixed dorsal dislocation of the navicular on the talus. A forced plantar-flexion lateral separates it from an oblique talus, which reduces.' };
+      if (v.hf === 'varus' && v.eq === 'equinus') return { label: 'Clubfoot (congenital talipes equinovarus)', sev: 'alert', note: 'Hindfoot equinus and varus with talocalcaneal parallelism, forefoot adductus and supination (metatarsal "stacking" on the lateral view) and often cavus.' };
+      if (v.hf === 'valgus' && v.ff === 'adductus') return { label: 'Skewfoot (serpentine or Z-foot)', sev: 'warn', note: 'Hindfoot valgus with forefoot adductus. Lateral subluxation of the navicular on the talar head is the key sign; the opposite deformities can cancel on the talus–first metatarsal angle.' };
+      if (v.hf === 'normal' && v.ff === 'adductus') return { label: 'Metatarsus adductus', sev: 'info', note: 'Forefoot adductus with normal talocalcaneal angles (no hindfoot varus or valgus). Usually flexible and self-limiting in infants.' };
+      if (v.hf === 'valgus' && v.corr) return { label: 'Flexible flatfoot (pes planovalgus)', sev: 'info', note: 'Hindfoot valgus and loss of the arch on weight-bearing that correct off weight-bearing or on toe standing. Common and usually physiologic in young children.' };
+      if (v.hf === 'valgus') return { label: 'Rigid flatfoot', sev: 'warn', note: 'Hindfoot valgus that does not correct. Look for tarsal coalition (calcaneonavicular or talocalcaneal), and consider CT.' };
+      if (v.hf === 'varus') return { label: 'Hindfoot varus (cavovarus)', sev: 'warn', note: 'Without equinus this suggests a cavovarus foot. In an older child consider an underlying neuromuscular cause.' };
+      if (v.eq === 'equinus') return { label: 'Isolated equinus', sev: 'warn', note: 'Check heel cord tightness and confirm with a maximal dorsiflexion lateral view.' };
+      if (v.eq === 'calcaneus') return { label: 'Calcaneus foot', sev: 'info', note: 'Heel dorsiflexed. In newborns a positional calcaneovalgus foot is common and resolves.' };
+      return { label: 'No pattern: alignment within normal limits', sev: 'ok' }; } }],
+    tables: [
+      { title: 'Terminology', head: ['Term', 'Meaning', 'Radiographic sign'], rows: [
+        ['Hindfoot valgus', 'Heel everted; calcaneus rotated laterally under the talus', 'AP and lateral talocalcaneal angles increased'],
+        ['Hindfoot varus', 'Heel inverted; talus and calcaneus parallel', 'AP and lateral talocalcaneal angles decreased; index under 40°'],
+        ['Equinus', 'Heel plantarflexed relative to the tibia', 'Tibiocalcaneal angle over 90° (negative calcaneal pitch)'],
+        ['Calcaneus', 'Heel dorsiflexed relative to the tibia', 'Tibiocalcaneal angle under 60°'],
+        ['Forefoot adductus (varus)', 'Forefoot deviated medially on the hindfoot', 'AP talus–first metatarsal angle negative'],
+        ['Forefoot abductus (valgus)', 'Forefoot deviated laterally on the hindfoot', 'AP talus–first metatarsal angle increased'],
+        ['Forefoot supination', 'Forefoot inverted', 'Metatarsals stacked ("ladder") on the lateral view'],
+        ['Forefoot pronation', 'Forefoot everted', 'Metatarsals overlapped on the lateral view'],
+        ['Cavus', 'High arch; forefoot plantarflexed on the hindfoot', 'Lateral talus–first metatarsal angle apex dorsal'],
+        ['Planus', 'Flat arch; forefoot dorsiflexed on the hindfoot', 'Lateral talus–first metatarsal angle increased, apex plantar'],
+        ['Clubfoot (CTEV)', 'Equinus + hindfoot varus + forefoot adductus and supination', 'Talocalcaneal parallelism, tibiocalcaneal over 90°'],
+        ['Congenital vertical talus', 'Rigid rocker-bottom foot: equinus + hindfoot valgus', 'Vertical talus; navicular dislocated dorsally and not reducing in plantar flexion'],
+        ['Skewfoot', 'Hindfoot valgus + forefoot adductus', 'Navicular subluxed laterally on the talar head'],
+        ['Metatarsus adductus', 'Forefoot adductus with a normal hindfoot', 'Normal talocalcaneal angles, negative talus–first metatarsal'],
+        ['Flexible flatfoot', 'Planovalgus that corrects off weight-bearing', 'Valgus and planus on standing views only'] ] }
+    ],
+    refs: ['katz1997', 'thapa2010', 'hamanishi1984', 'simons1978'] }
   ] }
 ];
 /* ---------- step-by-step prompts for measuring on an image ----------
@@ -1101,6 +1261,11 @@ const GUIDES = {
   'hv.ima': ['First metatarsal shaft axis', 'Second metatarsal shaft axis'],
   'hv.dmaa': ['First metatarsal shaft axis', 'Distal articular surface, from its medial to its lateral edge'],
   'hv.hvi': ['Proximal phalanx shaft axis', 'Distal phalanx shaft axis'],
+  'hind.ma': ['Tibial shaft axis, at the level of the heel', 'Lowest point of the calcaneus (straight across)'],
+  'ptc.ap': ['Talar axis, through the middle of the talar head and neck', 'Calcaneal axis, along the lateral border of the calcaneus'],
+  'ptc.lat': ['Talar axis, bisecting the talar head and neck', 'Plantar surface of the calcaneus'],
+  'ptm.apm': ['Talar axis', 'First metatarsal shaft axis'],
+  'ptm.latm': ['Talar axis', 'First metatarsal shaft axis'],
   'hind.a': ['Tibial shaft axis', 'Calcaneal axis on the hindfoot alignment view'],
   'arch.m': ['Talar long axis', 'First metatarsal long axis'],
   'arch.p': ['Plantar surface of the calcaneus', 'Horizontal reference along the plantar soft tissues']
@@ -1195,6 +1360,14 @@ const REFERENCES = {
   coughlin2007: { s: 'Coughlin 2007', a: 'Coughlin MJ, Jones CP.', t: 'Hallux valgus: demographics, etiology, and radiographic assessment.', j: 'Foot Ankle Int. 2007;28(7):759-777.' },
   robinson2005: { s: 'Robinson 2005', a: 'Robinson AH, Limbers JP.', t: 'Modern concepts in the treatment of hallux valgus.', j: 'J Bone Joint Surg Br. 2005;87(8):1038-1045.' },
   saltzman1995: { s: 'Saltzman 1995', a: 'Saltzman CL, el-Khoury GY.', t: 'The hindfoot alignment view.', j: 'Foot Ankle Int. 1995;16(9):572-576.' },
+  choi2020: { s: 'Choi 2020', a: 'Choi JY, Suh JS.', t: 'Radiographic measurements on hindfoot alignment view in 1,128 asymptomatic subjects.', j: 'Foot Ankle Orthop. 2020;5(4). Abstract.', url: 'https://doi.org/10.1177/2473011420S00166' },
+  reilingh2010: { s: 'Reilingh 2010', a: 'Reilingh ML, Beimers L, Tuijthof GJM, Stufkens SAS, Maas M, van Dijk CN.', t: 'Measuring hindfoot alignment radiographically: the long axial view is more reliable than the hindfoot alignment view.', j: 'Skeletal Radiol. 2010;39(11):1103-1108.', url: 'https://pubmed.ncbi.nlm.nih.gov/20062985/' },
+  vanderwilde1988: { s: 'VanderWilde 1988', a: 'VanderWilde R, Staheli LT, Chew DE, Malagon V.', t: 'Measurements on radiographs of the foot in normal infants and children.', j: 'J Bone Joint Surg Am. 1988;70(3):407-415.', url: 'https://pubmed.ncbi.nlm.nih.gov/3346265/' },
+  katz1997: { s: 'Katz 1997', a: 'Katz MA, Davidson RS, Chan PSH, Sullivan RJ.', t: 'Plain radiographic evaluation of the pediatric foot and its deformities.', j: 'Univ Pa Orthop J. 1997;10:30-39.', url: 'https://upoj.org/wp-content/uploads/v10/v10_08.pdf' },
+  thapa2010: { s: 'Thapa 2010', a: 'Thapa MM, Pruthi S, Chew FS.', t: 'Radiographic assessment of pediatric foot alignment: review.', j: 'AJR Am J Roentgenol. 2010;194(6 Suppl):S51-S58.', url: 'https://pubmed.ncbi.nlm.nih.gov/20489117/' },
+  beatson1966: { s: 'Beatson 1966', a: 'Beatson TR, Pearson JR.', t: 'A method of assessing correction in club feet.', j: 'J Bone Joint Surg Br. 1966;48(1):40-50.' },
+  simons1978: { s: 'Simons 1978', a: 'Simons GW.', t: 'A standardized method for the radiographic evaluation of clubfeet.', j: 'Clin Orthop Relat Res. 1978;(135):107-118.' },
+  hamanishi1984: { s: 'Hamanishi 1984', a: 'Hamanishi C.', t: 'Congenital vertical talus: classification with 69 cases and new measurement system.', j: 'J Pediatr Orthop. 1984;4(3):318-326.' },
   younger2005: { s: 'Younger 2005', a: 'Younger AS, Sawatzky B, Dryden P.', t: 'Radiographic assessment of adult flatfoot.', j: 'Foot Ankle Int. 2005;26(10):820-825.' },
 
   yekeler2006: { s: 'Yekeler 2006', a: 'Yekeler E, Tunaci M, Tunaci A, Dursun M, Acunas G.', t: 'Frequency of sternal variations and anomalies evaluated by MDCT.', j: 'AJR Am J Roentgenol. 2006;186(4):956-960.', url: 'https://doi.org/10.2214/AJR.04.1779' },
