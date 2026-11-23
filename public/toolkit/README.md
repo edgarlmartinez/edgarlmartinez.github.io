@@ -1,6 +1,6 @@
-# MSK Measurement Toolkit (v1.0)
+# MSK Measurement Toolkit (v1.1)
 
-Offline, single-file toolkit of literature-based musculoskeletal measurement calculators with how-to diagrams and a measure-on-image tool. Research and education use only; not a medical device.
+Offline, single-file toolkit (now at /toolkit/) of literature-based musculoskeletal measurement calculators with how-to diagrams and a measure-on-image tool. Research and education use only; not a medical device.
 
 **Covers:** scoliosis and sagittal alignment (Cobb, Risser, kyphosis, SRS-Schwab, coronal balance, RVAD), craniocervical junction (ADI/PADI, BDI/BAI, Powers ratio, condyle-C1 interval, Spence), chemical shift signal drop (marrow, adrenal SII and ASR), shoulder (CC interval, AC joint, acromiohumeral interval, Hamada), pelvis and hip (flamingo views, LCEA, Tonnis, extrusion index, ACEA, alpha angle), distal radius (tilt, inclination, height, step-off, teardrop, Lafontaine) and foot (hallux valgus angles, hindfoot alignment, Meary's angle, calcaneal pitch).
 
