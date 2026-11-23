@@ -29,6 +29,7 @@ const linkLabels = { email: 'Email', bidmc_profile: 'BIDMC profile', harvard_cat
       <ul class="roles">{currentRoles.map((r) => <li>{r}</li>)}</ul>
       <div class="btns">
         <a class="btn btn-primary" href={`${base}/cv/`}>View CV</a>
+        <a class="btn btn-ghost" href={`${base}/cv.pdf`} download="Martinez-Salazar_HMS_CV.pdf">Download CV (PDF)</a>
         <a class="btn btn-ghost" href={`${base}/publications/`}>Publications</a>
         <a class="btn btn-ghost" href="#contact">Contact</a>
       </div>
