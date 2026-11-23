@@ -38,7 +38,7 @@ const path = Astro.url.pathname.replace(base, '') || '/';
     </header>
     <main><slot /></main>
     <footer class="site-footer no-print">
-      <div class="wrap">© {new Date().getFullYear()} {site.display_name} · {site.affiliation}</div>
+      <div class="wrap">© {new Date().getFullYear()} {site.display_name}</div>
     </footer>
   </body>
 </html>
