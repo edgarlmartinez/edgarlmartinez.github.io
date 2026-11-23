@@ -261,6 +261,23 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
 @media (max-width:860px){.measure{grid-template-columns:1fr}.case{grid-template-columns:1fr}}
 @media (max-width:520px){.how{grid-template-columns:1fr}.how svg{max-width:240px}.top h1{font-size:19px}.ver{margin-left:0}}
 @media (prefers-reduced-motion:reduce){.card.flash{animation:none}}
+.bmap-row{display:grid;grid-template-columns:170px minmax(0,1fr);gap:24px;align-items:center;margin:0 0 22px}
+.bodymap{width:100%;max-width:170px;height:auto;display:block;margin:0 auto;touch-action:manipulation}
+.bodymap .head{fill:var(--surface-2);stroke:var(--line)}
+.bodymap .rg>*{fill:var(--surface-2);stroke:var(--line);stroke-width:1;transition:fill .15s,stroke .15s}
+.bodymap a.rg{cursor:pointer}
+.bodymap a.rg>*{fill:color-mix(in srgb,var(--accent) 28%,var(--surface-2));stroke:var(--accent)}
+.bodymap a.rg:hover>*,.bodymap a.rg:focus-visible>*{fill:color-mix(in srgb,var(--accent) 60%,var(--surface-2))}
+.bodymap a.rg[aria-current=true]>*{fill:var(--accent);stroke:var(--ink);stroke-width:1.5}
+.bodymap a.rg:focus{outline:none}
+.bmap-help{color:var(--muted);font-size:14px;margin:0 0 10px}
+.bmap-pills{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.bmap-pills button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer}
+.bmap-pills button:hover{border-color:var(--accent)}
+.bmap-pills button[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent)}
+.bmap-status{font-size:14px;margin:10px 0 0;min-height:1.5em}
+.bmap-status button{margin-left:8px;font:inherit;font-size:13px;color:var(--accent);background:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;cursor:pointer}
+@media (max-width:640px){.bmap-row{grid-template-columns:1fr;gap:12px}.bodymap{max-width:130px}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -2027,6 +2044,18 @@ const dropHTML = big => `<div class="drop${big ? '' : ' dark'}" data-drop tabind
   <small>PNG or JPEG (DICOM files need exporting first). The image stays in your browser and is never uploaded.</small>
   <small class="pmsg" aria-live="polite"></small>
 </div>`;
+/* ---------- body map (Start page): tap a region to filter the measurement tiles ---------- */
+const BODY_MODS = { 'Cervical spine': ['ccj'], 'Thoracic spine': ['spine'], 'Lumbar spine': ['spine'], 'Shoulder': ['shoulder'], 'Pelvis': ['hip'], 'Hip': ['hip'], 'Knee': ['knee'], 'Wrist': ['wrist'], 'Ankle': ['foot', 'pedfoot'], 'Foot': ['foot', 'pedfoot'] };
+const bodyMapSVG = () => {
+  const E = (cx, cy, rx, ry, rot = 0) => ({ t: 'e', cx, cy, rx, ry, rot }), R = (x, y, w, h, rx = 8, rot = 0) => ({ t: 'r', x, y, w, h, rx, rot });
+  const mir = sh => sh.t === 'e' ? { ...sh, cx: 200 - sh.cx, rot: -sh.rot } : { ...sh, x: 200 - sh.x - sh.w, rot: -sh.rot };
+  const pair = sh => [sh, mir(sh)];
+  const BODY = [['Chest', [R(74, 66, 52, 62, 14)]], ['Pelvis', [R(72, 166, 56, 34, 14)]], ['Shoulder', pair(E(64, 76, 13, 12))], ['Humerus', pair(R(50, 88, 15, 56, 7, 8))], ['Elbow', pair(E(52, 151, 9, 8))], ['Forearm', pair(R(40, 160, 13, 50, 6, 8))], ['Wrist', pair(E(40, 216, 8, 6))], ['Hand', pair(E(36, 236, 10, 15, 8))], ['Hip', pair(E(83, 208, 12, 10))], ['Thigh', pair(R(70, 218, 26, 82, 12))], ['Knee', pair(E(84, 312, 12, 10))], ['Leg', pair(R(74, 324, 20, 72, 9))], ['Ankle', pair(E(84, 404, 9, 7))], ['Foot', pair(E(78, 422, 15, 8, -12))], ['Cervical spine', [R(93, 50, 14, 16, 5)]], ['Thoracic spine', [R(94, 68, 12, 60, 5)]], ['Lumbar spine', [R(93, 130, 14, 34, 5)]]];
+  const sh = s => s.t === 'e' ? `<ellipse cx="${s.cx}" cy="${s.cy}" rx="${s.rx}" ry="${s.ry}"${s.rot ? ` transform="rotate(${s.rot} ${s.cx} ${s.cy})"` : ''}/>` : `<rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="${s.rx}"${s.rot ? ` transform="rotate(${s.rot} ${s.x + s.w / 2} ${s.y + s.h / 2})"` : ''}/>`;
+  return `<svg class="bodymap" viewBox="10 0 180 440" role="group" aria-label="Body map: choose a region to filter measurements"><circle class="head" cx="100" cy="28" r="20" aria-hidden="true"/>${BODY.map(([r, shapes]) => BODY_MODS[r]
+    ? `<a class="rg" href="#" data-region="${r}" role="button" aria-label="${r}: ${BODY_MODS[r].map(id => MODULES.find(m => m.id === id).tab).join(', ')}"><title>${r}</title>${shapes.map(sh).join('')}</a>`
+    : `<g class="rg" aria-hidden="true"><title>${r}: no measurements yet</title>${shapes.map(sh).join('')}</g>`).join('')}</svg>`;
+};
 const sv = document.createElement('section');
 sv.className = 'view'; sv.dataset.view = 'start'; sv.hidden = true;
 const tileHTML = c => {
@@ -2043,13 +2072,27 @@ sv.innerHTML = `<div class="hero">${dropHTML(true)}
     <li><b>Get the graded result</b><span>The value is checked against the published cutoffs and drawn on the image, ready to copy or download.</span></li>
   </ol></div>
   <div class="view-head"><h2>Or pick a measurement</h2><div class="ctl search"><input type="search" id="q" placeholder="Search, e.g. Cobb, alpha, glenoid, tilt" aria-label="Search measurements"></div></div>
-  <div id="tilegroups">${MODULES.map(m => `<div class="tgroup"><h3>${esc(m.tab)} <span>${esc(m.title)}</span></h3><div class="tiles">${m.calculators.map(tileHTML).join('')}</div></div>`).join('')}</div>
+  <div class="bmap-row">${bodyMapSVG()}<div><p class="bmap-help">Tap a highlighted part of the body to see its measurements, or pick a section.</p><ul class="bmap-pills" aria-label="Sections">${MODULES.map(m => `<li><button type="button" data-mod="${m.id}" aria-pressed="false">${esc(m.tab)}</button></li>`).join('')}</ul><p class="bmap-status" aria-live="polite"></p></div></div>
+  <div id="tilegroups">${MODULES.map(m => `<div class="tgroup" data-mod="${m.id}"><h3>${esc(m.tab)} <span>${esc(m.title)}</span></h3><div class="tiles">${m.calculators.map(tileHTML).join('')}</div></div>`).join('')}</div>
   <p class="example" id="qnone" hidden>No measurement matches that search.</p>`;
 main.prepend(sv);
-$('#q', sv).addEventListener('input', e => {
-  const q = e.target.value.trim().toLowerCase(); let any = false;
-  $$('.tgroup', sv).forEach(g => { let n = 0; $$('.tile', g).forEach(t => { const show = !q || t.dataset.text.includes(q); t.hidden = !show; n += show; }); g.hidden = !n; any = any || n > 0; });
+let bodySel = null; // { region?, label, mods: [module ids] } or null
+const filterTiles = () => {
+  const q = $('#q', sv).value.trim().toLowerCase(); let any = false;
+  $$('.tgroup', sv).forEach(g => { const inSel = !bodySel || bodySel.mods.includes(g.dataset.mod); let n = 0; $$('.tile', g).forEach(t => { const show = inSel && (!q || t.dataset.text.includes(q)); t.hidden = !show; n += show; }); g.hidden = !n; any = any || n > 0; });
   $('#qnone', sv).hidden = any;
+  $$('.bodymap a.rg', sv).forEach(a => { const on = !!bodySel && (bodySel.region ? bodySel.region === a.dataset.region : BODY_MODS[a.dataset.region].some(id => bodySel.mods.includes(id))); a.setAttribute('aria-current', on ? 'true' : 'false'); });
+  $$('.bmap-pills button', sv).forEach(b => b.setAttribute('aria-pressed', bodySel && bodySel.mods.includes(b.dataset.mod) ? 'true' : 'false'));
+  const n = $$('.tile', sv).filter(t => !t.hidden).length;
+  $('.bmap-status', sv).innerHTML = bodySel ? `Showing <b>${esc(bodySel.label)}</b>: ${n} measurement${n === 1 ? '' : 's'} <button type="button" data-bclear>Show all</button>` : '';
+};
+$('#q', sv).addEventListener('input', filterTiles);
+sv.addEventListener('click', e => {
+  const r = e.target.closest('.bodymap a.rg');
+  if (r) { e.preventDefault(); const reg = r.dataset.region; bodySel = bodySel && bodySel.region === reg ? null : { region: reg, label: reg, mods: BODY_MODS[reg] }; filterTiles(); return; }
+  const b = e.target.closest('.bmap-pills button');
+  if (b) { const id = b.dataset.mod; bodySel = bodySel && !bodySel.region && bodySel.mods[0] === id ? null : { label: MODULES.find(m => m.id === id).tab, mods: [id] }; filterTiles(); return; }
+  if (e.target.closest('[data-bclear]')) { bodySel = null; filterTiles(); }
 });
 sv.addEventListener('click', e => {
   const c = e.target.closest('[data-calc]');
