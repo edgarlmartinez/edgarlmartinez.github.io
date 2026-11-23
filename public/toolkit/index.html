@@ -244,6 +244,8 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
 .fl .warn{color:var(--warn);font-weight:500}
 .lnk{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-align:left;font-weight:500;text-decoration:underline;text-decoration-color:var(--accent-soft);text-underline-offset:2px}
 .flagline{font-size:12.5px;border-radius:6px;padding:6px 10px;margin:0}
+.fl .key{flex-basis:100%;font-size:12px;color:var(--muted)}
+.fl .key.ok{color:var(--ok);font-weight:500}.fl .key.off{color:var(--warn);font-weight:500}
 #mres{display:flex;flex-direction:column;gap:8px}
 #mres .res .rv{font-size:18px}
 #mres .res{grid-template-columns:minmax(0,1fr) auto}
@@ -289,7 +291,7 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
      REGIONS), put its images in the cases/ folder next to this file.
      ===================================================================== -->
 <script>
-const TOOLKIT_META = { version: '1.3', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
+const TOOLKIT_META = { version: '1.4', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
 
 const has = x => x !== null && x !== undefined && !(typeof x === 'number' && isNaN(x));
 const sum = (...a) => a.reduce((s, x) => s + (x || 0), 0);
@@ -1246,7 +1248,7 @@ const GUIDES = {
   'flamingo.w': ['Right symphyseal margin', 'Left symphyseal margin'],
   'lcea.a': ['Inter-teardrop line (horizontal reference)', 'Line from the femoral head center to the lateral sourcil edge'],
   'cover.t': ['Horizontal reference through the medial sourcil', 'Line from the medial to the lateral sourcil edge'],
-  'cover.a': ['Lateral acetabular edge', 'Lateral femoral head margin'],
+  'cover.a': ['Lateral acetabular edge', 'Lateral femoral head margin, straight across'],
   'cover.b': ['Medial femoral head margin', 'Lateral femoral head margin'],
   'cover.acea': ['Vertical line through the femoral head center (false-profile view)', 'Line from the head center to the anterior acetabular edge'],
   'alpha.a': ['Femoral neck axis, from the head center down the middle of the neck', 'Line from the head center to where the head leaves its best-fit circle'],
@@ -1412,6 +1414,207 @@ const REFERENCES = {
   nyska1998: { s: 'Nyska 1998', a: 'Nyska M, Howard CB, Matan Y, et al.', t: 'Fracture of the posterior body of the talus--the hidden fracture.', j: 'Arch Orthop Trauma Surg. 1998;117(1-2):114-117.' },
   karasick1996: { s: 'Karasick 1996', a: 'Karasick D, Schweitzer ME.', t: 'The os trigonum syndrome: imaging features.', j: 'AJR Am J Roentgenol. 1996;166(1):125-129.' }
 };
+
+/* =====================================================================
+   SYNTHETIC PRACTICE SAMPLES — drawn shapes, not patient data.
+   Each entry builds a radiograph-style scene with a known answer:
+     w, h   image size in pixels      mm   pixel spacing (mm per pixel)
+     view   short title shown with the image
+     els    shapes: shaft (long bone), rrect (block), ell (ellipse),
+            circ, poly, plate (floor), label; soft:true = soft tissue,
+            dark:true = a defect cut into bone
+     keys   inputId -> the correct points (4 for angle/tilt, 2 for length)
+   The expected value is computed from the key points with the same
+   math as the measuring tool, so key and grading always agree.
+   ===================================================================== */
+const SMP = (() => {
+  const R = Math.PI / 180, P = (x, y) => ({ x, y }), dv = a => P(Math.cos(a * R), Math.sin(a * R));
+  const add = (p, v, k = 1) => P(p.x + v.x * k, p.y + v.y * k);
+  const loc = (c, a, x, y) => P(c.x + x * Math.cos(a * R) - y * Math.sin(a * R), c.y + x * Math.sin(a * R) + y * Math.cos(a * R));
+  const edge = (c, w, h, a, side, f = 1) => side === 'top' ? [loc(c, a, -w / 2 * f, -h / 2), loc(c, a, w / 2 * f, -h / 2)] : [loc(c, a, -w / 2 * f, h / 2), loc(c, a, w / 2 * f, h / 2)];
+  const axis = (c, a, len) => [add(c, dv(a), -len / 2), add(c, dv(a), len / 2)];
+  const L = (p, text) => ({ t: 'label', p, text });
+  return {
+  kyph: () => { /* lateral thoracic spine, T1–T12 along a kyphotic arc */
+    const els = [], v = []; let c = P(330, 70);
+    for (let i = 0; i < 12; i++) { const a = 30 - i * 60 / 11, w = 88 + i * 3, h = 44 + i * 1.5; if (i) { const pa = v[i - 1]; c = add(pa.c, dv(90 + (pa.a + a) / 2), (pa.h + h) / 2 + 13); } v.push({ c, a, w, h }); els.push({ t: 'rrect', c, w, h, a, r: 6 }); els.push({ t: 'rrect', c: loc(c, a, w / 2 + 34, 0), w: 46, h: h * 0.7, a, r: 10, soft: true }); }
+    els.push(L(add(v[3].c, P(-130, 0)), 'T4'), L(add(v[11].c, P(-130, 0)), 'T12'), L(P(40, 40), 'anterior ←'));
+    return { w: 620, h: 900, mm: 0.4, view: 'Lateral thoracic spine', els, keys: { k: [...edge(v[3].c, v[3].w, v[3].h, v[3].a, 'top'), ...edge(v[11].c, v[11].w, v[11].h, v[11].a, 'bottom')] } };
+  },
+  sag: () => { /* lateral lumbosacral spine with femoral heads */
+    const els = [], v = [], ang = [-10, 0, 10, 20, 30]; let c = P(360, 120);
+    for (let i = 0; i < 5; i++) { const a = ang[i], w = 120, h = 70; if (i) { const pa = v[i - 1]; c = add(pa.c, dv(90 + (pa.a + a) / 2), 70 + 22); } v.push({ c, a, w, h }); els.push({ t: 'rrect', c, w, h, a, r: 7 }); els.push({ t: 'rrect', c: loc(c, a, -w / 2 - 40, 0), w: 60, h: 46, a, r: 12, soft: true }); }
+    const l5 = v[4], l5b = loc(l5.c, l5.a, 0, l5.h / 2), M = add(l5b, dv(90 + 34), 24), ss = 38;
+    const P1 = add(M, dv(ss), -62), P2 = add(M, dv(ss), 62), u = dv(ss + 90);
+    els.push({ t: 'poly', pts: [P1, P2, add(P2, u, 120), add(add(P1, u, 210), P(-40, 10)), add(P1, u, 120)] });
+    const H = add(M, P(Math.sin(17 * R), Math.cos(17 * R)), 270);
+    els.push({ t: 'ell', c: add(H, P(-60, -40)), rx: 150, ry: 210, a: -20, soft: true }, { t: 'circ', c: H, r: 52 }, { t: 'circ', c: add(H, P(8, 6)), r: 50, soft: true });
+    els.push(L(add(v[0].c, P(90, -30)), 'L1'), L(add(M, P(90, 0)), 'S1'), L(P(470, 60), 'anterior →'));
+    return { w: 640, h: 980, mm: 0.3, view: 'Lateral lumbosacral spine', els, keys: {
+      ll: [...edge(v[0].c, v[0].w, v[0].h, v[0].a, 'top'), P1, P2], pi: [P1, P2, M, H], pt: [H, add(H, P(0, -180)), H, M] } };
+  },
+  coronal: () => { /* full-length PA spine, C7 offset from the sacral midline */
+    const els = []; const n = 18, x0 = 330, xs = 390, sy = 1040;
+    for (let i = 0; i < n; i++) { const t = i / (n - 1), y = 70 + t * 900, x = x0 + (xs - x0) * t + 45 * Math.sin(Math.PI * t * 1.6), a = -16 * Math.cos(Math.PI * t * 1.6) * 0.6, w = 46 + i * 3.2, h = 30 + i * 1.6; els.push({ t: 'rrect', c: P(x, y), w, h, a, r: 5 }); }
+    els.push({ t: 'poly', pts: [P(xs - 75, sy), P(xs + 75, sy), P(xs + 20, sy + 150), P(xs - 20, sy + 150)] });
+    els.push({ t: 'ell', c: P(xs - 210, sy + 40), rx: 150, ry: 120, soft: true }, { t: 'ell', c: P(xs + 210, sy + 40), rx: 150, ry: 120, soft: true });
+    els.push(L(P(x0 + 50, 70), 'C7'), L(P(xs + 85, sy + 10), 'sacrum'));
+    return { w: 720, h: 1220, mm: 0.5, view: 'PA full-length spine', els, keys: { d: [P(x0, sy - 4), P(xs, sy - 4)] } };
+  },
+  rvad: () => { /* apical vertebra with asymmetric ribs */
+    const c = P(380, 300), e = 10, w = 110, h = 64, els = [{ t: 'rrect', c, w, h, a: e, r: 8 }];
+    const lh = loc(c, e, -w / 2 - 6, -4), rh = loc(c, e, w / 2 + 6, -4), ld = dv(e + 90 + 68), rd = dv(e + 90 - 44);
+    els.push({ t: 'shaft', a: lh, b: add(lh, ld, 300), w: 26 }, { t: 'shaft', a: rh, b: add(rh, rd, 300), w: 26 });
+    els.push({ t: 'rrect', c: add(c, P(-8, -110)), w: 100, h: 60, a: e + 6, r: 8 }, { t: 'rrect', c: add(c, P(10, 108)), w: 116, h: 64, a: e - 5, r: 8 });
+    els.push(L(P(40, 40), 'concave side'), L(P(560, 40), 'convex side'));
+    return { w: 760, h: 600, mm: 0.3, view: 'PA thoracic spine, apical vertebra', els, keys: {
+      cc: [...edge(c, w, h, e, 'bottom', 0.9), lh, add(lh, ld, 200)], cv: [...edge(c, w, h, e, 'bottom', 0.9), rh, add(rh, rd, 200)] } };
+  },
+  adi: () => { /* lateral C1–C2 */
+    const A = P(272, 300), adi = 25, dx = A.x + adi, dw = 82, padi = 160, sl = dx + dw + padi;
+    const els = [{ t: 'ell', c: P(A.x - 20, 300), rx: 20, ry: 32 }, { t: 'rrect', c: P(dx + dw / 2, 380), w: dw, h: 230, a: 0, r: 34 }, { t: 'rrect', c: P(dx + dw / 2 + 10, 560), w: 130, h: 150, a: 0, r: 10 },
+      { t: 'ell', c: P(sl + 34, 300), rx: 34, ry: 24 }, { t: 'poly', pts: [P(sl + 40, 470), P(sl + 120, 450), P(sl + 150, 520), P(sl + 30, 540)] }, { t: 'ell', c: P(300, 130), rx: 260, ry: 80, soft: true }];
+    els.push(L(P(150, 260), 'C1 anterior arch'), L(P(dx + 4, 240), 'dens'), L(P(sl + 10, 262), 'C1 posterior arch'));
+    return { w: 720, h: 680, mm: 0.12, view: 'Lateral cervical spine, C1–C2', els, keys: { adi: [P(A.x, 300), P(dx, 300)], padi: [P(dx + dw, 300), P(sl, 300)] } };
+  },
+  harris: () => { /* skull base over the dens: basion–dens and basion–axial intervals */
+    const B = P(330, 250), dT = P(338, 250 + 70), Xp = B.x + 50;
+    const els = [{ t: 'poly', pts: [P(120, 40), P(200, 20), B, P(318, 262)] }, { t: 'rrect', c: P(dT.x, dT.y + 150), w: 84, h: 300, a: 0, r: 40 }, { t: 'rrect', c: P(Xp - 66, 560), w: 132, h: 160, a: 0, r: 10 },
+      { t: 'ell', c: P(230, 330), rx: 20, ry: 30 }, { t: 'poly', pts: [P(560, 60), P(640, 160), P(600, 240), P(520, 140)] }];
+    els.push(L(P(200, 210), 'basion'), L(P(360, 360), 'dens'), L(P(430, 620), 'C2'));
+    return { w: 720, h: 700, mm: 0.12, view: 'Lateral craniocervical junction', els, keys: { bdi: [B, dT], bai: [B, P(Xp, B.y)] } };
+  },
+  powers: () => {
+    const A = P(272, 420), B = P(325, 270), Pp = add(B, dv(25), 220), O = add(A, dv(-28), 253);
+    const els = [{ t: 'ell', c: P(252, 420), rx: 20, ry: 30 }, { t: 'rrect', c: P(325, 480), w: 80, h: 250, a: 0, r: 36 }, { t: 'ell', c: add(Pp, P(26, 6)), rx: 28, ry: 20 },
+      { t: 'poly', pts: [P(150, 60), P(220, 40), B, P(312, 284)] }, { t: 'poly', pts: [O, P(O.x + 20, O.y - 4), P(660, 120), P(620, 90)] }];
+    els.push(L(P(250, 255), 'basion'), L(P(O.x - 40, O.y - 24), 'opisthion'), L(P(160, 470), 'C1 anterior arch'), L(P(Pp.x - 20, Pp.y + 40), 'C1 posterior arch'));
+    return { w: 720, h: 660, mm: 0.15, view: 'Lateral craniocervical junction', els, keys: { bc: [B, Pp], oa: [O, A] } };
+  },
+  cci: () => { /* coronal CT: occipital condyles over C1 lateral masses */
+    const els = [], gap = 15, y = 300;
+    [210, 510].forEach(x => { els.push({ t: 'ell', c: P(x, y - 60), rx: 80, ry: 60 }, { t: 'rrect', c: P(x, y + gap + 55), w: 150, h: 110, a: 0, r: 16 }); });
+    els.push({ t: 'rrect', c: P(360, 520), w: 170, h: 150, a: 0, r: 12 }, { t: 'rrect', c: P(360, 400), w: 70, h: 120, a: 0, r: 30 });
+    els.push(L(P(40, 200), 'occipital condyle'), L(P(40, 420), 'C1 lateral mass'));
+    return { w: 720, h: 640, mm: 0.1, view: 'Coronal CT, craniocervical junction', els, keys: { cci: [P(210, y), P(210, y + gap)] } };
+  },
+  spence: () => { /* open-mouth odontoid: C1 lateral mass overhang */
+    const els = [], y1 = 330, l2 = 290, r2 = 510, a = 30, b = 25;
+    els.push({ t: 'rrect', c: P(400, 470), w: r2 - l2, h: 180, a: 0, r: 18 }, { t: 'rrect', c: P(400, 300), w: 80, h: 160, a: 0, r: 34 });
+    els.push({ t: 'rrect', c: P(l2 - a + 60, y1 - 40), w: 120, h: 80, a: 0, r: 16 }, { t: 'rrect', c: P(r2 + b - 60, y1 - 40), w: 120, h: 80, a: 0, r: 16 });
+    els.push(L(P(80, 220), 'left C1'), L(P(600, 220), 'right C1'), L(P(360, 600), 'C2'));
+    return { w: 800, h: 660, mm: 0.1, view: 'Open-mouth odontoid (patient left on image left)', els, keys: { a: [P(l2 - a, y1 + 10), P(l2, y1 + 10)], b: [P(r2, y1 + 10), P(r2 + b, y1 + 10)] } };
+  },
+  cc: () => { /* AP shoulder, AC joint and coracoclavicular interval */
+    const yc = 260, cb = yc + 28, cx = 420, coT = cb + 70, ce = 560, ag = 27;
+    const els = [{ t: 'poly', pts: [P(40, yc - 40), P(ce, yc - 30), P(ce, cb), P(40, cb - 10)] }, { t: 'poly', pts: [P(ce + ag, yc - 34), P(860, yc - 60), P(870, yc + 10), P(ce + ag, cb + 6)] },
+      { t: 'ell', c: P(cx, coT + 30), rx: 46, ry: 30 }, { t: 'circ', c: P(760, 520), r: 170 }, { t: 'poly', pts: [P(560, 360), P(620, 380), P(600, 640), P(520, 620)] }];
+    els.push(L(P(70, yc - 56), 'clavicle'), L(P(720, yc - 80), 'acromion'), L(P(cx - 40, coT + 80), 'coracoid'));
+    return { w: 920, h: 700, mm: 0.15, view: 'AP shoulder (Zanca)', els, keys: { cc: [P(cx, coT), P(cx, cb)], ac: [P(ce, yc), P(ce + ag, yc)] } };
+  },
+  ahi: () => {
+    const A = 240, gap = 60, hx = 470;
+    const els = [{ t: 'poly', pts: [P(180, A - 60), P(760, A - 90), P(780, A - 20), P(200, A)] }, { t: 'circ', c: P(hx, A + gap + 170), r: 170 }, { t: 'shaft', a: P(hx + 40, A + gap + 260), b: P(hx + 90, 900), w: 150 }, { t: 'poly', pts: [P(170, 330), P(240, 320), P(250, 560), P(160, 560)] }];
+    els.push(L(P(540, A - 104), 'acromion'), L(P(hx + 100, A + gap + 90), 'humeral head'));
+    return { w: 860, h: 860, mm: 0.15, view: 'True AP (Grashey) shoulder', els, keys: { ahi: [P(hx, A), P(hx, A + gap)] } };
+  },
+  gtrack: () => { /* left: glenoid en face; right: humeral head axial */
+    const c = P(250, 360), r = 87, d = 27, els = [];
+    els.push({ t: 'ell', c: P(250, 230), rx: 58, ry: 90 }, { t: 'circ', c, r }, { t: 'poly', dark: true, pts: [P(c.x + r - d, c.y - r - 4), P(c.x + r + 6, c.y - r - 4), P(c.x + r + 6, c.y + r + 4), P(c.x + r - d, c.y + r + 4)] });
+    const H = P(740, 330), Rr = 160, at = a => add(H, dv(a), Rr), t1 = 200, t2 = 231.6, t3 = 246;
+    els.push({ t: 'circ', c: H, r: Rr }, { t: 'poly', dark: true, pts: [add(H, dv(t1), Rr + 4), add(H, dv((t1 + t2) / 2), Rr - 34), add(H, dv(t2), Rr + 4), add(H, dv((t1 + t2) / 2), Rr + 30)] }, { t: 'ell', c: add(H, dv(t3 + 8), Rr + 6), rx: 26, ry: 14, a: t3 + 98 });
+    els.push(L(P(150, 520), 'glenoid en face'), L(P(c.x + r - 30, 470), 'anterior →'), L(P(620, 560), 'humeral head (axial)'), L(add(at(t3), P(10, -30)), 'cuff footprint'));
+    return { w: 960, h: 600, mm: 0.15, view: '3D CT glenoid en face and axial humeral head', els, keys: { D: [P(c.x - r, c.y), P(c.x + r, c.y)], d: [P(c.x + r, c.y), P(c.x + r - d, c.y)], hs: [at(t1), at(t2)], br: [at(t2), at(t3)] } };
+  },
+  flamingo: () => { /* two stance views side by side */
+    const els = [], panel = (x0, off, txt) => { const y = 300; els.push({ t: 'rrect', c: P(x0 + 110, y + 90), w: 140, h: 180, a: 0, r: 20 }, { t: 'rrect', c: P(x0 + 110 + 140 + 33, y + off + 90), w: 140, h: 180, a: 0, r: 20 }, L(P(x0 + 50, 110), txt)); return [P(x0 + 170, y), P(x0 + 170, y + off)]; };
+    const kr = panel(30, 17, 'right-leg stance'), kl = panel(460, 7, 'left-leg stance');
+    els.push(L(P(40, 560), 'patient right is image left'));
+    return { w: 880, h: 600, mm: 0.15, view: 'Flamingo views of the symphysis', els, keys: { r: kr, l: kl, w: [P(210, 400), P(243, 400)] } };
+  },
+  lcea: () => hip({ lcea: 30 }),
+  cover: () => hip({ lcea: 30, tonnis: 10 }),
+  alpha: () => { /* Dunn view head–neck junction with cam */
+    const C = P(330, 330), r = 110, ax = 40, ant = 62, pos = 40, Qa = add(C, dv(ax - ant), r), Qp = add(C, dv(ax + pos), r), u = dv(ax);
+    const els = [{ t: 'poly', pts: [Qa, add(Qa, u, 320), add(Qp, u, 320), Qp] }, { t: 'circ', c: C, r }, { t: 'shaft', a: add(C, u, 300), b: add(C, u, 560), w: 170 }];
+    els.push({ t: 'poly', pts: [P(60, 120), P(260, 150), P(220, 200), P(60, 200)], soft: true }, L(P(Qa.x + 20, Qa.y - 16), 'anterior head–neck junction'));
+    return { w: 760, h: 760, mm: 0.25, view: '45° Dunn view, proximal femur', els, keys: { a: [C, add(C, u, 260), C, Qa] } };
+  },
+  tilt: () => { /* lateral distal radius, dorsal tilt */
+    const V = P(330, 372), D = add(V, dv(11), 142), mid = P(400, 900);
+    const els = [{ t: 'poly', pts: [P(345, 900), P(345, 620), P(V.x - 8, V.y + 50), V, P((V.x + D.x) / 2, Math.max(V.y, D.y) - 6), D, P(D.x + 8, D.y + 40), P(455, 620), P(455, 900)] },
+      { t: 'ell', c: P(400, 320), rx: 68, ry: 44 }, { t: 'ell', c: P(400, 210), rx: 46, ry: 66 }, { t: 'shaft', a: P(400, 140), b: P(408, 0), w: 56 }];
+    els.push(L(P(210, 380), 'volar'), L(P(500, 420), 'dorsal'));
+    return { w: 760, h: 940, mm: 0.15, view: 'Lateral wrist', els, keys: { t: [mid, P(400, 560), V, D] } };
+  },
+  incl: () => wristPA(),
+  height: () => wristPA(),
+  artic: () => { /* articular step-off and gap */
+    const y = 300, step = 13, g = 10, xe = 390;
+    const els = [{ t: 'poly', pts: [P(160, y), P(xe, y), P(xe, 620), P(160, 620)] }, { t: 'poly', pts: [P(xe + g, y + step), P(600, y + step), P(600, 620), P(xe + g, 620)] }, { t: 'ell', c: P(300, 230), rx: 90, ry: 50 }, { t: 'ell', c: P(500, 236), rx: 80, ry: 46 }];
+    els.push(L(P(170, 660), 'radial articular surface, two fragments'));
+    return { w: 760, h: 700, mm: 0.15, view: 'Distal radius articular surface', els, keys: { step: [P(xe - 2, y), P(xe - 2, y + step)], gap: [P(xe, y + 60), P(xe + g, y + 60)] } };
+  },
+  hv: () => { /* AP forefoot */
+    const b1 = P(330, 900), a1 = -102, h1 = add(b1, dv(a1), 300), b2 = P(420, 900), a2 = -90, h2 = add(b2, dv(a2), 330);
+    const p1b = add(h1, dv(a1), 30), ap = a1 + 25, p1t = add(p1b, dv(ap), 150), p2b = add(p1t, dv(ap), 10), ad = ap + 6, p2t = add(p2b, dv(ad), 90);
+    const n = dv(a1 + 90 - 8), hm = add(add(h1, n, -27), dv(a1), 12), hl = add(add(h1, n, 27), dv(a1), 12);
+    const els = [{ t: 'shaft', a: b1, b: h1, w: 56 }, { t: 'shaft', a: b2, b: h2, w: 38 }, { t: 'shaft', a: P(490, 905), b: P(505, 600), w: 34 }, { t: 'shaft', a: P(555, 910), b: P(580, 640), w: 32 }, { t: 'shaft', a: P(615, 915), b: P(650, 690), w: 32 },
+      { t: 'shaft', a: p1b, b: p1t, w: 38 }, { t: 'shaft', a: p2b, b: p2t, w: 32 }, { t: 'poly', pts: [add(hm, dv(a1), -12), add(hl, dv(a1), -12), hl, hm] }, { t: 'circ', c: add(b1, P(14, -330 * 0.84)), r: 15 }, { t: 'shaft', a: add(h2, dv(-88), 12), b: add(h2, dv(-86), 130), w: 30 }];
+    els.push(L(P(150, 700), '1st MT'), L(P(440, 700), '2nd MT'));
+    return { w: 760, h: 960, mm: 0.2, view: 'Weight-bearing AP foot', els, keys: { hva: [b1, h1, p1b, p1t], ima: [b1, h1, b2, h2], dmaa: [b1, h1, hm, hl], hvi: [p1b, p1t, p2b, p2t] } };
+  },
+  hind: () => {
+    const tx = 400, T = P(410, 520), B = P(410 + 240 * Math.tan(8 * R), 760), mc = P((T.x + B.x) / 2, (T.y + B.y) / 2);
+    const els = [{ t: 'shaft', a: P(tx, 0), b: P(tx, 410), w: 120 }, { t: 'shaft', a: P(tx + 130, 0), b: P(tx + 130, 430), w: 46 }, { t: 'rrect', c: P(405, 460), w: 150, h: 90, a: 0, r: 30 }, { t: 'ell', c: mc, rx: 72, ry: 128, a: -8 }, { t: 'plate', a: P(80, 772), b: P(760, 772) }];
+    els.push(L(P(90, 40), 'medial'), L(P(640, 40), 'lateral'), L(P(B.x + 60, B.y - 60), 'calcaneus'));
+    return { w: 820, h: 820, mm: 0.2, view: 'Hindfoot alignment view (right, from behind)', els, keys: { a: [P(tx, 60), P(tx, 400), T, B], ma: [P(tx, B.y), B] } };
+  },
+  arch: () => {
+    const Pt = P(150, 788), Cc = add(Pt, dv(-20), 230), tc = P(360, 560), ta = 25, B1 = P(560, 660), H1 = add(B1, dv(17), 230);
+    const els = [{ t: 'poly', pts: [Pt, Cc, P(380, 640), P(300, 600), P(190, 610), P(128, 700)] }, { t: 'ell', c: tc, rx: 110, ry: 52, a: ta }, { t: 'shaft', a: P(340, 0), b: P(350, 470), w: 110 },
+      { t: 'rrect', c: P(480, 640), w: 70, h: 80, a: 20, r: 12 }, { t: 'rrect', c: P(530, 662), w: 40, h: 70, a: 18, r: 8 }, { t: 'shaft', a: B1, b: H1, w: 40 }, { t: 'plate', a: P(60, 800), b: P(860, 800) }];
+    els.push(L(P(300, 500), 'talus'), L(P(150, 650), 'calcaneus'), L(P(650, 660), '1st MT'));
+    return { w: 900, h: 860, mm: 0.25, view: 'Weight-bearing lateral foot', els, keys: { m: [...axis(tc, ta, 220), B1, H1], p: [Pt, Cc, P(100, 800), P(700, 800)] } };
+  },
+  ptc: () => { /* child: AP (left panel) and lateral (right panel) */
+    const tC = P(230, 420), tA = -102, cC = P(290, 480), cA = -72, crx = 30, lat = loc(cC, cA, 0, crx);
+    const lt = P(640, 380), la = 30, lp = P(560, 560), lpa = -10;
+    const els = [{ t: 'ell', c: tC, rx: 120, ry: 34, a: tA }, { t: 'ell', c: cC, rx: 130, ry: crx, a: cA }, { t: 'shaft', a: P(170, 240), b: P(120, 30), w: 30 }, { t: 'shaft', a: P(360, 250), b: P(400, 50), w: 26 },
+      { t: 'ell', c: lt, rx: 90, ry: 42, a: la }, { t: 'poly', pts: [lp, add(lp, dv(lpa), 210), add(add(lp, dv(lpa), 200), P(0, -80)), P(lp.x + 20, lp.y - 110)] }, { t: 'shaft', a: P(640, 0), b: P(650, 320), w: 80 }];
+    els.push(L(P(60, 600), 'AP view'), L(P(520, 640), 'lateral view'), L(P(80, 300), 'talus'), L(P(330, 560), 'calcaneus'));
+    return { w: 900, h: 680, mm: 0.15, view: 'Child foot, AP and lateral (synthetic)', els, keys: {
+      ap: [...axis(tC, tA, 220), add(lat, dv(cA), -110), add(lat, dv(cA), 110)], lat: [...axis(lt, la, 170), lp, add(lp, dv(lpa), 200)] } };
+  },
+  ptm: () => {
+    const tC = P(230, 470), tA = -100, mA = -90, mb = add(tC, dv(tA), 190), mh = add(mb, dv(mA), 220);
+    const lt = P(580, 360), la = 28, lb = add(lt, dv(la), 120), lh = add(lb, dv(20), 170);
+    const els = [{ t: 'ell', c: tC, rx: 110, ry: 34, a: tA }, { t: 'shaft', a: mb, b: mh, w: 34 }, { t: 'shaft', a: P(300, 330), b: P(330, 80), w: 28 },
+      { t: 'ell', c: lt, rx: 90, ry: 40, a: la }, { t: 'shaft', a: lb, b: lh, w: 32 }, { t: 'shaft', a: P(590, 0), b: P(600, 300), w: 80 }];
+    els.push(L(P(60, 640), 'AP view'), L(P(520, 640), 'lateral view'), L(P(110, 520), 'talus'), L(P(250, 200), '1st MT'));
+    return { w: 900, h: 680, mm: 0.15, view: 'Child foot, AP and lateral (synthetic)', els, keys: { apm: [...axis(tC, tA, 200), mb, mh], latm: [...axis(lt, la, 160), lb, lh] } };
+  }
+  };
+  function hip(o) { /* AP right hip with both teardrops */
+    const t = 3, C = P(330, 360), r = 125, up = t - 90, E = add(C, dv(up - o.lcea), r + 8), Mm = add(C, dv(up + 40), r + 8);
+    const T1 = P(470, 600), T2 = add(T1, dv(t), 380), els = [];
+    const roof = []; for (let a = up - o.lcea; a <= up + 70; a += 5) roof.push(add(C, dv(a), r + 8)); for (let a = up + 70; a >= up - o.lcea; a -= 5) roof.push(add(C, dv(a), r + 46));
+    els.push({ t: 'poly', pts: roof }, { t: 'poly', pts: [add(E, P(-10, -40)), P(80, 60), P(700, 40), P(820, 280), Mm] , soft: true });
+    els.push({ t: 'circ', c: C, r }, { t: 'shaft', a: add(C, dv(70), 80), b: P(470, 820), w: 150 }, { t: 'ell', c: P(230, 560), rx: 70, ry: 110, a: -20, soft: true });
+    [T1, T2].forEach(T => els.push({ t: 'poly', pts: [add(T, P(-14, -70)), add(T, P(-14, 0)), add(T, P(0, 8)), add(T, P(14, 0)), add(T, P(14, -70)), add(T, P(4, -70)), add(T, P(4, -10)), add(T, P(-4, -10)), add(T, P(-4, -70))] }));
+    els.push(L(add(T1, P(-20, 40)), 'teardrop'), L(add(T2, P(-40, 40)), 'other teardrop'), L(P(30, 860), 'patient right on image left (lateral = left)'));
+    const keys = { a: [T1, T2, C, E] };
+    if (o.tonnis) { const Mz = add(C, dv(up + 18), r + 8), Ez = add(Mz, dv(180 + o.tonnis), 110); keys.t = [Mz, add(Mz, P(-150, 0)), Mz, Ez]; els.push({ t: 'plate', a: Mz, b: Ez }); keys.a = [E, P(C.x - r, E.y)]; keys.b = [P(C.x - r, C.y), P(C.x + r, C.y)]; }
+    return { w: 900, h: 900, mm: 0.2, view: 'AP pelvis, right hip', els, keys };
+  }
+  function wristPA() { /* PA distal radius: inclination and radial height */
+    const S = P(300, 360), U = add(S, dv(23), 170);
+    const els = [{ t: 'poly', pts: [P(335, 900), P(335, 640), P(S.x - 4, S.y + 70), S, U, P(U.x + 4, U.y + 40), P(445, 640), P(445, 900)] }, { t: 'poly', pts: [P(480, 900), P(480, 470), P(U.x + 12, U.y + 8), P(560, U.y + 2), P(560, 900)] },
+      { t: 'ell', c: P(370, 318), rx: 60, ry: 40 }, { t: 'ell', c: P(470, 360), rx: 48, ry: 36 }, { t: 'ell', c: P(420, 210), rx: 50, ry: 60 }, { t: 'shaft', a: P(420, 140), b: P(430, 0), w: 50 }];
+    els.push(L(P(160, 330), 'radial styloid'), L(P(590, 470), 'ulna'));
+    return { w: 760, h: 940, mm: 0.18, view: 'PA wrist', els, keys: { a: [P(390, 880), P(390, 620), S, U], h: [S, P(S.x, U.y)] } };
+  }
+})();
 </script>
 
 <!-- =====================================================================
@@ -1556,7 +1759,7 @@ const tileHTML = c => {
   const first = c.inputs.find(i => i.measure && !i.optional) || c.inputs.find(i => i.measure);
   return `<div class="tile" data-text="${esc((c.title + ' ' + MODULES.find(m => m.id === c.module).tab + ' ' + c.inputs.map(i => i.label).join(' ')).toLowerCase())}">
     ${c.diagram ? `<svg viewBox="0 0 200 140" class="dg" aria-hidden="true">${c.diagram}</svg>` : '<span></span>'}
-    <div><h4>${esc(c.title)}</h4><div class="rowc"><button class="btn" type="button" data-calc="${c.id}">Calculator</button>${first ? `<button class="btn primary" type="button" data-mtarget="${c.id}.${first.id}">Measure on image</button>` : ''}</div></div>
+    <div><h4>${esc(c.title)}</h4><div class="rowc"><button class="btn" type="button" data-calc="${c.id}">Calculator</button>${first ? `<button class="btn primary" type="button" data-mtarget="${c.id}.${first.id}">Measure on image</button>` : ''}${first && (c.id === 'cobb' || SMP[c.id]) ? `<button class="btn" type="button" data-sample="${c.id}">Practice sample</button>` : ''}</div></div>
   </div>`;
 };
 sv.innerHTML = `<div class="hero">${dropHTML(true)}
@@ -1592,6 +1795,7 @@ mv.innerHTML = `<div class="view-head"><h2>Measure an image</h2><p>Pick what you
     <div class="panel"><h3><span class="n">1</span> What are you measuring?</h3>
       <div class="ctl"><select id="target" aria-label="Measurement"></select></div>
       <label class="rowc chk" for="snap"><input type="checkbox" id="snap" checked> Auto-align points and lines to bone edges</label>
+      <button class="btn" type="button" id="ldsample">Load a synthetic practice image for this measurement</button>
     </div>
     <div class="panel"><h3><span class="n">2</span> Result</h3><div id="mres"></div></div>
     <div class="panel"><h3><span class="n">3</span> Share</h3>
@@ -1699,7 +1903,7 @@ const M = (() => {
   }
 
   function load(src, isSample) {
-    S.img = src; S.sample = isSample; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
+    S.img = src; S.sample = isSample; S.keys = null; S.showKey = false; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
     S.fitted = false; fit(); refresh();
   }
   function useSample() {
@@ -1707,6 +1911,51 @@ const M = (() => {
     setTarget('cobb.cobb');
     S.shapes.push({ type: 'angle', pts: s.preset, key: 'cobb.cobb' }); send(S.shapes[0]); refresh();
   }
+  const hasSample = cid => cid === 'cobb' || !!SMP[cid];
+  /* draw a synthetic scene as a radiograph-like image */
+  function renderScene(sc) {
+    const c = document.createElement('canvas'); c.width = sc.w; c.height = sc.h; const g = c.getContext('2d');
+    const bg = g.createRadialGradient(sc.w / 2, sc.h / 2, 40, sc.w / 2, sc.h / 2, Math.max(sc.w, sc.h) * 0.75); bg.addColorStop(0, '#2c3238'); bg.addColorStop(1, '#090b0e');
+    g.fillStyle = bg; g.fillRect(0, 0, sc.w, sc.h);
+    const path = e => {
+      g.beginPath();
+      if (e.t === 'circ') g.arc(e.c.x, e.c.y, e.r, 0, 7);
+      else if (e.t === 'ell') g.ellipse(e.c.x, e.c.y, e.rx, e.ry, (e.a || 0) * Math.PI / 180, 0, 7);
+      else if (e.t === 'poly') { e.pts.forEach((p, i) => i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)); g.closePath(); }
+      else if (e.t === 'rrect') { g.save(); g.translate(e.c.x, e.c.y); g.rotate((e.a || 0) * Math.PI / 180); if (g.roundRect) g.roundRect(-e.w / 2, -e.h / 2, e.w, e.h, e.r || 0); else g.rect(-e.w / 2, -e.h / 2, e.w, e.h); g.restore(); }
+    };
+    sc.els.forEach(e => {
+      if (e.t === 'label') return;
+      if (e.t === 'plate') { g.strokeStyle = '#cfd6dc'; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.moveTo(e.a.x, e.a.y); g.lineTo(e.b.x, e.b.y); g.stroke(); return; }
+      if (e.t === 'shaft') {
+        const dx = e.b.x - e.a.x, dy = e.b.y - e.a.y, len = Math.hypot(dx, dy), m = { x: (e.a.x + e.b.x) / 2, y: (e.a.y + e.b.y) / 2 }, n = { x: -dy / len, y: dx / len };
+        path({ t: 'rrect', c: m, w: len, h: e.w, a: Math.atan2(dy, dx) * 180 / Math.PI, r: e.w * 0.35 });
+        const gr = g.createLinearGradient(m.x + n.x * e.w / 2, m.y + n.y * e.w / 2, m.x - n.x * e.w / 2, m.y - n.y * e.w / 2);
+        gr.addColorStop(0, '#dfe4e8'); gr.addColorStop(0.22, '#a2aab1'); gr.addColorStop(0.5, '#8d959c'); gr.addColorStop(0.78, '#a2aab1'); gr.addColorStop(1, '#dfe4e8');
+        g.fillStyle = gr; g.fill(); g.strokeStyle = '#e6ebee'; g.lineWidth = 2.5; g.stroke(); return;
+      }
+      path(e);
+      if (e.soft) { g.fillStyle = 'rgba(150,160,170,.16)'; g.fill(); return; }
+      if (e.dark) { g.fillStyle = '#111418'; g.fill(); return; }
+      g.fillStyle = '#959da4'; g.fill(); g.strokeStyle = '#e3e8eb'; g.lineWidth = 4; g.stroke();
+    });
+    const cp = document.createElement('canvas'); cp.width = sc.w; cp.height = sc.h; const g2 = cp.getContext('2d'); g2.filter = 'blur(0.8px)'; g2.drawImage(c, 0, 0);
+    g.clearRect(0, 0, sc.w, sc.h); g.drawImage(cp, 0, 0);
+    const id = g.getImageData(0, 0, sc.w, sc.h), d = id.data; for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - .5) * 16; d[i] += n; d[i + 1] += n; d[i + 2] += n; } g.putImageData(id, 0, 0);
+    g.font = '500 14px system-ui, sans-serif'; g.fillStyle = 'rgba(214,222,230,.72)';
+    sc.els.filter(e => e.t === 'label').forEach(e => g.fillText(e.text, e.p.x, e.p.y));
+    g.fillStyle = 'rgba(255,255,255,.6)'; g.font = '600 15px system-ui, sans-serif'; g.fillText('SYNTHETIC SAMPLE · NOT PATIENT DATA', 14, 24);
+    g.font = '13px system-ui, sans-serif'; g.fillStyle = 'rgba(255,255,255,.5)'; g.fillText(sc.view, 14, 44);
+    return c;
+  }
+  function useSampleFor(cid) {
+    if (cid === 'cobb') { useSample(); S.keys = { cid: 'cobb', keys: { cobb: S.shapes[0].pts.map(p => ({ ...p })) }, view: 'PA spine' }; refresh(); return; }
+    const sc = SMP[cid](); load(renderScene(sc), true);
+    S.mmPerPx = sc.mm; $('#mmpx', mv).value = sc.mm; S.keys = { cid, keys: sc.keys, view: sc.view };
+    const c = CALCS[cid], first = c.inputs.find(i => i.measure && !i.optional && sc.keys[i.id]) || c.inputs.find(i => i.measure && sc.keys[i.id]);
+    setTarget(cid + '.' + first.id); xmsg('');
+  }
+  const keyVal = (t, pts) => value({ type: t.kind, pts });
   const iw = () => S.img ? (S.img.naturalWidth || S.img.width) : 1, ih = () => S.img ? (S.img.naturalHeight || S.img.height) : 1;
   function resize() { const r = stage.getBoundingClientRect(); if (!r.width) return; const dpr = window.devicePixelRatio || 1; cv.width = r.width * dpr; cv.height = r.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (!S.fitted) fit(); draw(); }
   function fit() { const r = stage.getBoundingClientRect(); if (!r.width || !S.img) return; S.scale = Math.min(r.width / iw(), r.height / ih()) * 0.96; S.ox = (r.width - iw() * S.scale) / 2; S.oy = (r.height - ih() * S.scale) / 2; S.fitted = true; }
@@ -1766,11 +2015,15 @@ const M = (() => {
     const fields = targets.filter(x => x.cid === c.id).map(x => {
       const sh = measured.get(x.key), inp = c.inputs.find(i => i.id === x.iid), el = document.getElementById(`in-${c.id}-${x.iid}`);
       const st = sh && sh.note !== 'set the scale to grade' ? `<b>${fmtV(value(sh))}</b> measured` : sh ? '<span class="warn">needs a scale</span>' : el && el.value !== '' ? `${esc(el.value)} ${esc(inp.unit || '')} <em>from the calculator, not measured</em>` : '<em>empty</em>';
-      return `<li class="${x.key === S.target ? 'cur' : ''}"><button type="button" class="lnk" data-pick="${x.key}">${esc(x.label)}${inp.optional ? ' <em>optional</em>' : ''}</button><span>${st}</span></li>`;
+      const kp = S.keys && S.keys.cid === c.id && S.keys.keys[x.iid];
+      let ks = '';
+      if (kp) { const kv = keyVal(x, kp); if (sh && sh.note !== 'set the scale to grade') { const df = Math.abs(value(sh).v - kv.v), tol = x.kind === 'length' ? 1 : 2; ks = `<span class="key ${df <= tol ? 'ok' : 'off'}">Answer ${fmtV(kv)} · you are ${df <= tol ? 'within' : 'off by'} ${df <= tol ? (x.kind === 'length' ? '1 mm' : '2°') : fmtV({ v: df, unit: kv.unit })}</span>`; } else if (S.showKey) ks = `<span class="key">Answer ${fmtV(kv)}</span>`; else ks = '<span class="key">Answer hidden until you measure</span>'; }
+      return `<li class="${x.key === S.target ? 'cur' : ''}"><button type="button" class="lnk" data-pick="${x.key}">${esc(x.label)}${inp.optional ? ' <em>optional</em>' : ''}</button><span>${st}</span>${ks}</li>`;
     }).join('');
     const scaleWarn = t.kind === 'length' && !S.mmPerPx ? `<p class="flagline sev-warn">Lengths are in pixels until you set the scale. <button type="button" class="lnk" data-scale>Set the scale</button></p>` : '';
     const others = c.inputs.some(i => !i.measure) ? '<p class="muted">Other settings for this calculator, such as modality or checkboxes, are in the full calculator.</p>' : '';
-    return `<p class="rtitle">${esc(c.title)}</p><ul class="fl">${fields}</ul>${scaleWarn}
+    const sampleRow = S.keys && S.keys.cid === c.id ? `<p class="muted">Synthetic practice image (${esc(S.keys.view)}). The scale is preset, so lengths are in millimetres. <button type="button" class="lnk" data-showkey>${S.showKey ? 'Hide' : 'Show'} answer lines</button></p>` : hasSample(c.id) ? `<p class="muted"><button type="button" class="lnk" data-sample="${c.id}">Practice on a synthetic sample</button> with a built-in answer key.</p>` : '';
+    return `<p class="rtitle">${esc(c.title)}</p><ul class="fl">${fields}</ul>${sampleRow}${scaleWarn}
       ${S.shapes.some(s => s.key && T(s.key).cid === c.id && s.note === 'set the scale to grade') ? '<p class="muted">The graded result appears once the scale is set.</p>' : !S.shapes.some(s => s.key && T(s.key).cid === c.id) ? '<p class="muted">The graded result appears here as soon as you place the last point.</p>' : `<div class="results">${$('.results', card).innerHTML}</div><ul class="flags">${$('.flags', card).innerHTML}</ul>`}${others}
       <div class="rowc"><button class="btn" type="button" data-open="${c.id}">Open full calculator</button><button class="btn" type="button" data-copy="${c.id}">Copy summary</button></div>`;
   }
@@ -1819,6 +2072,11 @@ const M = (() => {
       sh.pts.forEach(p => dot(p, c));
       label(sh.pts[sh.pts.length - 1], shapeText(sh, n));
     });
+    if (S.showKey && S.keys) {
+      ctx.save(); ctx.setLineDash([7, 5]);
+      Object.entries(S.keys.keys).forEach(([iid, pts]) => { const t = T(S.keys.cid + '.' + iid); if (!t) return; for (let i = 0; i < pts.length; i += 2) seg(pts[i], pts[i + 1], '#ffb020'); ctx.setLineDash([]); const a = pts[pts.length - 2], b = pts[pts.length - 1]; label({ x: a.x + (b.x - a.x) * 0.6, y: a.y + (b.y - a.y) * 0.6 }, `key ${fmtV(keyVal(t, pts))}`); ctx.setLineDash([7, 5]); });
+      ctx.restore();
+    }
     const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); P.forEach(p => dot(p, c)); }
     $('#mempty', mv).hidden = !!S.img;
     $('#hint', mv).hidden = !S.img || !S.pending.length;
@@ -1833,7 +2091,7 @@ const M = (() => {
     }).join('') : '<li><small>No measurements yet.</small></li>';
     $('#scalest', mv).textContent = S.mmPerPx ? S.mmPerPx.toPrecision(3) + ' mm/px' : 'not set';
   }
-  function refresh() { list(); $('#mres', mv).innerHTML = resultHTML(); draw(); }
+  function refresh() { list(); $('#mres', mv).innerHTML = resultHTML(); const t = T(S.target); $('#ldsample', mv).hidden = !(t && hasSample(t.cid)); draw(); }
   function setTool(t) { S.tool = t; S.pending = []; $$('#tools button', mv).forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t && !S.target)); $('#calrow', mv).hidden = !(t === 'calib' && S.shapes.some(s => s.type === 'calib')); cv.style.cursor = t === 'pan' ? 'grab' : 'crosshair'; draw(); }
   function setTarget(key) {
     S.target = key; $('#target', mv).value = key; const t = T(key);
@@ -1845,10 +2103,20 @@ const M = (() => {
     if (!S.img) return;
     cv.setPointerCapture(e.pointerId); const p = pt(e);
     if (S.tool === 'pan' || e.button === 1) { S.drag = { pan: true, x: p.x, y: p.y, ox: S.ox, oy: S.oy }; return; }
-    if (!S.pending.length) for (const sh of S.shapes) for (let i = 0; i < sh.pts.length; i++) if (dist(toScr(sh.pts[i]), p) < 12) { S.drag = { sh, i }; return; }
-    S.pending.push(snap(toImg(p)));
+    if (!S.pending.length) for (const sh of S.shapes) for (let i = 0; i < sh.pts.length; i++) if (dist(toScr(sh.pts[i]), p) < 12) { S.drag = { sh, i, at: { ...sh.pts[i] }, p0: p }; return; }
+    addPoint(toImg(p));
+  });
+  /* landmarks that are constructed lines (axes, references) are not edges, so they are not auto-aligned */
+  const CONSTRUCTED = /axis|line from|line through|vertical|horizontal|reference|plumb|perpendicular|straight across|midpoint|center/i;
+  function autoFor(n) {
+    const t = T(S.target), g = t && GUIDES[t.key]; if (!g) return true;
+    return !CONSTRUCTED.test(S.tool === 'length' ? g[n] : g[n < 2 ? 0 : 1]);
+  }
+  function addPoint(ip) {
+    const n0 = S.pending.length;
+    S.pending.push(autoFor(n0) ? snap(ip) : ip);
     const n = S.pending.length;
-    if (n % 2 === 0 && S.tool !== 'length' && S.tool !== 'calib') { const [a, b] = fitLine(S.pending[n - 2], S.pending[n - 1]); S.pending[n - 2] = a; S.pending[n - 1] = b; }
+    if (n % 2 === 0 && S.tool !== 'length' && S.tool !== 'calib' && autoFor(n - 1)) { const [a, b] = fitLine(S.pending[n - 2], S.pending[n - 1]); S.pending[n - 2] = a; S.pending[n - 1] = b; }
     if (n === NEED[S.tool]) {
       const t = T(S.target), sh = { type: S.tool, pts: S.pending };
       S.pending = [];
@@ -1863,16 +2131,17 @@ const M = (() => {
       refresh(); return;
     }
     draw();
-  });
+  }
   cv.addEventListener('pointermove', e => {
     const p = pt(e); S.cursor = p;
     if (S.drag && S.drag.pan) { S.ox = S.drag.ox + p.x - S.drag.x; S.oy = S.drag.oy + p.y - S.drag.y; }
-    else if (S.drag) { S.drag.sh.pts[S.drag.i] = toImg(p); S.drag.moved = true; }
+    else if (S.drag && (S.drag.moved || dist(p, S.drag.p0) > 4)) { S.drag.sh.pts[S.drag.i] = toImg(p); S.drag.moved = true; }
     draw();
   });
   cv.addEventListener('pointerup', () => {
     const d = S.drag; S.drag = null;
     if (d && d.sh && d.moved) { d.sh.pts[d.i] = snap(d.sh.pts[d.i]); if (d.sh.key) send(d.sh); else if (d.sh.type !== 'calib') d.sh.note = null; refresh(); }
+    else if (d && d.sh) addPoint(toImg(d.p0)); /* a click on an existing point without dragging starts a new measurement there (shared landmarks) */
   });
   cv.addEventListener('wheel', e => { if (!S.img) return; e.preventDefault(); zoom(e.deltaY < 0 ? 1.15 : 1 / 1.15, pt(e)); }, { passive: false });
   function zoom(f, at) { const r = stage.getBoundingClientRect(); at = at || { x: r.width / 2, y: r.height / 2 }; const ip = toImg(at); S.scale *= f; S.ox = at.x - ip.x * S.scale; S.oy = at.y - ip.y * S.scale; draw(); }
@@ -1901,6 +2170,8 @@ const M = (() => {
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-act]');
     if (a) { e.stopPropagation(); if (a.dataset.act === 'choose') $('#file', mv).click(); else if (a.dataset.act === 'paste') pasteClip(); else { if (current !== 'measure') go('measure'); requestAnimationFrame(() => { resize(); useSample(); }); } return; }
+    const sm = e.target.closest('[data-sample]');
+    if (sm) { const cid = sm.dataset.sample; if (current !== 'measure') go('measure'); requestAnimationFrame(() => { resize(); useSampleFor(cid); }); return; }
     const d = e.target.closest('[data-drop]'); if (d) $('#file', mv).click();
   });
   document.addEventListener('keydown', e => { const d = e.target.closest && e.target.closest('[data-drop]'); if (d && (e.key === 'Enter' || e.key === ' ') && e.target === d) { e.preventDefault(); $('#file', mv).click(); } });
@@ -1921,6 +2192,7 @@ const M = (() => {
     if (c && mm > 0) { S.mmPerPx = mm / dist(c.pts[0], c.pts[1]); $('#mmpx', mv).value = S.mmPerPx.toPrecision(4); $('#calrow', mv).hidden = true; resend(); const t = T(S.target); setTool(t ? t.kind : 'angle'); refresh(); }
   };
   $('#target', mv).onchange = e => setTarget(e.target.value);
+  $('#ldsample', mv).onclick = () => { const t = T(S.target); if (t && hasSample(t.cid)) useSampleFor(t.cid); };
   $('#undo', mv).onclick = () => { if (S.pending.length) S.pending.pop(); else S.shapes.pop(); refresh(); };
   $('#clear', mv).onclick = () => { S.shapes = []; S.pending = []; refresh(); };
   $('#mlist', mv).addEventListener('click', e => {
@@ -1930,6 +2202,7 @@ const M = (() => {
   });
   $('#mres', mv).addEventListener('click', e => {
     const p = e.target.closest('[data-pick]'); if (p) { setTarget(p.dataset.pick); return; }
+    if (e.target.closest('[data-showkey]')) { S.showKey = !S.showKey; refresh(); return; }
     if (e.target.closest('[data-scale]')) { const sp = $('#scalep', mv); sp.open = true; sp.scrollIntoView({ block: 'nearest' }); return; }
     const o = e.target.closest('[data-open]'); if (o) { const id = o.dataset.open; go(CALCS[id].module); const card = document.getElementById('card-' + id); card.scrollIntoView({ block: 'start' }); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash'); }
   });
