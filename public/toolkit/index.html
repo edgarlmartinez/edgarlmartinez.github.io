@@ -175,6 +175,12 @@ input[type=range]{accent-color:var(--accent);width:100%}
 .case ul.tp{margin:0 0 10px;padding-left:18px;display:flex;flex-direction:column;gap:5px;max-width:70ch}
 .case h5{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;font-weight:600}
 .case ol.cr{margin:0;padding-left:20px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.case .side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.surg{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;background:var(--surface-2);padding:12px 14px}
+.surg h5{margin:0 0 8px;color:var(--accent)}
+.surg ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:13.5px}
+.surg .src{margin:10px 0 0;font-size:12px;color:var(--muted)}
+.surg .src a{color:inherit}
 .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;align-content:start}
 .gallery figure{margin:0;background:var(--canvas);border-radius:8px;overflow:hidden;cursor:zoom-in;display:flex;flex-direction:column}
 .gallery img{width:100%;height:170px;object-fit:contain;display:block}
@@ -275,7 +281,8 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
      How to add a measurement: copy any object inside a module's
      `calculators: [ ... ]`, give it a new `id`, then edit:
        inputs   – fields the user fills in (type: number | select | check)
-                  add measure:'angle' | 'tilt' | 'length' to show a
+                  add measure:'angle' | 'tilt' | 'length' | 'vangle' |
+                  'offset' | 'depth' to show a
                   "Measure" button that links to the image tool
        results  – each has calc(v) returning a number (v = input values,
                   null when empty) and either `bands` (ordered cutoffs:
@@ -291,7 +298,7 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
      REGIONS), put its images in the cases/ folder next to this file.
      ===================================================================== -->
 <script>
-const TOOLKIT_META = { version: '1.4', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
+const TOOLKIT_META = { version: '1.5', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
 
 const has = x => x !== null && x !== undefined && !(typeof x === 'number' && isNaN(x));
 const sum = (...a) => a.reduce((s, x) => s + (x || 0), 0);
@@ -868,6 +875,193 @@ const MODULES = [
   ] },
 
 /* ------------------------------------------------------------------ */
+{ id: 'knee', tab: 'Knee', title: 'Patellar height & patellofemoral instability',
+  blurb: 'Patella alta, trochlear dysplasia and tibial tubercle lateralization are the main anatomic risk factors for patellar instability (Dejour 1994). Patellar height: lateral radiograph in about 30° of flexion with the patellar tendon taut, or sagittal MRI. Trochlea and TT-TG: axial MRI or CT.',
+  calculators: [
+  { id: 'isr', title: 'Insall-Salvati ratio (radiograph and MRI)', vary: true,
+    howTo: 'Lateral knee radiograph in about 30° of flexion, or the sagittal MRI slice showing the longest patellar tendon. LT: patellar tendon length, from the lower pole of the patella to the tendon insertion on the tibial tubercle (measure along the deep surface of the tendon on MRI). LP: greatest diagonal length of the patella. Ratio = LT / LP. MRI has its own, wider cutoffs.',
+    diagram: `
+      <path d="M20,4 L56,4 L60,70 Q52,92 30,92 Q14,88 14,70 Z" class="bn"/>
+      <path d="M118,30 Q140,26 146,48 L140,84 Q132,98 124,92 L112,58 Q110,36 118,30 Z" class="bn"/>
+      <path d="M24,104 L92,104 L112,120 L118,140 L24,140 Z" class="bn"/>
+      <path d="M126,92 L116,122" style="stroke:var(--muted);stroke-width:7;stroke-linecap:round;opacity:.5"/>
+      <line x1="146" y1="28" x2="126" y2="94" class="ms"/><line x1="126" y1="94" x2="116" y2="122" class="ms"/>
+      <circle cx="126" cy="94" r="2.5" class="pt"/><circle cx="116" cy="122" r="2.5" class="pt"/>
+      <text x="152" y="62" class="m">LP</text><text x="128" y="118" class="m">LT</text><text x="64" y="30" class="s">femur</text><text x="40" y="128" class="s">tibia</text>`,
+    inputs: [
+      { id: 'lt', label: 'LT: patellar tendon length', unit: 'mm', value: 52, measure: 'length' },
+      { id: 'lp', label: 'LP: patellar length (longest diagonal)', unit: 'mm', value: 41, measure: 'length' },
+      { id: 'mod', label: 'Modality', type: 'select', value: 'xr', options: [['xr', 'Radiograph'], ['mr', 'MRI (sagittal)']] }
+    ],
+    results: [{ id: 'r', label: 'Insall-Salvati ratio (LT / LP)', decimals: 2, calc: v => has(v.lt) && has(v.lp) && v.lp > 0 ? v.lt / v.lp : null, scale: [0.4, 2], bandsBy: v => v.mod, bandSets: {
+      xr: [ { upTo: 0.8, label: 'Patella baja (under 0.8)', sev: 'warn' },
+            { upTo: 1.2, incl: true, label: 'Normal (0.8–1.2)', sev: 'ok' },
+            { label: 'Patella alta (over 1.2)', sev: 'warn', note: 'A risk factor for patellar instability: the patella engages the trochlea later in flexion.' } ],
+      mr: [ { upTo: 0.74, label: 'Patella baja on MRI (under 0.74)', sev: 'warn' },
+            { upTo: 1.5, incl: true, label: 'Normal on MRI (0.74–1.5)', sev: 'ok', note: 'MRI ratios run higher than radiographic ones; do not apply the 1.2 radiographic cutoff to MRI.' },
+            { label: 'Patella alta on MRI (over 1.5)', sev: 'warn', note: 'Shabshin 2004 cutoffs (2.5th and 97.5th percentiles). Sex-specific alta cutoffs: 1.52 in women, 1.32 in men.' } ] } }],
+    pitfalls: [
+      'The ratio uses the whole patella, so an unusually long non-articular lower pole (Cyclops-type or elongated patella) overstates alta. The modified Insall-Salvati ratio and Caton-Deschamps index use the articular surface instead.',
+      'An abnormal tibial tubercle (Osgood-Schlatter, prior tubercle osteotomy) makes the tendon insertion hard to define; Blackburne-Peel and Caton-Deschamps do not depend on it.',
+      'Flexion matters little for Insall-Salvati if the tendon is taut, but a slack tendon in full extension underestimates LT.'
+    ],
+    refs: ['insall1971', 'shabshin2004', 'dejour1994'] },
+
+  { id: 'mis', title: 'Modified Insall-Salvati ratio (Grelsamer)',
+    howTo: 'Lateral knee radiograph in about 30° of flexion (also applied on sagittal MRI). A: from the lower edge of the patellar articular surface (not the lower pole) to the patellar tendon insertion on the tibial tubercle. B: length of the patellar articular surface. Ratio = A / B.',
+    diagram: `
+      <path d="M118,30 Q140,26 146,48 L140,84 Q132,98 124,92 L112,58 Q110,36 118,30 Z" class="bn"/>
+      <path d="M24,104 L92,104 L112,120 L118,140 L24,140 Z" class="bn"/>
+      <line x1="116" y1="34" x2="112" y2="76" class="ms"/><line x1="112" y1="76" x2="116" y2="122" class="ms"/>
+      <circle cx="116" cy="34" r="2.5" class="pt"/><circle cx="112" cy="76" r="2.5" class="pt"/><circle cx="116" cy="122" r="2.5" class="pt"/>
+      <text x="84" y="56" class="m">B</text><text x="96" y="104" class="m">A</text><text x="150" y="40" class="s">patella</text><text x="40" y="128" class="s">tibia</text>`,
+    inputs: [
+      { id: 'a', label: 'A: articular surface lower edge to tendon insertion', unit: 'mm', value: 52, measure: 'length' },
+      { id: 'b', label: 'B: patellar articular surface length', unit: 'mm', value: 30, measure: 'length' }
+    ],
+    results: [{ id: 'r', label: 'Modified Insall-Salvati ratio (A / B)', decimals: 2, calc: v => has(v.a) && has(v.b) && v.b > 0 ? v.a / v.b : null, scale: [0.8, 3], bands: [
+      { upTo: 2, incl: true, label: 'Not patella alta (2.0 or less)', sev: 'ok', note: 'Normal mean about 1.5. No well-validated cutoff for patella baja.' },
+      { label: 'Patella alta (over 2.0)', sev: 'warn' } ] }],
+    pitfalls: ['Less reproducible than the original Insall-Salvati ratio, because the lower edge of the articular surface is harder to see than the lower pole.'],
+    refs: ['grelsamer1992'] },
+
+  { id: 'cdi', title: 'Caton-Deschamps index',
+    howTo: 'Lateral knee radiograph in 10–80° of flexion, or sagittal MRI. AT: from the lower edge of the patellar articular surface to the anterosuperior corner of the tibial plateau. AP: length of the patellar articular surface. Index = AT / AP. Independent of the tibial tubercle, so it is the usual index after tubercle surgery.',
+    diagram: `
+      <path d="M118,30 Q140,26 146,48 L140,84 Q132,98 124,92 L112,58 Q110,36 118,30 Z" class="bn"/>
+      <path d="M24,104 L92,104 L112,120 L118,140 L24,140 Z" class="bn"/>
+      <line x1="116" y1="34" x2="112" y2="76" class="ms"/><line x1="112" y1="76" x2="92" y2="104" class="ms"/>
+      <circle cx="112" cy="76" r="2.5" class="pt"/><circle cx="92" cy="104" r="2.5" class="pt"/>
+      <text x="84" y="56" class="m">AP</text><text x="62" y="92" class="m">AT</text><text x="40" y="128" class="s">tibia</text>`,
+    inputs: [
+      { id: 'at', label: 'AT: articular surface lower edge to tibial plateau corner', unit: 'mm', value: 30, measure: 'length' },
+      { id: 'ap', label: 'AP: patellar articular surface length', unit: 'mm', value: 30, measure: 'length' }
+    ],
+    results: [{ id: 'r', label: 'Caton-Deschamps index (AT / AP)', decimals: 2, calc: v => has(v.at) && has(v.ap) && v.ap > 0 ? v.at / v.ap : null, scale: [0.3, 1.8], bands: [
+      { upTo: 0.6, label: 'Patella baja (under 0.6)', sev: 'warn' },
+      { upTo: 1.2, label: 'Normal (0.6 to under 1.2)', sev: 'ok' },
+      { label: 'Patella alta (1.2 or more)', sev: 'warn', note: 'Dejour 1994 threshold; present in 24% of knees with objective patellar instability. Some authors use over 1.3.' } ] }],
+    refs: ['caton1982', 'dejour1994'] },
+
+  { id: 'bpr', title: 'Blackburne-Peel ratio',
+    howTo: 'Lateral knee radiograph in about 30° of flexion. Draw a line along the tibial plateau. A: perpendicular distance from that line to the lower edge of the patellar articular surface. B: length of the patellar articular surface. Ratio = A / B. Does not depend on the tibial tubercle.',
+    diagram: `
+      <path d="M118,30 Q140,26 146,48 L140,84 Q132,98 124,92 L112,58 Q110,36 118,30 Z" class="bn"/>
+      <path d="M24,104 L92,104 L112,120 L118,140 L24,140 Z" class="bn"/>
+      <line x1="10" y1="104" x2="150" y2="104" class="rf"/>
+      <line x1="116" y1="34" x2="112" y2="76" class="ms"/><line x1="112" y1="76" x2="112" y2="104" class="ma"/>
+      <text x="84" y="56" class="m">B</text><text x="118" y="96" class="m">A</text><text x="12" y="98" class="s">plateau line</text>`,
+    inputs: [
+      { id: 'a', label: 'A: plateau line to articular surface lower edge (perpendicular)', unit: 'mm', value: 25, measure: 'length' },
+      { id: 'b', label: 'B: patellar articular surface length', unit: 'mm', value: 30, measure: 'length' }
+    ],
+    results: [{ id: 'r', label: 'Blackburne-Peel ratio (A / B)', decimals: 2, calc: v => has(v.a) && has(v.b) && v.b > 0 ? v.a / v.b : null, scale: [0.2, 1.6], bands: [
+      { upTo: 0.5, label: 'Patella baja (under 0.5)', sev: 'warn' },
+      { upTo: 1, incl: true, label: 'Normal (0.5–1.0, mean about 0.8)', sev: 'ok' },
+      { label: 'Patella alta (over 1.0)', sev: 'warn' } ] }],
+    pitfalls: ['A posteriorly sloped or depressed tibial plateau changes the reference line; draw it along the medial plateau.'],
+    refs: ['blackburne1977'] },
+
+  { id: 'pti', title: 'Patellotrochlear index (MRI)', vary: true,
+    howTo: 'Sagittal MRI through the deepest part of the patellar cartilage. BLp: length of the patellar articular cartilage. BLt: length of trochlear cartilage that lies opposite the patellar cartilage, measured parallel to BLp from the top of the trochlear cartilage to the level of the lower end of the patellar cartilage. PTI = BLt / BLp × 100%. Measures cartilage engagement rather than bony height.',
+    diagram: `
+      <path d="M22,4 L70,4 L80,60 Q82,100 50,110 Q20,110 18,70 Z" class="bn"/>
+      <path d="M118,8 Q138,8 142,30 L138,66 Q130,78 122,74 L112,44 Q110,14 118,8 Z" class="bn"/>
+      <path d="M78,52 Q84,80 80,100" style="fill:none;stroke:var(--muted);stroke-width:5;opacity:.6"/>
+      <line x1="112" y1="14" x2="110" y2="72" class="ms"/><line x1="94" y1="52" x2="94" y2="72" class="ms"/>
+      <line x1="80" y1="72" x2="112" y2="72" class="rf"/>
+      <text x="116" y="96" class="m">BLp</text><text x="62" y="128" class="m">BLt / BLp</text><text x="96" y="46" class="s">BLt</text><text x="26" y="40" class="s">femur</text>`,
+    inputs: [
+      { id: 'blt', label: 'BLt: trochlear cartilage opposite the patellar cartilage', unit: 'mm', value: 11, measure: 'length' },
+      { id: 'blp', label: 'BLp: patellar cartilage length', unit: 'mm', value: 33, measure: 'length' }
+    ],
+    results: [{ id: 'r', label: 'Patellotrochlear index', unit: '%', decimals: 0, calc: v => has(v.blt) && has(v.blp) && v.blp > 0 ? 100 * v.blt / v.blp : null, scale: [0, 70], bands: [
+      { upTo: 12.5, label: 'Patella alta (under 12.5%)', sev: 'warn', note: 'Little patellotrochlear cartilage overlap.' },
+      { upTo: 50, incl: true, label: 'Normal (12.5–50%)', sev: 'ok' },
+      { label: 'Patella baja (over 50%)', sev: 'warn' } ] }],
+    pitfalls: ['The 12.5–50% range comes from one cohort of knees without patellofemoral symptoms (mean 31.7%); cutoffs for abnormality vary between studies.', 'Knee position and quadriceps contraction during the scan change cartilage overlap.'],
+    refs: ['biedert2006'] },
+
+  { id: 'tdep', title: 'Trochlear groove depth',
+    howTo: 'Axial MRI (or CT) about 3 cm above the joint line, on the slice where the trochlea is clearly seen. Draw the posterior condylar reference line, then mark the highest point of the lateral facet, the deepest point of the groove and the highest point of the medial facet. Depth = mean of the two facet heights − groove height, each measured perpendicular to the reference line.',
+    diagram: `
+      <path d="M20,40 Q50,18 80,34 Q100,52 120,36 Q150,22 180,44 L182,100 Q170,124 140,120 Q120,108 100,114 Q80,108 60,120 Q28,124 18,100 Z" class="bn"/>
+      <line x1="10" y1="124" x2="190" y2="124" class="rf"/>
+      <line x1="50" y1="24" x2="50" y2="124" class="ma"/><line x1="100" y1="46" x2="100" y2="124" class="ma"/><line x1="152" y1="26" x2="152" y2="124" class="ma"/>
+      <text x="32" y="16" class="m">lat</text><text x="88" y="40" class="m">groove</text><text x="142" y="16" class="m">med</text><text x="20" y="136" class="s">posterior condylar line</text>`,
+    inputs: [{ id: 'd', label: 'Trochlear depth', unit: 'mm', value: 5.5, measure: 'depth' }],
+    results: [{ id: 'd', label: 'Trochlear depth', unit: 'mm', decimals: 1, calc: v => v.d, scale: [0, 10], bands: [
+      { upTo: 3, incl: true, label: 'Trochlear dysplasia (3 mm or less)', sev: 'warn', note: 'Pfirrmann 2000: sensitivity 100%, specificity 96% at 3 cm above the joint line.' },
+      { label: 'Normal (over 3 mm)', sev: 'ok' } ] }],
+    pitfalls: ['Pfirrmann also used facet asymmetry: a medial-to-lateral facet length ratio under 2:5 (0.4) indicates dysplasia. Dejour 1994 used a radiographic depth of 4 mm or less as pathological.', 'Measure on bone (subchondral) contours unless the reference you follow uses cartilage; mixing them changes the value.', 'Slices too close to the joint line show the intercondylar notch, not the trochlea, and overstate depth.'],
+    refs: ['pfirrmann2000', 'dejour1994'] },
+
+  { id: 'sulc', title: 'Sulcus (trochlear) angle', vary: true,
+    howTo: 'Axial (Merchant) radiograph in 45° of flexion, or axial MRI or CT through the upper trochlea. Mark the highest point of the lateral facet, the deepest point of the groove and the highest point of the medial facet. The sulcus angle is the angle at the groove. Larger angles mean a flatter, shallower trochlea.',
+    diagram: `
+      <path d="M20,40 Q50,18 80,34 Q100,52 120,36 Q150,22 180,44 L182,100 Q170,124 140,120 Q120,108 100,114 Q80,108 60,120 Q28,124 18,100 Z" class="bn"/>
+      <line x1="50" y1="24" x2="100" y2="48" class="ms"/><line x1="100" y1="48" x2="152" y2="26" class="ms"/>
+      <circle cx="50" cy="24" r="2.5" class="pt"/><circle cx="100" cy="48" r="2.5" class="pt"/><circle cx="152" cy="26" r="2.5" class="pt"/>
+      <text x="86" y="76" class="m">sulcus angle</text><text x="22" y="16" class="s">lateral</text><text x="148" y="16" class="s">medial</text>`,
+    inputs: [{ id: 'a', label: 'Sulcus angle', unit: '°', value: 138, measure: 'vangle' }],
+    results: [{ id: 'a', label: 'Sulcus angle', unit: '°', calc: v => v.a, scale: [110, 180], bands: [
+      { upTo: 145, incl: true, label: 'Normal (about 135 ± 10°)', sev: 'ok' },
+      { upTo: 150, incl: true, label: 'Borderline (145–150°)', sev: 'info', note: 'Published dysplasia thresholds range from 145° to 150°.' },
+      { label: 'Shallow trochlea (over 150°): trochlear dysplasia', sev: 'warn' } ] }],
+    pitfalls: ['Radiographic and MRI sulcus angles are not interchangeable: cartilage and bony contours give different values.', 'Severe dysplasia (flat or convex trochlea) makes the angle unmeasurable; describe the morphology instead (Dejour types A–D).'],
+    refs: ['diederichs2010', 'fucentese2006', 'merchant1974'] },
+
+  { id: 'lti', title: 'Lateral trochlear inclination',
+    howTo: 'Axial MRI on the most proximal slice that shows trochlear cartilage. Line 1 (reference): tangent to the posterior femoral condyles. Line 2: along the subchondral bone of the lateral trochlear facet. The angle between them is the lateral trochlear inclination.',
+    diagram: `
+      <path d="M20,40 Q50,18 80,34 Q100,52 120,36 Q150,22 180,44 L182,100 Q170,124 140,120 Q120,108 100,114 Q80,108 60,120 Q28,124 18,100 Z" class="bn"/>
+      <line x1="10" y1="124" x2="190" y2="124" class="rf"/><line x1="40" y1="20" x2="100" y2="48" class="ms"/><line x1="40" y1="124" x2="100" y2="124" class="ms"/>
+      <path d="M78,124 A24,24 0 0 0 76,114" class="ms"/>
+      <text x="108" y="64" class="m">LTI</text><text x="20" y="136" class="s">posterior condylar line</text>`,
+    inputs: [{ id: 'a', label: 'Lateral trochlear inclination', unit: '°', value: 18, measure: 'angle' }],
+    results: [{ id: 'a', label: 'Lateral trochlear inclination', unit: '°', calc: v => v.a, scale: [0, 35], bands: [
+      { upTo: 11, label: 'Trochlear dysplasia (under 11°)', sev: 'warn', note: 'Carrillon 2000: sensitivity 93%, specificity 87%, accuracy 90% for patellar instability.' },
+      { label: 'Normal (11° or more)', sev: 'ok' } ] }],
+    refs: ['carrillon2000'] },
+
+  { id: 'ttg', title: 'TT-TG and TT-PCL distances', vary: true,
+    howTo: 'Axial CT or MRI. TT-TG: draw the posterior condylar line on the femoral slice, mark the deepest point of the trochlear groove (TG), then the most anterior point of the tibial tubercle (TT) on the tubercle slice. The distance is measured between TG and TT parallel to the posterior condylar line (superimpose the slices or copy the positions). TT-PCL: on the tibia, from the medial border of the PCL at its insertion to TT, parallel to the dorsal tibial condylar line.',
+    diagram: `
+      <path d="M20,40 Q50,18 80,34 Q100,52 120,36 Q150,22 180,44 L182,100 Q170,124 140,120 Q120,108 100,114 Q80,108 60,120 Q28,124 18,100 Z" class="bn"/>
+      <ellipse cx="60" cy="30" rx="14" ry="8" style="fill:none;stroke:var(--muted);stroke-dasharray:3 2"/>
+      <line x1="10" y1="124" x2="190" y2="124" class="rf"/>
+      <line x1="100" y1="48" x2="100" y2="124" class="rf"/><line x1="60" y1="22" x2="60" y2="124" class="rf"/>
+      <line x1="60" y1="84" x2="100" y2="84" class="ma"/>
+      <text x="104" y="60" class="s">TG</text><text x="28" y="20" class="s">TT</text><text x="62" y="78" class="m">TT-TG</text><text x="20" y="136" class="s">posterior condylar line</text>`,
+    inputs: [
+      { id: 'ttg', label: 'TT-TG distance', unit: 'mm', value: 14, measure: 'offset' },
+      { id: 'pcl', label: 'TT-PCL distance', unit: 'mm', optional: true, value: 19, measure: 'offset' },
+      { id: 'mod', label: 'Modality', type: 'select', value: 'ct', options: [['ct', 'CT'], ['mr', 'MRI']] }
+    ],
+    results: [
+      { id: 'ttg', label: 'TT-TG distance', unit: 'mm', decimals: 1, calc: v => v.ttg, scale: [0, 30], bandsBy: v => v.mod, bandSets: {
+        ct: [ { upTo: 15, label: 'Normal (under 15 mm)', sev: 'ok' },
+              { upTo: 20, label: 'Borderline (15 to under 20 mm)', sev: 'info' },
+              { label: 'Lateralized tibial tubercle (20 mm or more)', sev: 'warn', note: 'Dejour 1994: 20 mm or more in 56% of knees with instability, rare in controls. A common threshold for tibial tubercle medialization.' } ],
+        mr: [ { upTo: 15, label: 'Normal (under 15 mm)', sev: 'ok' },
+              { upTo: 20, label: 'Borderline (15 to under 20 mm)', sev: 'info', note: 'MRI values run lower than CT, so a borderline MRI value may reach 20 mm on CT.' },
+              { label: 'Lateralized tibial tubercle (20 mm or more)', sev: 'warn', note: 'CT-derived threshold; MRI and CT TT-TG are not interchangeable (Camp 2013).' } ] } },
+      { id: 'pcl', label: 'TT-PCL distance', unit: 'mm', decimals: 1, calc: v => v.pcl, scale: [0, 35], bands: [
+        { upTo: 24, label: 'Normal (under 24 mm)', sev: 'ok' },
+        { label: 'Lateralized tubercle on the tibia (24 mm or more)', sev: 'warn', note: 'Separates true tubercle lateralization from a high TT-TG caused by femoral or knee rotation (Seitlinger 2012).' } ] }
+    ],
+    flags: [
+      { when: v => has(v.ttg) && has(v.pcl) && v.ttg >= 20 && v.pcl < 24, sev: 'info', text: 'High TT-TG with normal TT-PCL: the high TT-TG may come from knee rotation or trochlear position rather than a lateral tubercle.', refs: ['seitlinger2012'] }
+    ],
+    pitfalls: [
+      'TT-TG depends on knee flexion and rotation; scan in full extension with the foot neutral.',
+      'Use the deepest point of the bony groove on the most proximal slice with a complete cartilage-covered trochlea, and the most anterior point of the tubercle at the patellar tendon insertion.',
+      'MRI and CT TT-TG are not interchangeable: MRI values were several millimetres lower than CT in the same patients (Camp 2013). Quote the modality.'
+    ],
+    refs: ['dejour1994', 'camp2013', 'seitlinger2012'] }
+  ] },
+
+/* ------------------------------------------------------------------ */
 { id: 'wrist', tab: 'Wrist', title: 'Distal radius',
   blurb: 'Standard PA and true lateral wrist radiographs. Compare with the uninjured side when available. Older, lower-demand patients tolerate larger deformities.',
   calculators: [
@@ -1252,6 +1446,21 @@ const GUIDES = {
   'cover.b': ['Medial femoral head margin', 'Lateral femoral head margin'],
   'cover.acea': ['Vertical line through the femoral head center (false-profile view)', 'Line from the head center to the anterior acetabular edge'],
   'alpha.a': ['Femoral neck axis, from the head center down the middle of the neck', 'Line from the head center to where the head leaves its best-fit circle'],
+  'isr.lt': ['Lower pole of the patella', 'Patellar tendon insertion on the tibial tubercle'],
+  'isr.lp': ['Upper pole of the patella', 'Lower pole of the patella (longest diagonal)'],
+  'mis.a': ['Lower edge of the patellar articular surface', 'Patellar tendon insertion on the tibial tubercle'],
+  'mis.b': ['Upper edge of the patellar articular surface', 'Lower edge of the patellar articular surface'],
+  'cdi.at': ['Lower edge of the patellar articular surface', 'Anterosuperior corner of the tibial plateau'],
+  'cdi.ap': ['Upper edge of the patellar articular surface', 'Lower edge of the patellar articular surface'],
+  'bpr.a': ['Lower edge of the patellar articular surface', 'Tibial plateau line, straight down (perpendicular)'],
+  'bpr.b': ['Upper edge of the patellar articular surface', 'Lower edge of the patellar articular surface'],
+  'pti.blt': ['Upper end of the trochlear cartilage', 'Trochlear cartilage level with the lower end of the patellar cartilage (perpendicular)'],
+  'pti.blp': ['Upper end of the patellar cartilage', 'Lower end of the patellar cartilage'],
+  'tdep.d': ['Back of the lateral femoral condyle (posterior condylar line)', 'Back of the medial femoral condyle (posterior condylar line)', 'Highest point of the lateral trochlear facet', 'Deepest point of the trochlear groove', 'Highest point of the medial trochlear facet'],
+  'sulc.a': ['Highest point of the lateral trochlear facet', 'Deepest point of the trochlear groove', 'Highest point of the medial trochlear facet'],
+  'lti.a': ['Posterior condylar reference line, tangent to both condyles', 'Lateral trochlear facet, along its subchondral bone'],
+  'ttg.ttg': ['Back of the lateral femoral condyle (posterior condylar line)', 'Back of the medial femoral condyle (posterior condylar line)', 'Deepest point of the trochlear groove (TG)', 'Most anterior point of the tibial tubercle (TT)'],
+  'ttg.pcl': ['Back of the lateral tibial condyle (dorsal tibial line)', 'Back of the medial tibial condyle (dorsal tibial line)', 'Medial border of the PCL at its tibial insertion', 'Most anterior point of the tibial tubercle (TT)'],
   'tilt.t': ['Long axis of the radial shaft', 'Articular surface, from the dorsal to the volar rim'],
   'incl.a': ['Long axis of the radial shaft', 'Line from the radial styloid tip to the ulnar corner of the radius'],
   'height.h': ['Radial styloid tip', 'Ulnar corner of the articular surface, measured along the shaft axis'],
@@ -1278,11 +1487,38 @@ const GUIDES = {
 const REGIONS = ['Hand', 'Wrist', 'Forearm', 'Elbow', 'Humerus', 'Shoulder', 'Chest', 'Cervical spine', 'Thoracic spine', 'Lumbar spine', 'Pelvis', 'Hip', 'Femur', 'Thigh', 'Knee', 'Leg', 'Ankle', 'Foot'];
 /* Case fields: id, region (one of REGIONS), alsoIn (optional extra regions), title, modality, added (year-month only, never exact study dates),
    images [{src, caption}], findings, teaching [bullets], refs [REFERENCES keys],
-   calc (optional) {id: calculator id, values: {inputId: value}, label} adds a button that loads the case values into a calculator. */
+   calc (optional) {id: calculator id, values: {inputId: value}, label} adds a button that loads the case values into a calculator.
+   link (optional) {href: '#moduleId', label} adds a button that opens a toolkit section.
+   surgeon (optional) {points: [bullets], sources: [{label, url}]} adds the "What the surgeon cares about" side panel. */
 
 const CASES = []; /* teaching cases live in the site's Educational cases section */
 
 const REFERENCES = {
+  jibri2019: { s: 'Jibri 2019', a: 'Jibri Z, Jamieson P, Rakhra KS, Sampaio ML, Dervin G.', t: 'Patellar maltracking: an update on the diagnosis and treatment strategies.', j: 'Insights Imaging. 2019;10:65.', url: 'https://doi.org/10.1186/s13244-019-0755-1' },
+  campagna2012: { s: 'Campagna 2012', a: 'Campagna R, Pessis E, Biau DJ, et al.', t: 'Is superolateral Hoffa fat pad edema a consequence of impingement between lateral femoral condyle and patellar ligament?', j: 'Radiology. 2012;263:469-474.', url: 'https://doi.org/10.1148/radiol.12111066' },
+  chung2001: { s: 'Chung 2001', a: 'Chung CB, Skaf A, Roger B, Campos J, Stump X, Resnick D.', t: 'Patellar tendon-lateral femoral condyle friction syndrome: MR imaging in 42 patients.', j: 'Skeletal Radiol. 2001;30(12):694-697.', url: 'https://doi.org/10.1007/s002560100409' },
+  insall1971: { s: 'Insall 1971', a: 'Insall J, Salvati E.', t: 'Patella position in the normal knee joint.', j: 'Radiology. 1971;101:101-104.', url: 'https://pubmed.ncbi.nlm.nih.gov/?term=Patella%20position%20in%20the%20normal%20knee%20joint%20Insall' },
+  shabshin2004: { s: 'Shabshin 2004', a: 'Shabshin N, Schweitzer ME, Morrison WB, Parker L.', t: 'MRI criteria for patella alta and baja.', j: 'Skeletal Radiol. 2004;33(8):445-450.', url: 'https://doi.org/10.1007/s00256-004-0794-6' },
+  grelsamer1992: { s: 'Grelsamer 1992', a: 'Grelsamer RP, Meadows S.', t: 'The modified Insall-Salvati ratio for assessment of patellar height.', j: 'Clin Orthop Relat Res. 1992;(282):170-176.' },
+  caton1982: { s: 'Caton 1982', a: 'Caton J, Deschamps G, Chambat P, Lerat JL, Dejour H.', t: 'Patella infera. Apropos of 128 cases [Les rotules basses].', j: 'Rev Chir Orthop Reparatrice Appar Mot. 1982;68:317-325.' },
+  blackburne1977: { s: 'Blackburne 1977', a: 'Blackburne JS, Peel TE.', t: 'A new method of measuring patellar height.', j: 'J Bone Joint Surg Br. 1977;59(2):241-242.' },
+  biedert2006: { s: 'Biedert 2006', a: 'Biedert RM, Albrecht S.', t: 'The patellotrochlear index: a new index for assessing patellar height.', j: 'Knee Surg Sports Traumatol Arthrosc. 2006;14(8):707-712.', url: 'https://doi.org/10.1007/s00167-005-0015-4' },
+  dejour1994: { s: 'Dejour 1994', a: 'Dejour H, Walch G, Nove-Josserand L, Guier C.', t: 'Factors of patellar instability: an anatomic radiographic study.', j: 'Knee Surg Sports Traumatol Arthrosc. 1994;2(1):19-26.', url: 'https://doi.org/10.1007/BF01552649' },
+  pfirrmann2000: { s: 'Pfirrmann 2000', a: 'Pfirrmann CW, Zanetti M, Romero J, Hodler J.', t: 'Femoral trochlear dysplasia: MR findings.', j: 'Radiology. 2000;216(3):858-864.', url: 'https://doi.org/10.1148/radiology.216.3.r00se38858' },
+  carrillon2000: { s: 'Carrillon 2000', a: 'Carrillon Y, Abidi H, Dejour D, Fantino O, Moyen B, Tran-Minh VA.', t: 'Patellar instability: assessment on MR images by measuring the lateral trochlear inclination—initial experience.', j: 'Radiology. 2000;216(2):582-585.', url: 'https://doi.org/10.1148/radiology.216.2.r00au07582' },
+  diederichs2010: { s: 'Diederichs 2010', a: 'Diederichs G, Issever A, Scheffler S.', t: 'MR imaging of patellar instability: injury patterns and assessment of risk factors.', j: 'RadioGraphics. 2010;30(4):961-981.', url: 'https://doi.org/10.1148/rg.304095755' },
+  fucentese2006: { s: 'Fucentese 2006', a: 'Fucentese S, von Roll A, Koch P, Epari D, Fuchs B, Schottle P.', t: 'The patella morphology in trochlear dysplasia—a comparative MRI study.', j: 'Knee. 2006;13(2):145-150.', url: 'https://doi.org/10.1016/j.knee.2005.12.005' },
+  merchant1974: { s: 'Merchant 1974', a: 'Merchant AC, Mercer RL, Jacobsen RH, Cool CR.', t: 'Roentgenographic analysis of patellofemoral congruence.', j: 'J Bone Joint Surg Am. 1974;56(7):1391-1396.', url: 'https://doi.org/10.2106/00004623-197456070-00007' },
+  seitlinger2012: { s: 'Seitlinger 2012', a: 'Seitlinger G, Scheurecker G, Högler R, Labey L, Innocenti B, Hofmann S.', t: 'Tibial tubercle-posterior cruciate ligament distance: a new measurement to define the position of the tibial tubercle in patients with patellar dislocation.', j: 'Am J Sports Med. 2012;40(5):1119-1125.', url: 'https://pubmed.ncbi.nlm.nih.gov/22415209/' },
+  camp2013: { s: 'Camp 2013', a: 'Camp CL, Stuart MJ, Krych AJ, Levy BA, Bond JR, Collins MS, Dahm DL.', t: 'CT and MRI measurements of tibial tubercle-trochlear groove distances are not equivalent in patients with patellar instability.', j: 'Am J Sports Med. 2013;41(8):1835-1840.', url: 'https://pubmed.ncbi.nlm.nih.gov/23857884/' },
+  miller1995: { s: 'Miller 1995', a: 'Miller TT, Staron RB, Feldman F, Parisien M, Glucksman WJ, Gandolfo LH.', t: 'The symptomatic accessory tarsal navicular bone: assessment with MR imaging.', j: 'Radiology. 1995;195(3):849-853.', url: 'https://doi.org/10.1148/radiology.195.3.7754020' },
+  choi2004: { s: 'Choi 2004', a: 'Choi YS, Lee KT, Kang HS, Kim EK.', t: 'MR imaging findings of painful type II accessory navicular bone: correlation with surgical and pathologic studies.', j: 'Korean J Radiol. 2004;5(4):274-279.', url: 'https://doi.org/10.3348/kjr.2004.5.4.274' },
+  mosel2004: { s: 'Mosel 2004', a: 'Mosel LD, Kat E, Voyvodic F.', t: 'Imaging of the symptomatic type II accessory navicular bone.', j: 'Australas Radiol. 2004;48:267-271.', url: 'https://doi.org/10.1111/j.1440-1673.2004.01286.x' },
+  lawson1984: { s: 'Lawson 1984', a: 'Lawson JP, Ogden JA, Sella E, Barwick KW.', t: 'The painful accessory navicular.', j: 'Skeletal Radiol. 1984;12(4):250-262.', url: 'https://doi.org/10.1007/BF00349506' },
+  sella1987: { s: 'Sella 1987', a: 'Sella EJ, Lawson JP.', t: 'Biomechanics of the accessory navicular synchondrosis.', j: 'Foot Ankle. 1987;8(3):156-163.', url: 'https://doi.org/10.1177/107110078700800310' },
+  mellado2003: { s: 'Mellado 2003', a: 'Mellado JM, Ramos A, Salvadó E, et al.', t: 'Accessory ossicles and sesamoid bones of the ankle and foot: imaging findings, clinical significance and differential diagnosis.', j: 'Eur Radiol. 2003;13 Suppl 6:L164-L177.', url: 'https://doi.org/10.1007/s00330-003-2011-8' },
+  kiter1999: { s: 'Kiter 1999', a: 'Kiter E, Erdag N, Karatosun V, Günal I.', t: 'Tibialis posterior tendon abnormalities in feet with accessory navicular bone and flatfoot.', j: 'Acta Orthop Scand. 1999;70(6):618-621.', url: 'https://doi.org/10.3109/17453679908997852' },
+  schweitzer2000: { s: 'Schweitzer 2000', a: 'Schweitzer ME, Karasick D.', t: 'MR imaging of disorders of the posterior tibialis tendon.', j: 'AJR Am J Roentgenol. 2000;175:627-635.', url: 'https://pubmed.ncbi.nlm.nih.gov/10954441/' },
   kane1977: { s: 'Kane 1977', a: 'Kane WJ.', t: 'Scoliosis prevalence: a call for a statement of terms.', j: 'Clin Orthop Relat Res. 1977;(126):43-46.' },
   cobb1948: { s: 'Cobb 1948', a: 'Cobb JR.', t: 'Outline for the study of scoliosis.', j: 'Instr Course Lect. 1948;5:261-275.' },
   weinstein2008: { s: 'Weinstein 2008', a: 'Weinstein SL, Dolan LA, Cheng JC, Danielsson A, Morcuende JA.', t: 'Adolescent idiopathic scoliosis.', j: 'Lancet. 2008;371(9623):1527-1537.' },
@@ -1421,9 +1657,10 @@ const REFERENCES = {
      w, h   image size in pixels      mm   pixel spacing (mm per pixel)
      view   short title shown with the image
      els    shapes: shaft (long bone), rrect (block), ell (ellipse),
-            circ, poly, plate (floor), label; soft:true = soft tissue,
+            circ, poly, plate (floor), label; soft:true = soft tissue, cart:true = cartilage,
             dark:true = a defect cut into bone
-     keys   inputId -> the correct points (4 for angle/tilt, 2 for length)
+     keys   inputId -> the correct points (4 for angle/tilt, 2 for length,
+            3 for vangle, 4 for offset, 5 for depth)
    The expected value is computed from the key points with the same
    math as the measuring tool, so key and grading always agree.
    ===================================================================== */
@@ -1593,8 +1830,45 @@ const SMP = (() => {
       { t: 'ell', c: lt, rx: 90, ry: 40, a: la }, { t: 'shaft', a: lb, b: lh, w: 32 }, { t: 'shaft', a: P(590, 0), b: P(600, 300), w: 80 }];
     els.push(L(P(60, 640), 'AP view'), L(P(520, 640), 'lateral view'), L(P(110, 520), 'talus'), L(P(250, 200), '1st MT'));
     return { w: 900, h: 680, mm: 0.15, view: 'Child foot, AP and lateral (synthetic)', els, keys: { apm: [...axis(tC, tA, 200), mb, mh], latm: [...axis(lt, la, 160), lb, lh] } };
+  },
+  isr: () => kneeLat('isr'), mis: () => kneeLat('mis'), cdi: () => kneeLat('cdi'), bpr: () => kneeLat('bpr'),
+  pti: () => { /* sagittal knee, extended: little patellar and trochlear cartilage overlap */
+    const els = [{ t: 'poly', pts: [P(235, 0), P(365, 0), P(370, 300), P(430, 380), P(445, 470), P(430, 560), P(360, 590), P(250, 585), P(190, 520), P(180, 420), P(235, 300)] },
+      { t: 'poly', pts: [P(434, 392), P(447, 470), P(439, 540), P(449, 540), P(457, 470), P(444, 392)], cart: true },
+      { t: 'poly', pts: [P(200, 610), P(440, 610), P(452, 700), P(420, 900), P(240, 900), P(215, 700)] },
+      { t: 'ell', c: P(500, 350), rx: 30, ry: 64 }, { t: 'rrect', c: P(466, 350), w: 9, h: 100, r: 0, cart: true },
+      { t: 'poly', pts: [P(488, 410), P(508, 412), P(462, 682), P(444, 676)], soft: true }];
+    els.push(L(P(540, 300), 'patella'), L(P(470, 470), 'trochlear cartilage'), L(P(260, 300), 'femur'), L(P(560, 60), 'anterior →'));
+    return { w: 700, h: 900, mm: 0.22, view: 'Sagittal MRI, knee extended (schematic)', els, keys: { blp: [P(466, 300), P(466, 400)], blt: [P(439, 392), P(440.4, 400)] } };
+  },
+  tdep: () => trochlea('tdep'), sulc: () => trochlea('sulc'), lti: () => trochlea('lti'),
+  ttg: () => { /* axial femur with the tibial tubercle slice superimposed */
+    const LF = P(200, 320), TG = P(350, 380), MF = P(490, 330), TT = P(250, 310);
+    const els = [{ t: 'ell', c: P(340, 500), rx: 215, ry: 150, soft: true }, { t: 'ell', c: P(250, 332), rx: 34, ry: 22, soft: true }, femurAx(LF, TG, MF), { t: 'circ', c: P(383, 660), r: 12, soft: true }];
+    els.push(L(P(150, 290), 'TT (tubercle slice)'), L(P(405, 690), 'PCL'), L(P(40, 700), 'lateral ←'), L(P(560, 700), '→ medial'), L(P(300, 60), 'anterior ↑'));
+    return { w: 700, h: 760, mm: 0.18, view: 'Axial knee, TG and TT slices superimposed', els, keys: { ttg: [P(230, 640), P(470, 640), TG, TT], pcl: [P(230, 640), P(470, 640), P(395, 660), TT] } };
   }
   };
+  function kneeLat(k) { /* lateral knee in flexion with a high-riding patella */
+    const Ps = P(515, 330), Pi = P(490, 470), E1 = P(481, 333), E2 = P(463, 455), As = P(479.25, 344.87), Ai = P(464.94, 441.8), TT = P(518, 658), ATP = P(450, 560);
+    const els = [{ t: 'shaft', a: P(330, 0), b: P(330, 430), w: 120 }, { t: 'ell', c: P(330, 470), rx: 125, ry: 88 },
+      { t: 'poly', pts: [P(205, 560), ATP, P(470, 590), P(500, 625), TT, P(505, 705), P(470, 740), P(455, 900), P(250, 900), P(240, 740), P(210, 620)] },
+      { t: 'poly', pts: [Ps, P(548, 360), P(545, 420), Pi, E2, E1] },
+      { t: 'poly', pts: [P(482, 466), P(500, 468), P(524, 660), P(508, 656)], soft: true }];
+    els.push(L(P(560, 340), 'patella'), L(P(540, 690), 'tibial tubercle'), L(P(380, 600), 'tibia'), L(P(560, 60), 'anterior →'));
+    const keys = { isr: { lt: [Pi, TT], lp: [Ps, Pi] }, mis: { a: [Ai, TT], b: [As, Ai] }, cdi: { at: [Ai, ATP], ap: [As, Ai] }, bpr: { a: [Ai, P(Ai.x, ATP.y)], b: [As, Ai] } }[k];
+    return { w: 700, h: 900, mm: 0.24, view: 'Lateral knee, about 30° flexion', els, keys };
+  }
+  function femurAx(LF, S, MF) { /* axial distal femur: trochlea on top, condyles resting on y = 640 */
+    return { t: 'poly', pts: [LF, S, MF, P(540, 380), P(565, 470), P(560, 560), P(520, 625), P(470, 640), P(420, 630), P(390, 600), P(350, 575), P(310, 600), P(280, 630), P(230, 640), P(180, 628), P(145, 560), P(140, 470), P(160, 380)] };
+  }
+  function trochlea(k) { /* shallow (dysplastic) trochlea, right knee, lateral on image left */
+    const LF = P(200, 340), S = P(340, 361), MF = P(490, 350), A = P(230, 640), B = P(470, 640);
+    const els = [{ t: 'ell', c: P(335, 250), rx: 120, ry: 36, a: -6 }, femurAx(LF, S, MF)];
+    els.push(L(P(300, 200), 'patella'), L(P(40, 700), 'lateral ←'), L(P(560, 700), '→ medial'), L(P(300, 60), 'anterior ↑'));
+    const keys = { tdep: { d: [A, B, LF, S, MF] }, sulc: { a: [LF, S, MF] }, lti: { a: [A, B, LF, S] } }[k];
+    return { w: 700, h: 760, mm: 0.18, view: 'Axial MRI, 3 cm above the joint line (schematic)', els, keys };
+  }
   function hip(o) { /* AP right hip with both teardrops */
     const t = 3, C = P(330, 360), r = 125, up = t - 90, E = add(C, dv(up - o.lcea), r + 8), Mm = add(C, dv(up + 40), r + 8);
     const T1 = P(470, 600), T2 = add(T1, dv(t), 380), els = [];
@@ -1829,7 +2103,12 @@ main.appendChild(mv);
 const M = (() => {
   const cv = $('#cv', mv), stage = $('#stage', mv), ctx = cv.getContext('2d');
   const S = { img: null, sample: false, scale: 1, ox: 0, oy: 0, tool: 'angle', shapes: [], pending: [], cursor: null, mmPerPx: null, drag: null, inv: false, bri: 100, con: 100, target: '', touched: new Set() };
-  const NEED = { angle: 4, tilt: 4, length: 2, calib: 2, pan: 0 };
+  /* vangle: 3 points (arm, vertex, arm), 0–180°. offset: reference line (2 points) then two
+     landmarks; distance between them measured along the reference line (TT-TG style).
+     depth: reference line then three landmarks A, B, C; ((dA + dC) / 2) − dB, where d is the
+     perpendicular distance to the line (trochlear depth). */
+  const NEED = { angle: 4, tilt: 4, length: 2, calib: 2, vangle: 3, offset: 4, depth: 5, pan: 0 };
+  const LENK = new Set(['length', 'offset', 'depth']), PERPT = new Set(['length', 'vangle', 'offset', 'depth']);
   const targets = [];
   MODULES.forEach(m => m.calculators.forEach(c => c.inputs.filter(i => i.measure).forEach(i => targets.push({ key: c.id + '.' + i.id, kind: i.measure, cid: c.id, iid: i.id, label: i.label, unit: i.unit }))));
   const T = k => targets.find(t => t.key === k);
@@ -1937,6 +2216,7 @@ const M = (() => {
       path(e);
       if (e.soft) { g.fillStyle = 'rgba(150,160,170,.16)'; g.fill(); return; }
       if (e.dark) { g.fillStyle = '#111418'; g.fill(); return; }
+      if (e.cart) { g.fillStyle = '#5d6872'; g.fill(); g.strokeStyle = '#aab4bc'; g.lineWidth = 2; g.stroke(); return; }
       g.fillStyle = '#959da4'; g.fill(); g.strokeStyle = '#e3e8eb'; g.lineWidth = 4; g.stroke();
     });
     const cp = document.createElement('canvas'); cp.width = sc.w; cp.height = sc.h; const g2 = cp.getContext('2d'); g2.filter = 'blur(0.8px)'; g2.drawImage(c, 0, 0);
@@ -1967,11 +2247,31 @@ const M = (() => {
   function value(sh) {
     if (sh.type === 'angle') return { v: lineAngle(sh.pts), unit: '°' };
     if (sh.type === 'tilt') return { v: 90 - lineAngle(sh.pts), unit: '°' };
-    const px = dist(sh.pts[0], sh.pts[1]);
+    if (sh.type === 'vangle') { const [a, o, b] = sh.pts; let d = Math.abs(dirAng(o, a) - dirAng(o, b)) % 360; return { v: d > 180 ? 360 - d : d, unit: '°' }; }
+    const px = sh.type === 'offset' ? offsetPx(sh.pts) : sh.type === 'depth' ? depthPx(sh.pts) : dist(sh.pts[0], sh.pts[1]);
     if (sh.type === 'calib') return { v: px, unit: 'px' };
     return S.mmPerPx ? { v: px * S.mmPerPx, unit: 'mm' } : { v: px, unit: 'px' };
   }
-  const NAMES = { angle: 'Angle', tilt: 'Tilt', length: 'Length', calib: 'Scale line' };
+  const NAMES = { angle: 'Angle', tilt: 'Tilt', length: 'Length', calib: 'Scale line', vangle: 'Angle (3-point)', offset: 'Offset', depth: 'Depth' };
+  /* geometry for reference-line measurements */
+  const refU = p => { const L = dist(p[0], p[1]) || 1; return { x: (p[1].x - p[0].x) / L, y: (p[1].y - p[0].y) / L }; };
+  const foot = (p, q) => { const u = refU(p), t = (q.x - p[0].x) * u.x + (q.y - p[0].y) * u.y; return { x: p[0].x + u.x * t, y: p[0].y + u.y * t }; };
+  const perp = (p, q) => dist(q, foot(p, q));
+  function offsetPx(p) { const u = refU(p); return Math.abs((p[3].x - p[2].x) * u.x + (p[3].y - p[2].y) * u.y); }
+  function depthPx(p) { return (perp(p, p[2]) + perp(p, p[4])) / 2 - perp(p, p[3]); }
+  /* the segments to draw for a (possibly unfinished) shape */
+  function segsFor(type, pts, cur) {
+    const P = cur ? [...pts, cur] : pts, out = [];
+    if (type === 'vangle') { for (let i = 0; i + 1 < P.length; i++) out.push([P[i], P[i + 1]]); return out; }
+    if (type === 'offset' || type === 'depth') {
+      if (P.length >= 2) out.push([P[0], P[1]]);
+      if (pts.length >= 2) P.slice(2).forEach(q => out.push([q, foot(P, q)]));
+      if (type === 'offset' && P.length >= 4) out.push([foot(P, P[2]), foot(P, P[3])]);
+      return out;
+    }
+    for (let i = 0; i + 1 < P.length; i += 2) out.push([P[i], P[i + 1]]);
+    return out;
+  }
   const fmtV = val => `${val.v.toFixed(val.unit === 'px' ? 0 : 1)}${val.unit === '°' ? '°' : ' ' + val.unit}`;
   const shapeText = (sh, n) => `${n + 1}. ${fmtV(value(sh))}${sh.note ? ' · ' + sh.note : ''}`;
 
@@ -1979,7 +2279,7 @@ const M = (() => {
   function send(sh) {
     const t = T(sh.key); if (!t) return;
     const val = value(sh);
-    if (t.kind === 'length' && val.unit !== 'mm') { sh.note = 'set the scale to grade'; return; }
+    if (LENK.has(t.kind) && val.unit !== 'mm') { sh.note = 'set the scale to grade'; return; }
     const el = document.getElementById(`in-${t.cid}-${t.iid}`); if (!el) return;
     if (!S.touched.has(t.cid)) { /* first measurement for this calculator on this image: drop example values of the other optional image fields */
       S.touched.add(t.cid); CALCS[t.cid].inputs.forEach(i => { if (i.measure && i.optional && i.id !== t.iid) { const o = document.getElementById(`in-${t.cid}-${i.id}`); if (o) o.value = ''; } });
@@ -2002,6 +2302,7 @@ const M = (() => {
     if (!n && t && S.shapes.some(s => s.key === t.key)) return `<b>Done: ${esc(t.label)}.</b> Drag any point to adjust, click again to redo it, or pick the next measurement.`;
     const head = t ? `${esc(t.label)}, step ${n + 1} of ${NEED[S.tool]}.` : `${NAMES[S.tool]}, step ${n + 1} of ${NEED[S.tool]}.`;
     if (S.tool === 'length') return `<b>${head}</b> Click ${g ? 'the ' + esc(lc(g[n])) : (n ? 'the other end' : 'one end')}.`;
+    if (PERPT.has(S.tool)) return `<b>${head}</b> Click the ${g ? esc(lc(g[n])) : 'next point'}.`;
     const L = n < 2 ? 0 : 1, names = g || (S.tool === 'tilt' ? ['the reference axis', 'the surface'] : ['the first line', 'the second line']);
     if (g) return `<b>${head}</b> Line ${L + 1}${S.tool === 'tilt' && !L ? ' (reference axis)' : ''}: ${esc(g[L])}. Click ${n % 2 ? 'its other end' : 'one end'}.`;
     return `<b>${head}</b> Click ${n % 2 ? 'the other end' : 'one end'} of ${names[L]}.`;
@@ -2017,10 +2318,10 @@ const M = (() => {
       const st = sh && sh.note !== 'set the scale to grade' ? `<b>${fmtV(value(sh))}</b> measured` : sh ? '<span class="warn">needs a scale</span>' : el && el.value !== '' ? `${esc(el.value)} ${esc(inp.unit || '')} <em>from the calculator, not measured</em>` : '<em>empty</em>';
       const kp = S.keys && S.keys.cid === c.id && S.keys.keys[x.iid];
       let ks = '';
-      if (kp) { const kv = keyVal(x, kp); if (sh && sh.note !== 'set the scale to grade') { const df = Math.abs(value(sh).v - kv.v), tol = x.kind === 'length' ? 1 : 2; ks = `<span class="key ${df <= tol ? 'ok' : 'off'}">Answer ${fmtV(kv)} · you are ${df <= tol ? 'within' : 'off by'} ${df <= tol ? (x.kind === 'length' ? '1 mm' : '2°') : fmtV({ v: df, unit: kv.unit })}</span>`; } else if (S.showKey) ks = `<span class="key">Answer ${fmtV(kv)}</span>`; else ks = '<span class="key">Answer hidden until you measure</span>'; }
+      if (kp) { const kv = keyVal(x, kp); if (sh && sh.note !== 'set the scale to grade') { const df = Math.abs(value(sh).v - kv.v), tol = LENK.has(x.kind) ? 1 : 2; ks = `<span class="key ${df <= tol ? 'ok' : 'off'}">Answer ${fmtV(kv)} · you are ${df <= tol ? 'within' : 'off by'} ${df <= tol ? (LENK.has(x.kind) ? '1 mm' : '2°') : fmtV({ v: df, unit: kv.unit })}</span>`; } else if (S.showKey) ks = `<span class="key">Answer ${fmtV(kv)}</span>`; else ks = '<span class="key">Answer hidden until you measure</span>'; }
       return `<li class="${x.key === S.target ? 'cur' : ''}"><button type="button" class="lnk" data-pick="${x.key}">${esc(x.label)}${inp.optional ? ' <em>optional</em>' : ''}</button><span>${st}</span>${ks}</li>`;
     }).join('');
-    const scaleWarn = t.kind === 'length' && !S.mmPerPx ? `<p class="flagline sev-warn">Lengths are in pixels until you set the scale. <button type="button" class="lnk" data-scale>Set the scale</button></p>` : '';
+    const scaleWarn = LENK.has(t.kind) && !S.mmPerPx ? `<p class="flagline sev-warn">Lengths are in pixels until you set the scale. <button type="button" class="lnk" data-scale>Set the scale</button></p>` : '';
     const others = c.inputs.some(i => !i.measure) ? '<p class="muted">Other settings for this calculator, such as modality or checkboxes, are in the full calculator.</p>' : '';
     const sampleRow = S.keys && S.keys.cid === c.id ? `<p class="muted">Synthetic practice image (${esc(S.keys.view)}). The scale is preset, so lengths are in millimetres. <button type="button" class="lnk" data-showkey>${S.showKey ? 'Hide' : 'Show'} answer lines</button></p>` : hasSample(c.id) ? `<p class="muted"><button type="button" class="lnk" data-sample="${c.id}">Practice on a synthetic sample</button> with a built-in answer key.</p>` : '';
     return `<p class="rtitle">${esc(c.title)}</p><ul class="fl">${fields}</ul>${sampleRow}${scaleWarn}
@@ -2038,7 +2339,7 @@ const M = (() => {
     S.shapes.forEach((sh, n) => {
       const col = sh.type === 'calib' ? '#ffd166' : '#4fd3be';
       g.strokeStyle = col; g.lineWidth = 2.2 * u; g.lineCap = 'round';
-      for (let i = 0; i < sh.pts.length; i += 2) { const A = P(sh.pts[i]), B = P(sh.pts[i + 1]); g.beginPath(); g.moveTo(A.x, A.y); g.lineTo(B.x, B.y); g.stroke(); }
+      segsFor(sh.type, sh.pts).forEach(([a, b]) => { const A = P(a), B = P(b); g.beginPath(); g.moveTo(A.x, A.y); g.lineTo(B.x, B.y); g.stroke(); });
       g.fillStyle = col; sh.pts.forEach(p => { const Q = P(p); g.beginPath(); g.arc(Q.x, Q.y, 3.5 * u, 0, 7); g.fill(); });
       const t = shapeText(sh, n), Q = P(sh.pts[sh.pts.length - 1]); g.font = `600 ${Math.round(13 * u)}px "IBM Plex Mono", monospace`;
       const tw = g.measureText(t).width, x = Math.max(4, Math.min(Q.x + 8 * u, W - tw - 12 * u)), y = Math.max(Q.y - 6 * u, 20 * u);
@@ -2068,16 +2369,16 @@ const M = (() => {
     const label = (p, t) => { const P = toScr(p); ctx.font = '600 13px "IBM Plex Mono", monospace'; const w = ctx.measureText(t).width, x = Math.max(4, Math.min(P.x + 8, r.width - w - 14)); ctx.fillStyle = 'rgba(7,10,14,.8)'; ctx.fillRect(x, P.y - 18, w + 10, 20); ctx.fillStyle = '#fff'; ctx.fillText(t, x + 5, P.y - 4); };
     S.shapes.forEach((sh, n) => {
       const c = sh.type === 'calib' ? col2 : col;
-      for (let i = 0; i < sh.pts.length; i += 2) seg(sh.pts[i], sh.pts[i + 1], c);
+      segsFor(sh.type, sh.pts).forEach(([a, b]) => seg(a, b, c));
       sh.pts.forEach(p => dot(p, c));
       label(sh.pts[sh.pts.length - 1], shapeText(sh, n));
     });
     if (S.showKey && S.keys) {
       ctx.save(); ctx.setLineDash([7, 5]);
-      Object.entries(S.keys.keys).forEach(([iid, pts]) => { const t = T(S.keys.cid + '.' + iid); if (!t) return; for (let i = 0; i < pts.length; i += 2) seg(pts[i], pts[i + 1], '#ffb020'); ctx.setLineDash([]); const a = pts[pts.length - 2], b = pts[pts.length - 1]; label({ x: a.x + (b.x - a.x) * 0.6, y: a.y + (b.y - a.y) * 0.6 }, `key ${fmtV(keyVal(t, pts))}`); ctx.setLineDash([7, 5]); });
+      Object.entries(S.keys.keys).forEach(([iid, pts]) => { const t = T(S.keys.cid + '.' + iid); if (!t) return; const sg = segsFor(t.kind, pts); sg.forEach(([a, b]) => seg(a, b, '#ffb020')); ctx.setLineDash([]); const [a, b] = sg[sg.length - 1]; label({ x: a.x + (b.x - a.x) * 0.6, y: a.y + (b.y - a.y) * 0.6 }, `key ${fmtV(keyVal(t, pts))}`); ctx.setLineDash([7, 5]); });
       ctx.restore();
     }
-    const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); P.forEach(p => dot(p, c)); }
+    const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; if (PERPT.has(S.tool) && S.tool !== 'length') segsFor(S.tool, P, S.cursor && (S.tool === 'vangle' || P.length === 1) ? toImg(S.cursor) : null).forEach(([a, b]) => seg(a, b, c)); else { for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); } P.forEach(p => dot(p, c)); }
     $('#mempty', mv).hidden = !!S.img;
     $('#hint', mv).hidden = !S.img || !S.pending.length;
     $('#hint', mv).textContent = S.pending.length ? `Point ${S.pending.length + 1} of ${NEED[S.tool]} · Esc cancels` : '';
@@ -2095,7 +2396,7 @@ const M = (() => {
   function setTool(t) { S.tool = t; S.pending = []; $$('#tools button', mv).forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t && !S.target)); $('#calrow', mv).hidden = !(t === 'calib' && S.shapes.some(s => s.type === 'calib')); cv.style.cursor = t === 'pan' ? 'grab' : 'crosshair'; draw(); }
   function setTarget(key) {
     S.target = key; $('#target', mv).value = key; const t = T(key);
-    if (t) { setTool(t.kind); if (t.kind === 'length' && !S.mmPerPx) $('#scalep', mv).open = true; } else setTool(S.tool === 'calib' || S.tool === 'pan' ? 'angle' : S.tool);
+    if (t) { setTool(t.kind); if (LENK.has(t.kind) && !S.mmPerPx) $('#scalep', mv).open = true; } else setTool(S.tool === 'calib' || S.tool === 'pan' ? 'angle' : S.tool);
     refresh();
   }
   const pt = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
@@ -2110,13 +2411,13 @@ const M = (() => {
   const CONSTRUCTED = /axis|line from|line through|vertical|horizontal|reference|plumb|perpendicular|straight across|midpoint|center/i;
   function autoFor(n) {
     const t = T(S.target), g = t && GUIDES[t.key]; if (!g) return true;
-    return !CONSTRUCTED.test(S.tool === 'length' ? g[n] : g[n < 2 ? 0 : 1]);
+    return !CONSTRUCTED.test(PERPT.has(S.tool) ? g[n] || '' : g[n < 2 ? 0 : 1]);
   }
   function addPoint(ip) {
     const n0 = S.pending.length;
     S.pending.push(autoFor(n0) ? snap(ip) : ip);
     const n = S.pending.length;
-    if (n % 2 === 0 && S.tool !== 'length' && S.tool !== 'calib' && autoFor(n - 1)) { const [a, b] = fitLine(S.pending[n - 2], S.pending[n - 1]); S.pending[n - 2] = a; S.pending[n - 1] = b; }
+    if (n % 2 === 0 && (S.tool === 'angle' || S.tool === 'tilt') && autoFor(n - 1)) { const [a, b] = fitLine(S.pending[n - 2], S.pending[n - 1]); S.pending[n - 2] = a; S.pending[n - 1] = b; }
     if (n === NEED[S.tool]) {
       const t = T(S.target), sh = { type: S.tool, pts: S.pending };
       S.pending = [];
@@ -2224,10 +2525,12 @@ function caseHTML(c) {
       <div class="meta"><span class="chip">${esc(c.region)}</span>${(c.alsoIn || []).map(r => `<span class="chip">${esc(r)}</span>`).join('')}<span class="chip">${esc(c.modality)}</span><span class="chip">${esc(c.added)}</span></div>
       <p>${esc(c.findings)}</p>
       ${c.calc && CALCS[c.calc.id] ? `<p><button type="button" class="btn primary" data-loadcalc="${c.id}">${esc(c.calc.label)}</button></p>` : ''}
+      ${c.link ? `<p><a class="btn primary" href="${esc(c.link.href)}">${esc(c.link.label)}</a></p>` : ''}
       <h5>Teaching points</h5><ul class="tp">${c.teaching.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
       <h5>References</h5><ol class="cr">${c.refs.map(k => `<li><a href="${esc(refUrl(k))}" target="_blank" rel="noopener">${esc(refFull(k))}</a></li>`).join('')}</ol>
     </div>
-    <div class="gallery">${c.images.map((im, n) => `<figure data-case="${c.id}" data-n="${n}" tabindex="0" role="button" aria-label="Enlarge ${esc(im.caption)}"><img src="${esc(im.src)}" alt="${esc(im.caption)}" loading="lazy"><figcaption>${esc(im.caption)}</figcaption></figure>`).join('')}</div>
+    <div class="side"><div class="gallery">${c.images.map((im, n) => `<figure data-case="${c.id}" data-n="${n}" tabindex="0" role="button" aria-label="Enlarge ${esc(im.caption)}"><img src="${esc(im.src)}" alt="${esc(im.caption)}" loading="lazy"><figcaption>${esc(im.caption)}</figcaption></figure>`).join('')}</div>
+      ${c.surgeon ? `<aside class="surg" aria-label="What the surgeon cares about"><h5>What the surgeon cares about</h5><ul>${c.surgeon.points.map(t => `<li>${esc(t)}</li>`).join('')}</ul><p class="src">Sources: ${c.surgeon.sources.map(x => `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label)}</a>`).join(' · ')}</p></aside>` : ''}</div>
   </article>`;
 }
 function renderCases() {

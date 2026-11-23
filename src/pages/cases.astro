@@ -53,6 +53,12 @@ const shapeSvg = (sh) => sh.t === 'ellipse'
     .case h4 { font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:14px 0 6px; font-family:inherit; }
     .case ul { margin:0; padding-left:20px; display:flex; flex-direction:column; gap:6px; max-width:70ch; }
     .case ol { margin:0; padding-left:22px; font-size:.85rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; }
+    .side { display:flex; flex-direction:column; gap:14px; min-width:0; }
+    .surg { border-left:4px solid var(--accent, #0f766e); background:var(--accent-soft); border-radius:8px; padding:12px 14px; }
+    .surg h4 { margin:0 0 6px; font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent, #0f766e); }
+    .surg ul { margin:0; padding-left:1.1em; font-size:.92rem; }
+    .surg li { margin:.35em 0; }
+    .surg .src { margin:.6em 0 0; font-size:.8rem; opacity:.85; }
     .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; align-content:start; }
     .gallery a { display:flex; flex-direction:column; background:#0b0f14; border-radius:8px; overflow:hidden; text-decoration:none; }
     .gallery img { width:100%; height:180px; object-fit:contain; display:block; }
@@ -110,10 +116,19 @@ const shapeSvg = (sh) => sh.t === 'ellipse'
               <h4>References</h4>
               <ol>{c.refs.filter((k) => refs[k]).map((k) => <li><a href={refs[k].url} target="_blank" rel="noopener">{refs[k].citation}</a></li>)}</ol>
             </div>
-            <div class="gallery">
-              {c.images.map((im) => (
-                <a href={img(im.src)} target="_blank" rel="noopener"><img src={img(im.src)} alt={im.caption} loading="lazy" /><span>{im.caption}</span></a>
-              ))}
+            <div class="side">
+              <div class="gallery">
+                {c.images.map((im) => (
+                  <a href={img(im.src)} target="_blank" rel="noopener"><img src={img(im.src)} alt={im.caption} loading="lazy" /><span>{im.caption}</span></a>
+                ))}
+              </div>
+              {c.surgeon && (
+                <aside class="surg" aria-label="What the surgeon cares about">
+                  <h4>What the surgeon cares about</h4>
+                  <ul>{c.surgeon.points.map((t) => <li>{t}</li>)}</ul>
+                  <p class="src">Sources: {c.surgeon.sources.map((x, i) => <>{i > 0 && ' · '}<a href={x.url} target="_blank" rel="noopener">{x.label}</a></>)}</p>
+                </aside>
+              )}
             </div>
           </article>
         ))}

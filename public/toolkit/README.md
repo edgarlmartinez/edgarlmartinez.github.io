@@ -1,4 +1,4 @@
-# MSK Measurement Toolkit (v1.4)
+# MSK Measurement Toolkit (v1.5)
 
 Offline, single-file toolkit (now at /toolkit/) of literature-based musculoskeletal measurement calculators with how-to diagrams and a measure-on-image tool. Research and education use only; not a medical device.
 
@@ -12,3 +12,5 @@ All cutoffs, labels, diagrams and citations live in the **TOOLKIT DATA** script 
 No patient data is included.
 
 **Synthetic practice samples (v1.4):** every calculator with image measurements has a drawn, radiograph-style practice image (`SMP` block in the data section) with a known answer and a preset pixel spacing. After you measure, the result panel compares your value with the answer key, and "Show answer lines" draws the correct lines. These images are generated shapes, not patient data.
+
+**Knee module (v1.5):** patellar height (Insall-Salvati with radiograph and MRI cutoffs, modified Insall-Salvati, Caton-Deschamps, Blackburne-Peel, patellotrochlear index), trochlear depth, sulcus angle, lateral trochlear inclination, and TT-TG distance with optional TT-PCL. Three new measure types support these: a three-point vertex angle (sulcus angle), an offset along a reference line (TT-TG, TT-PCL), and a five-point depth from a reference line (trochlear depth). Each has guided landmark steps and a synthetic practice image with an answer key.
