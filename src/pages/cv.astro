@@ -27,9 +27,9 @@ const dp = (() => {
 ---
 <Base title={`Curriculum Vitae · ${site.display_name}`} description={`Harvard Medical School format curriculum vitae of ${site.display_name}.`}>
   <div class="cv-toolbar no-print">
-    <p>Harvard Medical School CV format. Prepared {dp}.</p>
+    <p>Harvard Medical School CV format. Prepared {dp}. The PDF is regenerated automatically every time the CV is updated.</p>
     <div class="btns">
-      <a class="btn btn-outline" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/cv.pdf`} download>Download PDF</a>
+      <a class="btn btn-outline" style="background:var(--solid);border-color:var(--solid);color:#fff;font-weight:600" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/cv.pdf`} download="Martinez-Salazar_HMS_CV.pdf">⬇ Download CV (PDF)</a>
       <button class="btn btn-outline" onclick="window.print()">Print</button>
     </div>
   </div>
