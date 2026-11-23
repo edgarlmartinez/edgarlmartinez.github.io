@@ -1,111 +1,127 @@
 ---
 import Base from '../layouts/Base.astro';
-import PubItem from '../components/PubItem.astro';
-import { cv, site, newest, isCurrent, year, allPublications, has } from '../lib/cv.js';
+import { cv, site, newest, isCurrent, lectures, cases } from '../lib/cv.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentRoles = newest(cv.faculty_academic_appointments).filter(isCurrent).map((a) => a.title);
-const pubs = allPublications();
-const featured = [...pubs].filter((p) => p.featured).sort((a, b) => b.year - a.year).slice(0, 6);
-const t = cv.teaching || {};
-const trainees = (t.mentored_trainees || []).length;
-const firstYear = Math.min(...pubs.map((p) => p.year));
-const training = [...newest(cv.postdoctoral_training), ...newest(cv.education)];
-const service = [
-  ...Object.values(cv.committee_service || {}).flat(),
-  ...Object.values(cv.major_administrative_leadership || {}).flat(),
-].filter(isCurrent);
-const links = Object.entries(site.links || {}).filter(([, v]) => v);
-const linkLabels = { email: 'Email', bidmc_profile: 'BIDMC profile', harvard_catalyst: 'Harvard Catalyst', pubmed: 'PubMed', google_scholar: 'Google Scholar', orcid: 'ORCID', linkedin: 'LinkedIn', x: 'X' };
+const links = Object.entries(site.links || {}).filter(([k, v]) => v && k !== 'email');
+const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst', pubmed: 'PubMed', google_scholar: 'Google Scholar', orcid: 'ORCID', linkedin: 'LinkedIn', x: 'X' };
+
+// Toolkit sections (kept in sync by hand with /toolkit/ tabs).
+const toolkitSections = ['Spine and scoliosis', 'Craniocervical junction', 'Chemical shift', 'Shoulder', 'Pelvis and hip', 'Knee', 'Wrist', 'Foot and ankle', 'Pediatric foot'];
+
+// Cases: newest first, with the first image as a thumbnail.
+const caseList = [...(cases.cases || [])].sort((a, b) => String(b.added || '').localeCompare(String(a.added || '')));
+const caseRegions = [...new Set(caseList.map((c) => c.region))];
+
+const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: l.date })));
 ---
 <Base>
-  <section class="hero">
-    <div class="wrap hero-inner">
-      {site.photo && <img class="headshot" src={`${base}/${site.photo}`} alt={`Portrait of ${site.display_name}`} width="260" height="260" />}
-      <div>
+  <div class="home wrap">
+    <aside class="side">
+      {site.photo && <img class="side-photo" src={`${base}/${site.photo}`} alt={`Portrait of ${site.display_name}`} width="220" height="220" />}
       <h1>{site.display_name}</h1>
-      <p class="headline">{site.headline}</p>
-      <p class="affil">{site.affiliation}</p>
-      <ul class="roles">{currentRoles.map((r) => <li>{r}</li>)}</ul>
-      <div class="btns">
+      <p class="side-headline">{site.headline}</p>
+      <ul class="side-roles">{currentRoles.map((r) => <li>{r}</li>)}</ul>
+      <div class="side-btns">
         <a class="btn btn-primary" href={`${base}/cv/`}>View CV</a>
-        <a class="btn btn-ghost" href={`${base}/cv.pdf`} download="Martinez-Salazar_HMS_CV.pdf">Download CV (PDF)</a>
-        <a class="btn btn-ghost" href={`${base}/publications/`}>Publications</a>
-        <a class="btn btn-ghost" href="#contact">Contact</a>
+        <a class="btn btn-outline" href={`${base}/cv.pdf`} download="Martinez-Salazar_HMS_CV.pdf">Download CV (PDF)</a>
+        <a class="btn btn-outline" href={`${base}/publications/`}>Publications</a>
       </div>
-      </div>
-    </div>
-  </section>
+      {site.links?.email && <p class="side-contact"><a href={`mailto:${site.links.email}`}>{site.links.email}</a></p>}
+      <p class="side-links">{links.map(([k, v], i) => <>{i > 0 && ' · '}<a href={v} target="_blank" rel="noopener">{linkLabels[k] || k}</a></>)}</p>
+    </aside>
 
-  <section class="section wrap grid-2">
-    <div>
-      <h2>About</h2>
-      <p>{site.bio}</p>
-      <h3>Clinical and research focus</h3>
-      <ul class="tags">{site.interests.map((i) => <li>{i}</li>)}</ul>
-    </div>
-    <div>
-      <h2>At a glance</h2>
-      <div class="stats">
-        <div class="stat"><b>{pubs.length}</b><span>peer-reviewed publications since {firstYear}</span></div>
-        <div class="stat"><b>{(cv.abstracts || []).length}</b><span>abstracts and exhibits at national and international meetings</span></div>
-        <div class="stat"><b>{trainees}</b><span>mentored trainees</span></div>
-      </div>
-    </div>
-  </section>
-
-  {has(service) && (
-    <section class="section wrap">
-      <h2>Leadership and service</h2>
-      <div class="cards">
-        {service.map((s) => (
-          <div class="card">
-            <h3>{s.title}</h3>
-            <div class="meta">{[s.role, s.institution].filter(Boolean).join(' · ')}</div>
-            <div class="meta">Since {year(s.start)}</div>
+    <div class="main">
+      <section class="feature">
+        <div class="feature-head">
+          <div>
+            <p class="eyebrow">Measurement toolkit</p>
+            <h2>MSK Measurement Toolkit</h2>
           </div>
-        ))}
-      </div>
-    </section>
-  )}
+          <a class="btn btn-primary" href={`${base}/toolkit/`}>Open the toolkit →</a>
+        </div>
+        <p>Literature-based normal values, grading and interpretation for common musculoskeletal measurements. Measure directly on your own image with guided landmarks, then check yourself against practice cases with answer keys. Every threshold links to its source.</p>
+        <ul class="tags">{toolkitSections.map((s) => <li>{s}</li>)}</ul>
+        <p class="meta" style="margin-top:12px">Works offline in the browser. Images you load never leave your computer. For research and education only.</p>
+      </section>
 
-  <section class="section wrap">
-    <h2>Selected publications</h2>
-    <ol class="pubs" style="list-style:none;padding:0">{featured.map((p) => <PubItem p={p} />)}</ol>
-    <p><a href={`${base}/publications/`}>All {pubs.length} publications →</a></p>
-  </section>
+      <section class="feature">
+        <div class="feature-head">
+          <div>
+            <p class="eyebrow">Educational cases</p>
+            <h2>Teaching case library</h2>
+          </div>
+          <a class="btn btn-primary" href={`${base}/cases/`}>Browse all {caseList.length} cases →</a>
+        </div>
+        <p>De-identified musculoskeletal cases organized by body region, each with key images, teaching points and references. Regions so far: {caseRegions.join(', ')}.</p>
+        <div class="case-grid">
+          {caseList.slice(0, 8).map((c) => (
+            <a class="case-tile" href={`${base}/cases/#${c.id}`}>
+              {c.images?.[0] && <img src={`${base}/cases/${c.images[0].src}`} alt={c.images[0].caption || c.title} loading="lazy" />}
+              <span class="case-region">{c.region}{c.modality && ` · ${c.modality}`}</span>
+              <span class="case-title">{c.title}</span>
+            </a>
+          ))}
+        </div>
+      </section>
 
-  <section class="section wrap grid-2">
-    <div>
-      <h2>Training</h2>
-      <ul class="timeline">
-        {training.map((e) => (
-          <li>
-            <div class="when">{year(e.start)} - {year(e.end)}</div>
-            <div class="what">{e.title || e.degree}{e.field && `, ${e.field}`}</div>
-            <div class="where">{e.institution}</div>
-          </li>
-        ))}
-      </ul>
+      <section class="feature">
+        <div class="feature-head">
+          <div>
+            <p class="eyebrow">Lectures</p>
+            <h2>Lecture library</h2>
+          </div>
+          <a class="btn btn-primary" href={`${base}/lectures/`}>All lectures →</a>
+        </div>
+        <p>For residents and fellows. Slides are shared only with invited trainees.</p>
+        <ul class="lecture-list">
+          {lectureList.map((l) => (
+            <li>
+              <div>
+                <span class="lecture-title">{l.title}</span>
+                <span class="meta">{l.date} · {l.audience}</span>
+              </div>
+              {(l.link || lectures.folder_link) && <a class="btn btn-outline" href={l.link || lectures.folder_link} target="_blank" rel="noopener">Slides ↗</a>}
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
-    <div>
-      <h2>Teaching and mentorship</h2>
-      <p>{site.teaching_blurb}</p>
-      <ul class="timeline">
-        {newest(t.mentored_trainees).slice(0, 4).map((m) => (
-          <li><div class="when">{year(m.start)}</div><div class="what">{String(m.trainee).replace(/\s*\(role:.*\)$/, '')}</div><div class="where">{m.outcome}</div></li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="section wrap" id="contact">
-    <h2>Contact</h2>
-    <p>{cv.office_address.join(', ')}</p>
-    <div class="btns">
-      {links.map(([k, v]) => (
-        <a class="btn btn-outline" href={k === 'email' ? `mailto:${v}` : v} rel="noopener">{linkLabels[k] || k}</a>
-      ))}
-    </div>
-  </section>
+  </div>
 </Base>
+
+<style>
+  .home { display: grid; grid-template-columns: minmax(240px, 1fr) 3fr; gap: 40px; align-items: start; padding-top: 40px; max-width: 1280px; }
+  .side { position: sticky; top: 84px; text-align: left; }
+  .side-photo { width: 100%; max-width: 220px; height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 3px solid #2a3440; display: block; margin-bottom: 18px; }
+  .side h1 { font-size: 1.6rem; margin: 0 0 6px; color: #fff; }
+  .side-headline { color: var(--accent); margin: 0 0 14px; font-weight: 500; }
+  .side-roles { list-style: none; padding: 0; margin: 0 0 20px; font-size: .88rem; color: var(--muted); }
+  .side-roles li { padding: 6px 0; border-top: 1px solid var(--line); }
+  .side-btns { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .side-btns .btn { text-align: center; }
+  .side-contact { font-size: .88rem; margin: 0 0 6px; word-break: break-all; }
+  .side-links { font-size: .85rem; color: var(--muted); line-height: 1.8; margin: 0; }
+  .main { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+  .feature { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 26px; }
+  .feature-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+  .feature h2 { margin: 0; font-size: 1.5rem; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; color: var(--accent); margin: 0 0 4px; font-weight: 600; }
+  .feature > p { color: #c9d3de; margin: 8px 0 14px; max-width: 760px; }
+  .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .case-tile { display: flex; flex-direction: column; background: #05080b; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; text-decoration: none; color: var(--ink); }
+  .case-tile:hover { border-color: var(--accent); color: #fff; }
+  .case-tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #000; display: block; }
+  .case-region { font-size: .72rem; color: var(--accent); padding: 8px 10px 0; text-transform: uppercase; letter-spacing: .06em; }
+  .case-title { font-size: .88rem; padding: 2px 10px 10px; line-height: 1.35; }
+  .lecture-list { list-style: none; padding: 0; margin: 0; }
+  .lecture-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .lecture-title { display: block; font-weight: 500; }
+  @media (max-width: 900px) {
+    .home { grid-template-columns: 1fr; gap: 28px; }
+    .side { position: static; text-align: center; }
+    .side-photo { margin: 0 auto 16px; max-width: 160px; }
+    .side-btns { max-width: 320px; margin-left: auto; margin-right: auto; }
+  }
+</style>
