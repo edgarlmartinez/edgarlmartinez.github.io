@@ -1,0 +1,19 @@
+# CT: Hounsfield units kept as-is; fixed bin width (IBSI recommendation for calibrated intensities)
+imageType:
+  Original: {}
+featureClass:
+  shape:
+  firstorder:
+  glcm:
+  glrlm:
+  glszm:
+  gldm:
+  ngtdm:
+setting:
+  interpolator: sitkBSpline
+  resampledPixelSpacing: [1, 1, 3]
+  padDistance: 10
+  resegmentRange: [-200, 400]   # drop air/bone outliers, keep fat (-100) for lipomatous tumors
+  binWidth: 25
+  label: 1
+  geometryTolerance: 0.001

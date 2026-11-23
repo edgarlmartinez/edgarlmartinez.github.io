@@ -31,3 +31,19 @@ projects:
       radiographs.
     year: 2026
     tags: [Spine, Radiographs, Fractures, Morphometry]
+  - title: MSK tumor segmentation and radiomics on CT and MRI (v0.1)
+    demo: ai/msk-tumor-radiomics/
+    repo: https://github.com/edgarlmartinez/edgarlmartinez.github.io/tree/main/public/ai/msk-tumor-radiomics
+    dataset: TCIA Soft-tissue-Sarcoma (51 patients, T1, T2FS/STIR, CT)
+    dataset_url: https://www.cancerimagingarchive.net/collection/soft-tissue-sarcoma/
+    license: CC BY 3.0
+    model: nnU-Net v2 3D (MRI and CT models), PyRadiomics with IBSI settings
+    status: >-
+      Early research baseline. Automatically segments extremity soft-tissue
+      sarcomas and reports volume, diameters and texture features, flagging
+      features that stay stable when the contour changes. On 11 held-out
+      patients the median Dice was 0.74 on T1 and 0.75 on T2FS/STIR, and 0.48
+      on the CT of PET/CT. Trained on CPU with a shortened schedule; CT is not
+      yet usable.
+    year: 2026
+    tags: [MSK, Oncology, MRI, CT, Radiomics, Segmentation]

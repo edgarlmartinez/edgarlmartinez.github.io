@@ -1,0 +1,13 @@
+{
+    "channel_names": {
+        "0": "MRI"
+    },
+    "labels": {
+        "background": 0,
+        "tumor": 1
+    },
+    "numTraining": 80,
+    "file_ending": ".nii.gz",
+    "license": "CC BY 3.0 (TCIA Soft-tissue-Sarcoma, Vallieres et al. 2015)",
+    "description": "T1 and T2FS/STIR pooled; contrast-agnostic MRI tumor model"
+}
