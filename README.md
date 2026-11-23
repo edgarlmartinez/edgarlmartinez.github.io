@@ -14,6 +14,7 @@ Pages:
 - `/` home page (bio, current roles, leadership, selected publications, training, mentorship, contact)
 - `/publications/` searchable list of all publications and abstracts
 - `/cv/` the CV in HMS format, print-ready, with a downloadable `cv.pdf`
+- `/book/` *Core MSK Radiology*, a living book for residents: one Markdown file per chapter in `src/content/book/chapters/`, with real-life examples added as small files in `src/content/book/examples/` (how-to: `src/content/book/README.md`)
 
 ## Updating the CV
 

@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/book.css';
+import { getCollection } from 'astro:content';
+import { site } from '../../lib/cv.js';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const chapters = (await getCollection('chapters')).sort((a, b) => a.data.number - b.data.number);
+const examples = await getCollection('examples');
+const count = (n) => examples.filter((e) => e.data.chapter === n).length;
+const label = { draft: 'Draft', outline: 'Outline', reviewed: 'Reviewed' };
+---
+<Base title={`Core MSK Radiology · ${site.display_name}`} description="Core MSK Radiology: what every radiologist should know and never forget. A living online book for radiology residents.">
+  <section class="wrap book-hero">
+    <p class="kicker">A living book for residents</p>
+    <h1>Core MSK Radiology</h1>
+    <p class="sub">What every radiologist should know, and never forget</p>
+    <p class="by">{site.display_name}</p>
+    <p class="draft-note"><b>Work in progress.</b> Chapters marked <em>Draft</em> are awaiting the author's review, and chapters marked <em>Outline</em> are planned. The book grows with real cases from the reading room. For education only, not for clinical decision-making.</p>
+    <p style="max-width:760px">Each chapter is built around the decisions you make at the workstation every day. The figures are schematic drawings, and the reading-room examples are de-identified cases, linked to the <a href={`${base}/cases/`}>educational case library</a> and the <a href={`${base}/toolkit/`}>measurement toolkit</a> where they apply.</p>
+    <ol class="toc-list">
+      {chapters.map((c) => (
+        <li>
+          <a href={`${base}/book/${c.id}/`}>
+            <span class="num">{c.data.number}</span>
+            <span><span class="t">{c.data.title}</span><span class="s">{c.data.summary}{count(c.data.number) > 0 && ` · ${count(c.data.number)} reading-room example${count(c.data.number) > 1 ? 's' : ''}`}</span></span>
+            <span class={`badge ${c.data.status}`}>{label[c.data.status]}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</Base>

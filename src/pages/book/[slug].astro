@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/book.css';
+import { getCollection, render } from 'astro:content';
+import { site } from '../../lib/cv.js';
+
+export async function getStaticPaths() {
+  const chapters = (await getCollection('chapters')).sort((a, b) => a.data.number - b.data.number);
+  return chapters.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, prev: chapters[i - 1], next: chapters[i + 1] } }));
+}
+const { entry, prev, next } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const examples = (await getCollection('examples'))
+  .filter((e) => e.data.chapter === entry.data.number)
+  .sort((a, b) => String(a.data.added).localeCompare(String(b.data.added)));
+const rendered = await Promise.all(examples.map(async (e) => ({ e, Body: (await render(e)).Content })));
+// Image paths in examples are site paths such as /book/examples/x.png or /cases/images/x.png.
+const src = (p) => (/^https?:/.test(p) ? p : `${base}${p.startsWith('/') ? '' : '/'}${p}`);
+const label = { draft: 'Draft for author review', outline: 'Outline: chapter planned', reviewed: 'Reviewed' };
+---
+<Base title={`${entry.data.number}. ${entry.data.title} · Core MSK Radiology`} description={entry.data.summary}>
+  <div class="wrap chapter-layout">
+    <aside class="chapter-side no-print">
+      <a class="back" href={`${base}/book/`}>← Core MSK Radiology</a>
+      <ol>
+        {toc.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        {rendered.length > 0 && <li class="d2"><a href="#reading-room">Reading-room examples</a></li>}
+      </ol>
+    </aside>
+    <article class="prose">
+      <p class="ch-kicker">Chapter {entry.data.number} · <span class={`badge ${entry.data.status}`}>{label[entry.data.status]}</span></p>
+      <h1>{entry.data.title}</h1>
+      {entry.data.subtitle && <p class="ch-sub">{entry.data.subtitle}</p>}
+      {entry.data.status !== 'reviewed' && <p class="draft-note">This chapter is a {entry.data.status === 'draft' ? 'draft awaiting review by the author' : 'planned outline'}. For education only, not for clinical decision-making.{entry.data.updated && ` Last updated ${entry.data.updated}.`}</p>}
+      <Content />
+
+      {rendered.length > 0 && (
+        <section id="reading-room">
+          <h2 id="reading-room-h">Reading-room examples</h2>
+          <p>Real, de-identified cases added over time. Each one also appears next to the topic it illustrates.</p>
+          <div class="ex-pool">
+            {rendered.map(({ e, Body }) => (
+              <div class="ex-card" id={`ex-${e.id.replace(/[^a-z0-9-]/gi, '-')}`} data-topic={e.data.topic}>
+                <p class="ex-label">From the reading room</p>
+                <h4>{e.data.title}</h4>
+                <p class="ex-meta">{[e.data.modality, `added ${e.data.added}`].filter(Boolean).join(' · ')}{e.data.case && <> · <a href={`${base}/cases/#${e.data.case}`}>full case</a></>}</p>
+                {e.data.images.length > 0 && (
+                  <div class="ex-imgs">
+                    {e.data.images.map((im) => <a href={src(im.src)} target="_blank" rel="noopener"><img src={src(im.src)} alt={im.caption} loading="lazy" /><span>{im.caption}</span></a>)}
+                  </div>
+                )}
+                <Body />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <nav class="ch-nav no-print" aria-label="Chapters">
+        {prev ? <a href={`${base}/book/${prev.id}/`}><small>← Previous</small>{prev.data.number}. {prev.data.title}</a> : <span />}
+        {next && <a href={`${base}/book/${next.id}/`} style="text-align:right"><small>Next →</small>{next.data.number}. {next.data.title}</a>}
+      </nav>
+    </article>
+  </div>
+  <script is:inline>
+  // Place each reading-room example next to its topic (a <div class="ex-slot" data-topic="..."> in the chapter).
+  // Without JavaScript the examples simply stay in the "Reading-room examples" section.
+  (() => {
+    const cards = [...document.querySelectorAll('.ex-pool .ex-card')];
+    cards.forEach((card) => {
+      const slot = document.querySelector(`.ex-slot[data-topic="${card.dataset.topic}"]`);
+      if (slot) slot.appendChild(card);
+    });
+    const pool = document.querySelector('.ex-pool');
+    if (pool && !pool.children.length) {
+      const sec = document.getElementById('reading-room');
+      const list = document.createElement('ul');
+      cards.forEach((c) => { const li = document.createElement('li'); li.innerHTML = `<a href="#${c.id}">${c.querySelector('h4').textContent}</a>`; list.appendChild(li); });
+      pool.replaceWith(list);
+      sec.querySelector('p').textContent = 'Real, de-identified cases added over time, shown next to the topic each one illustrates:';
+    }
+  })();
+  </script>
+</Base>

@@ -1,0 +1,68 @@
+/* Core MSK Radiology book */
+.book-hero { padding: 48px 0 8px; }
+.book-hero .kicker { color: var(--accent); font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 8px; }
+.book-hero h1 { font-size: clamp(2rem, 5vw, 2.8rem); margin: 0 0 6px; }
+.book-hero .sub { font-family: var(--serif); font-size: 1.25rem; color: #cfe6ec; margin: 0 0 10px; }
+.book-hero .by { color: var(--muted); margin: 0; }
+.draft-note { border: 1px solid #5a4a1a; background: #1d1808; color: #f1dfa8; border-radius: 10px; padding: 10px 14px; font-size: .92rem; margin: 18px 0; max-width: 760px; }
+.toc-list { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; }
+.toc-list a { display: grid; grid-template-columns: 52px minmax(0,1fr) auto; gap: 14px; align-items: start; border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 14px 18px; text-decoration: none; color: var(--ink); }
+.toc-list a:hover { background: var(--bg-soft); border-color: #33404d; }
+.toc-list .num { font-family: var(--serif); font-size: 1.6rem; color: var(--accent); line-height: 1; }
+.toc-list .t { font-family: var(--serif); font-size: 1.12rem; color: var(--navy); font-weight: 600; display: block; }
+.toc-list .s { color: var(--muted); font-size: .92rem; display: block; margin-top: 2px; }
+.badge { font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.badge.draft { color: #f1dfa8; border-color: #5a4a1a; background: #1d1808; }
+.badge.reviewed { color: #9fe3ee; border-color: var(--accent); background: var(--accent-soft); }
+@media (max-width: 560px) { .toc-list a { grid-template-columns: 36px minmax(0,1fr); } .toc-list .badge { grid-column: 2; justify-self: start; } }
+
+.chapter-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 40px; align-items: start; padding-top: 32px; }
+.chapter-side { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; font-size: .88rem; }
+.chapter-side .back { display: inline-block; margin-bottom: 10px; text-decoration: none; }
+.chapter-side ol { list-style: none; padding: 0; margin: 0; border-left: 1px solid var(--line); }
+.chapter-side li a { display: block; padding: 4px 0 4px 12px; color: var(--muted); text-decoration: none; line-height: 1.35; }
+.chapter-side li.d3 a { padding-left: 24px; font-size: .84rem; }
+.chapter-side li a:hover { color: var(--navy); }
+@media (max-width: 900px) { .chapter-layout { grid-template-columns: 1fr; gap: 8px; } .chapter-side { position: static; max-height: none; } .chapter-side ol { display: none; } }
+
+.prose { max-width: 74ch; font-size: 1.02rem; min-width: 0; }
+.prose h1 { font-size: clamp(1.8rem, 4.5vw, 2.4rem); margin: 0 0 4px; }
+.prose .ch-kicker { color: var(--accent); font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
+.prose .ch-sub { font-family: var(--serif); color: #cfe6ec; font-size: 1.2rem; margin: 0 0 14px; }
+.prose h2 { font-size: 1.6rem; margin: 2.4em 0 .5em; padding-top: .4em; border-top: 1px solid var(--line); scroll-margin-top: 80px; }
+.prose h3 { font-size: 1.22rem; margin: 1.8em 0 .4em; scroll-margin-top: 80px; }
+.prose h4 { font-family: var(--sans); font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 1.2em 0 .3em; }
+.prose p, .prose li { color: var(--ink); }
+.prose li { margin: .3em 0; }
+.prose strong { color: #fff; }
+.prose blockquote { margin: 1.2em 0; padding: 10px 16px; border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0; }
+.prose blockquote p { margin: .4em 0; }
+.prose table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: .92rem; display: block; overflow-x: auto; }
+.prose th, .prose td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+.prose th { background: var(--bg-soft); color: var(--navy); font-weight: 600; }
+.prose code { background: var(--bg-soft); padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+.prose figure { margin: 1.6em 0; }
+.prose figure img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--line); background: #0b0f14; }
+.prose figcaption { color: var(--muted); font-size: .88rem; margin-top: 6px; }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+
+/* Lesion cards inside chapters: <div class="lesion" markdown> ... */
+.prose .lesion { border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 4px 20px 12px; margin: 1.4em 0; }
+.prose .lesion h3 { margin-top: .9em; }
+.prose .never { border: 1px solid #1f5f6b; background: #071a1e; border-radius: var(--radius); padding: 6px 20px; margin: 1.6em 0; }
+.prose .never h3 { color: var(--accent); }
+
+/* Reading-room examples */
+.ex-card { border: 1px dashed #2f5560; background: #081417; border-radius: var(--radius); padding: 12px 16px; margin: 1em 0; }
+.ex-card .ex-label { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 2px; }
+.ex-card h4 { font-family: var(--serif); text-transform: none; letter-spacing: 0; font-size: 1.05rem; color: var(--navy); margin: 0 0 6px; }
+.ex-card .ex-meta { color: var(--muted); font-size: .82rem; margin: 0 0 8px; }
+.ex-card .ex-imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 8px 0; }
+.ex-card .ex-imgs a { display: flex; flex-direction: column; background: #0b0f14; border-radius: 8px; overflow: hidden; text-decoration: none; }
+.ex-card .ex-imgs img { width: 100%; height: 170px; object-fit: contain; display: block; border: 0; border-radius: 0; }
+.ex-card .ex-imgs span { color: #d6dde4; font-size: .76rem; padding: 4px 8px; background: #121920; }
+.ex-slot:empty { display: none; }
+.ch-nav { display: flex; justify-content: space-between; gap: 12px; margin: 48px 0 0; flex-wrap: wrap; }
+.ch-nav a { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; text-decoration: none; max-width: 48%; }
+.ch-nav small { display: block; color: var(--muted); }
+@media (max-width: 560px) { .ch-nav a { max-width: 100%; } }
