@@ -189,6 +189,67 @@ input[type=range]{accent-color:var(--accent);width:100%}
 .refs-list li{font-size:13px}
 .disclaimer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:28px;max-width:90ch}
 
+/* start view */
+kbd{font-family:var(--f-mono);font-size:11.5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--surface)}
+.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;margin-bottom:28px;align-items:stretch}
+.drop{border:2px dashed var(--accent);border-radius:14px;background:var(--accent-soft);padding:28px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;min-height:250px;cursor:pointer;transition:background .15s}
+.drop:hover,.drop.over{background:var(--surface-2);border-style:solid}
+.drop>b{font-family:var(--f-head);font-size:22px;line-height:1.2}
+.drop>span{color:var(--muted);max-width:54ch}
+.drop>svg{width:46px;height:46px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linejoin:round}
+.drop small{color:var(--muted)}
+.drop .rowc{justify-content:center}
+.drop .pmsg:empty{display:none}
+.drop .pmsg{color:var(--warn);font-weight:500}
+.drop.dark{background:rgba(79,211,190,.07);border-color:rgba(79,211,190,.6);min-height:0;height:100%;color:#dbe4ec}
+.drop.dark>span,.drop.dark small{color:#a9b7c4}
+.drop.dark kbd{background:#141c25;border-color:#33414f;color:#dbe4ec}
+.drop.dark .btn:not(.primary){background:#141c25;border-color:#33414f;color:#e6edf2}
+.drop.dark>svg{stroke:#4fd3be}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.steps li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px 12px 52px;position:relative;counter-increment:s;flex:1}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:600;display:grid;place-items:center;font-size:13px}
+.steps li b{display:block;font-family:var(--f-head);font-size:15px}
+.steps li span{color:var(--muted);font-size:13px}
+.ctl.search{flex:1 1 260px;max-width:420px;margin-left:auto}
+.ctl.search input{font-family:var(--f-body);padding:8px 10px}
+.tgroup{margin-bottom:22px}
+.tgroup h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:10px}
+.tgroup h3 span{color:var(--muted);letter-spacing:0;text-transform:none;font-weight:400;font-family:var(--f-body);margin-left:6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;align-items:center}
+.tile:hover{border-color:var(--accent)}
+.tile h4{margin:0 0 8px;font-size:14.5px;font-family:var(--f-head);font-weight:600;line-height:1.25}
+.tile .rowc .btn{padding:4px 9px;font-size:12px}
+
+/* guided measuring */
+.mstep{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap}
+.mstep .t{flex:1 1 300px;font-size:15px}
+.mstep .t b{color:var(--accent)}
+.stage .overlay{position:absolute;inset:14px;display:flex}
+.stage .overlay .drop{flex:1}
+.stage.over{outline:3px dashed var(--accent);outline-offset:-3px}
+.panel h3{display:flex;align-items:center;gap:8px}
+.panel h3 .n{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:12px;font-family:var(--f-body)}
+details.panel>summary{cursor:pointer;font-weight:600;font-family:var(--f-head);font-size:14px;display:flex;gap:8px;align-items:center}
+details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weight:400}
+.chk{font-size:13px}.chk input{accent-color:var(--accent);width:16px;height:16px}
+.rtitle{margin:0;font-family:var(--f-head);font-weight:600;font-size:15px}
+.muted{color:var(--muted);font-size:12.5px;margin:0}
+.fl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+.fl li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 10px;padding:4px 6px;border-radius:6px}
+.fl li.cur{background:var(--accent-soft)}
+.fl li em{font-style:normal;color:var(--muted)}
+.fl li b{font-family:var(--f-mono);font-weight:500}
+.fl .warn{color:var(--warn);font-weight:500}
+.lnk{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-align:left;font-weight:500;text-decoration:underline;text-decoration-color:var(--accent-soft);text-underline-offset:2px}
+.flagline{font-size:12.5px;border-radius:6px;padding:6px 10px;margin:0}
+#mres{display:flex;flex-direction:column;gap:8px}
+#mres .res .rv{font-size:18px}
+#mres .res{grid-template-columns:minmax(0,1fr) auto}
+.example.auto{margin-top:14px}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.stage{height:min(62vh,560px)}}
+@media (max-width:520px){.drop>b{font-size:19px}.drop{padding:20px 14px}.stage .overlay{inset:8px}.tile{grid-template-columns:72px minmax(0,1fr)}}
 @media (max-width:860px){.measure{grid-template-columns:1fr}.case{grid-template-columns:1fr}}
 @media (max-width:520px){.how{grid-template-columns:1fr}.how svg{max-width:240px}.top h1{font-size:19px}.ver{margin-left:0}}
 @media (prefers-reduced-motion:reduce){.card.flash{animation:none}}
@@ -228,7 +289,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
      REGIONS), put its images in the cases/ folder next to this file.
      ===================================================================== -->
 <script>
-const TOOLKIT_META = { version: '1.1', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
+const TOOLKIT_META = { version: '1.2', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
 
 const has = x => x !== null && x !== undefined && !(typeof x === 'number' && isNaN(x));
 const sum = (...a) => a.reduce((s, x) => s + (x || 0), 0);
@@ -338,7 +399,7 @@ const MODULES = [
       <text x="8" y="134" class="s">PI = PT + SS</text>`,
     inputs: [
       { id: 'll', label: 'Lumbar lordosis (L1–S1)', unit: '°', value: 38, measure: 'angle' },
-      { id: 'pi', label: 'Pelvic incidence', unit: '°', value: 58, optional: true, measure: 'angle' },
+      { id: 'pi', label: 'Pelvic incidence', unit: '°', value: 58, optional: true, measure: 'tilt' },
       { id: 'pt', label: 'Pelvic tilt', unit: '°', value: 24, optional: true, measure: 'angle' },
       { id: 'sva', label: 'SVA (+ anterior)', unit: 'mm', value: 52, optional: true, measure: 'length' }
     ],
@@ -748,7 +809,7 @@ const MODULES = [
       <line x1="100" y1="90" x2="100" y2="22" class="rf"/><line x1="100" y1="90" x2="128" y2="42" class="ms"/>
       <circle cx="100" cy="90" r="2.5" class="pt"/><circle cx="128" cy="42" r="2.5" class="pt"/>
       <text x="108" y="30" class="m">LCEA</text><text x="140" y="56" class="s">lateral edge</text><text x="6" y="20" class="s">medial</text><text x="164" y="20" class="s">lateral</text>`,
-    inputs: [{ id: 'a', label: 'LCEA', unit: '°', value: 22, measure: 'angle' }],
+    inputs: [{ id: 'a', label: 'LCEA', unit: '°', value: 22, measure: 'tilt' }],
     results: [{ id: 'a', label: 'Lateral center-edge angle', unit: '°', calc: v => v.a, scale: [0, 50], bands: [
       { upTo: 20, label: 'Dysplasia (under 20°)', sev: 'alert', note: 'Lateral undercoverage.' },
       { upTo: 25, label: 'Borderline dysplasia (20–25°)', sev: 'warn' },
@@ -916,7 +977,7 @@ const MODULES = [
     inputs: [
       { id: 'hva', label: 'Hallux valgus angle', unit: '°', value: 32, measure: 'angle' },
       { id: 'ima', label: 'Intermetatarsal angle (1–2)', unit: '°', value: 13, measure: 'angle' },
-      { id: 'dmaa', label: 'DMAA', unit: '°', optional: true, value: 8, measure: 'angle' },
+      { id: 'dmaa', label: 'DMAA', unit: '°', optional: true, value: 8, measure: 'tilt' },
       { id: 'hvi', label: 'Hallux interphalangeus angle', unit: '°', optional: true, value: 7, measure: 'angle' }
     ],
     results: [
@@ -988,6 +1049,63 @@ const MODULES = [
     refs: ['younger2005'] }
   ] }
 ];
+/* ---------- step-by-step prompts for measuring on an image ----------
+   key = calculatorId.inputId. For angle and tilt inputs give the two lines
+   (for tilt, the first line is the reference axis); for lengths give the
+   two points. Inputs without an entry get generic prompts. */
+const GUIDES = {
+  'cobb.cobb': ['Superior endplate of the upper end vertebra', 'Inferior endplate of the lower end vertebra'],
+  'cobb.prior': ['Superior endplate of the upper end vertebra', 'Inferior endplate of the lower end vertebra'],
+  'kyph.k': ['Superior endplate of T4 (or T5)', 'Inferior endplate of T12'],
+  'sag.ll': ['Superior endplate of L1', 'Superior endplate of S1'],
+  'sag.pi': ['S1 endplate, from corner to corner', 'Line from the S1 endplate midpoint to the femoral head center'],
+  'sag.pt': ['Vertical line through the femoral head center', 'Line from the femoral head center to the S1 endplate midpoint'],
+  'sag.sva': ['Posterosuperior corner of S1', 'C7 plumb line, straight across at the level of S1'],
+  'coronal.d': ['C7 plumb line at the level of the sacrum', 'Center sacral vertical line, straight across'],
+  'rvad.cc': ['Endplate of the apical vertebra', 'Concave-side rib: line through the middle of the rib head and neck'],
+  'rvad.cv': ['Endplate of the apical vertebra', 'Convex-side rib: line through the middle of the rib head and neck'],
+  'adi.adi': ['Posterior cortex of the anterior C1 arch', 'Anterior cortex of the dens'],
+  'adi.padi': ['Posterior cortex of the dens', 'Anterior cortex of the posterior C1 arch'],
+  'harris.bdi': ['Tip of the basion', 'Tip of the dens'],
+  'harris.bai': ['Tip of the basion', 'Posterior axial line (along the back of C2), straight across'],
+  'powers.bc': ['Basion', 'Spinolaminar line of the posterior C1 arch'],
+  'powers.oa': ['Opisthion', 'Posterior cortex of the anterior C1 arch'],
+  'cci.cci': ['Occipital condyle articular surface', 'Opposing C1 lateral mass surface'],
+  'spence.a': ['Lateral edge of the left C1 lateral mass', 'Lateral edge of the left C2 lateral mass'],
+  'spence.b': ['Lateral edge of the right C1 lateral mass', 'Lateral edge of the right C2 lateral mass'],
+  'cc.cc': ['Top of the coracoid process', 'Undersurface of the clavicle'],
+  'cc.ccn': ['Top of the coracoid process', 'Undersurface of the clavicle'],
+  'cc.ac': ['Acromial articular margin', 'Clavicular articular margin'],
+  'ahi.ahi': ['Undersurface of the acromion', 'Top of the humeral head (shortest distance)'],
+  'gtrack.D': ['Posterior edge of the best-fit inferior glenoid circle', 'Anterior edge of the same circle'],
+  'gtrack.d': ['Anterior edge of the best-fit circle', 'Anterior glenoid rim (remaining bone)'],
+  'gtrack.hs': ['Medial margin of the Hill-Sachs lesion', 'Lateral margin of the Hill-Sachs lesion'],
+  'gtrack.br': ['Lateral margin of the Hill-Sachs lesion', 'Medial edge of the rotator cuff footprint'],
+  'flamingo.r': ['Top of the right pubic body at the symphysis', 'Top of the left pubic body (vertical offset)'],
+  'flamingo.l': ['Top of the right pubic body at the symphysis', 'Top of the left pubic body (vertical offset)'],
+  'flamingo.w': ['Right symphyseal margin', 'Left symphyseal margin'],
+  'lcea.a': ['Inter-teardrop line (horizontal reference)', 'Line from the femoral head center to the lateral sourcil edge'],
+  'cover.t': ['Horizontal reference through the medial sourcil', 'Line from the medial to the lateral sourcil edge'],
+  'cover.a': ['Lateral acetabular edge', 'Lateral femoral head margin'],
+  'cover.b': ['Medial femoral head margin', 'Lateral femoral head margin'],
+  'cover.acea': ['Vertical line through the femoral head center (false-profile view)', 'Line from the head center to the anterior acetabular edge'],
+  'alpha.a': ['Femoral neck axis, from the head center down the middle of the neck', 'Line from the head center to where the head leaves its best-fit circle'],
+  'tilt.t': ['Long axis of the radial shaft', 'Articular surface, from the dorsal to the volar rim'],
+  'incl.a': ['Long axis of the radial shaft', 'Line from the radial styloid tip to the ulnar corner of the radius'],
+  'height.h': ['Radial styloid tip', 'Ulnar corner of the articular surface, measured along the shaft axis'],
+  'height.hn': ['Radial styloid tip', 'Ulnar corner of the articular surface, measured along the shaft axis'],
+  'artic.step': ['Articular surface of one fragment', 'Articular surface of the adjacent fragment'],
+  'artic.gap': ['Edge of one fragment', 'Edge of the adjacent fragment'],
+  'artic.td': ['Long axis of the radial shaft', 'Central axis of the volar lunate facet teardrop'],
+  'hv.hva': ['First metatarsal shaft axis', 'Proximal phalanx shaft axis'],
+  'hv.ima': ['First metatarsal shaft axis', 'Second metatarsal shaft axis'],
+  'hv.dmaa': ['First metatarsal shaft axis', 'Distal articular surface, from its medial to its lateral edge'],
+  'hv.hvi': ['Proximal phalanx shaft axis', 'Distal phalanx shaft axis'],
+  'hind.a': ['Tibial shaft axis', 'Calcaneal axis on the hindfoot alignment view'],
+  'arch.m': ['Talar long axis', 'First metatarsal long axis'],
+  'arch.p': ['Plantar surface of the calcaneus', 'Horizontal reference along the plantar soft tissues']
+};
+
 
 /* ======================= TEACHING CASES ======================= */
 const REGIONS = ['Hand', 'Wrist', 'Forearm', 'Elbow', 'Humerus', 'Shoulder', 'Chest', 'Cervical spine', 'Thoracic spine', 'Lumbar spine', 'Pelvis', 'Hip', 'Femur', 'Thigh', 'Knee', 'Leg', 'Ankle', 'Foot'];
@@ -997,8 +1115,6 @@ const REGIONS = ['Hand', 'Wrist', 'Forearm', 'Elbow', 'Humerus', 'Shoulder', 'Ch
 
 const CASES = []; /* teaching cases live in the site's Educational cases section */
 
-/* ======================= REFERENCES ======================= */
-/* s = short label, a = authors, t = title, j = journal/year/pages, url = optional direct link (default: PubMed title search) */
 const REFERENCES = {
   kane1977: { s: 'Kane 1977', a: 'Kane WJ.', t: 'Scoliosis prevalence: a call for a statement of terms.', j: 'Clin Orthop Relat Res. 1977;(126):43-46.' },
   cobb1948: { s: 'Cobb 1948', a: 'Cobb JR.', t: 'Outline for the study of scoliosis.', j: 'Instr Course Lect. 1948;5:261-275.' },
@@ -1144,19 +1260,19 @@ const refFull = k => { const r = REFERENCES[k]; return r ? `${r.a ? r.a + ' ' : 
 const refLink = k => REFERENCES[k] ? `<a href="${esc(refUrl(k))}" target="_blank" rel="noopener" title="${esc(refFull(k))}">${esc(REFERENCES[k].s)}</a>` : `<span title="missing reference">${esc(k)}?</span>`;
 
 /* ---------- tabs ---------- */
-const VIEWS = [...MODULES.map(m => ({ id: m.id, label: m.tab })), { sep: true }, { id: 'measure', label: 'Measure on image' }, ...(TOOLKIT_META.showCases ? [{ id: 'cases', label: 'Cases' }] : []), { id: 'refs', label: 'References' }];
+const VIEWS = [{ id: 'start', label: 'Start' }, { sep: true }, ...MODULES.map(m => ({ id: m.id, label: m.tab })), { sep: true }, { id: 'measure', label: 'Measure an image' }, ...(TOOLKIT_META.showCases ? [{ id: 'cases', label: 'Cases' }] : []), { id: 'refs', label: 'References' }];
 const tabs = $('#tabs');
 tabs.innerHTML = VIEWS.map(v => v.sep ? '<span class="sep" aria-hidden="true"></span>' : `<button role="tab" data-view="${v.id}" aria-selected="false">${esc(v.label)}</button>`).join('');
 tabs.addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (b) go(b.dataset.view); });
 let current = null;
 function go(id, opts = {}) {
-  if (!VIEWS.some(v => v.id === id)) id = MODULES[0].id;
+  if (!VIEWS.some(v => v.id === id)) id = 'start';
   current = id;
   $$('button[data-view]', tabs).forEach(b => b.setAttribute('aria-selected', b.dataset.view === id));
   $$('.view').forEach(s => s.hidden = s.dataset.view !== id);
   const btn = $(`button[data-view="${id}"]`, tabs); btn && btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
-  if (id === 'measure') M.resize();
+  if (id === 'measure') { M.resize(); M.refreshResult(); }
   if (!opts.keepScroll) window.scrollTo({ top: 0 });
 }
 window.addEventListener('hashchange', () => go(location.hash.slice(1)));
@@ -1252,59 +1368,96 @@ main.addEventListener('click', e => {
   if (ms) { M.setTarget(ms.dataset.c + '.' + ms.dataset.i); go('measure'); }
 });
 
+/* ---------- start view ---------- */
+const ICON_IMG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>';
+const dropHTML = big => `<div class="drop${big ? '' : ' dark'}" data-drop tabindex="0" role="button" aria-label="Add an image: drop, paste or choose a file">
+  ${ICON_IMG}<b>${big ? 'Drop or paste an image to measure' : 'Add an image to start'}</b>
+  <span>Copy an image from PACS or take a screenshot, then press <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>V</kbd> anywhere on this page. You can also drag a file here.</span>
+  <div class="rowc"><button class="btn primary" type="button" data-act="choose">Choose image</button><button class="btn" type="button" data-act="paste">Paste from clipboard</button><button class="btn" type="button" data-act="sample">Try a synthetic sample</button></div>
+  <small>PNG or JPEG (DICOM files need exporting first). The image stays in your browser and is never uploaded.</small>
+  <small class="pmsg" aria-live="polite"></small>
+</div>`;
+const sv = document.createElement('section');
+sv.className = 'view'; sv.dataset.view = 'start'; sv.hidden = true;
+const tileHTML = c => {
+  const first = c.inputs.find(i => i.measure && !i.optional) || c.inputs.find(i => i.measure);
+  return `<div class="tile" data-text="${esc((c.title + ' ' + MODULES.find(m => m.id === c.module).tab + ' ' + c.inputs.map(i => i.label).join(' ')).toLowerCase())}">
+    ${c.diagram ? `<svg viewBox="0 0 200 140" class="dg" aria-hidden="true">${c.diagram}</svg>` : '<span></span>'}
+    <div><h4>${esc(c.title)}</h4><div class="rowc"><button class="btn" type="button" data-calc="${c.id}">Calculator</button>${first ? `<button class="btn primary" type="button" data-mtarget="${c.id}.${first.id}">Measure on image</button>` : ''}</div></div>
+  </div>`;
+};
+sv.innerHTML = `<div class="hero">${dropHTML(true)}
+  <ol class="steps">
+    <li><b>Add an image</b><span>Drop, paste or choose a radiograph, CT or MR image.</span></li>
+    <li><b>Pick a measurement</b><span>The toolkit tells you which landmark to click at each step, and lines align to bone edges as you click.</span></li>
+    <li><b>Get the graded result</b><span>The value is checked against the published cutoffs and drawn on the image, ready to copy or download.</span></li>
+  </ol></div>
+  <div class="view-head"><h2>Or pick a measurement</h2><div class="ctl search"><input type="search" id="q" placeholder="Search, e.g. Cobb, alpha, glenoid, tilt" aria-label="Search measurements"></div></div>
+  <div id="tilegroups">${MODULES.map(m => `<div class="tgroup"><h3>${esc(m.tab)} <span>${esc(m.title)}</span></h3><div class="tiles">${m.calculators.map(tileHTML).join('')}</div></div>`).join('')}</div>
+  <p class="example" id="qnone" hidden>No measurement matches that search.</p>`;
+main.prepend(sv);
+$('#q', sv).addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase(); let any = false;
+  $$('.tgroup', sv).forEach(g => { let n = 0; $$('.tile', g).forEach(t => { const show = !q || t.dataset.text.includes(q); t.hidden = !show; n += show; }); g.hidden = !n; any = any || n > 0; });
+  $('#qnone', sv).hidden = any;
+});
+sv.addEventListener('click', e => {
+  const c = e.target.closest('[data-calc]');
+  if (c) { const id = c.dataset.calc; go(CALCS[id].module); const card = document.getElementById('card-' + id); card.scrollIntoView({ block: 'start' }); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash'); return; }
+  const t = e.target.closest('[data-mtarget]');
+  if (t) { M.setTarget(t.dataset.mtarget); go('measure'); }
+});
+
 /* ---------- measure on image ---------- */
 const mv = document.createElement('section');
 mv.className = 'view'; mv.dataset.view = 'measure'; mv.hidden = true;
-mv.innerHTML = `<div class="view-head"><h2>Measure on image</h2><p>Drag and drop, paste (Ctrl/⌘+V) or open a PNG or JPEG exported from PACS (DICOM files are not supported). Images stay in your browser and are never uploaded. A synthetic spine is loaded so you can try the tools.</p>
-<p class="example" style="flex-basis:100%"><b>What is automatic:</b> edge snapping of your points, the angle and length math, grading against the literature cutoffs, and labeling the result on the image for copy or download. <b>What is not:</b> you choose the landmarks; the tool does not detect anatomy on its own.</p></div>
+mv.innerHTML = `<div class="view-head"><h2>Measure an image</h2><p>Pick what you are measuring, then click the landmarks in the order the prompt asks. The result is graded and drawn on the image as soon as the last point is placed. Drag any point to adjust it.</p></div>
+<div class="mstep" id="mstep"><span class="t" id="prompt"></span><span class="rowc"><button class="btn" id="undo" type="button">Undo</button><button class="btn" id="newimg" type="button">New image</button></span></div>
 <div class="measure">
-  <div class="stage" id="stage"><canvas id="cv"></canvas><div class="hint" id="hint"></div></div>
+  <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay" id="mempty">${dropHTML(false)}</div><div class="hint" id="hint"></div></div>
   <div class="side">
-    <div class="panel"><h3>Image</h3>
-      <div class="rowc"><label class="btn primary" for="file" style="cursor:pointer">Open image…</label><input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn" id="sample" type="button">Synthetic sample</button></div>
-      <small>Or drop an image on the viewer, or paste one from the clipboard.</small>
-      <label class="rowc" for="snap" style="font-size:13px"><input type="checkbox" id="snap" checked style="accent-color:var(--accent)"> Snap points to nearby edges</label>
-      <div class="rowc"><button class="btn" id="zin" type="button">Zoom in</button><button class="btn" id="zout" type="button">Zoom out</button><button class="btn" id="zfit" type="button">Fit</button><button class="btn" id="inv" type="button" aria-pressed="false">Invert</button></div>
-      <label for="bri"><small>Brightness</small></label><input type="range" id="bri" min="40" max="200" value="100">
-      <label for="con"><small>Contrast</small></label><input type="range" id="con" min="40" max="250" value="100">
+    <div class="panel"><h3><span class="n">1</span> What are you measuring?</h3>
+      <div class="ctl"><select id="target" aria-label="Measurement"></select></div>
+      <label class="rowc chk" for="snap"><input type="checkbox" id="snap" checked> Auto-align points and lines to bone edges</label>
     </div>
-    <div class="panel"><h3>Tool</h3>
-      <div class="toolrow" id="tools">
-        <button class="btn" data-tool="angle" type="button">Angle</button><button class="btn" data-tool="tilt" type="button">Tilt</button><button class="btn" data-tool="length" type="button">Length</button><button class="btn" data-tool="calib" type="button">Calibrate</button><button class="btn" data-tool="pan" type="button">Pan</button>
-      </div>
-      <small id="tooltip"></small>
-      <div class="field"><label for="mmpx">Pixel spacing (mm per pixel)</label><div class="ctl"><input id="mmpx" type="number" step="any" placeholder="not calibrated"><span class="unit">mm/px</span></div></div>
-      <div class="rowc" id="calrow" hidden><div class="field" style="flex:1"><label for="calmm">Known length of the calibration line</label><div class="ctl"><input id="calmm" type="number" step="any" value="10"><span class="unit">mm</span></div></div><button class="btn primary" id="calok" type="button">Apply</button></div>
-      <small>Radiographs are magnified about 10–20% at the detector. Calibrate on a marker or ruler at the level of the anatomy, or use the DICOM pixel spacing.</small>
-    </div>
-    <div class="panel"><h3>Measurements</h3>
-      <div class="field"><label for="target">Send results to</label><div class="ctl"><select id="target"></select></div></div>
-      <ul class="mlist" id="mlist"></ul>
-      <div class="rowc"><button class="btn" id="undo" type="button">Undo last</button><button class="btn" id="clear" type="button">Clear all</button></div>
-    </div>
-    <div class="panel"><h3>Share</h3>
-      <small>Exports the image with your measurements and their grading drawn on it.</small>
+    <div class="panel"><h3><span class="n">2</span> Result</h3><div id="mres"></div></div>
+    <div class="panel"><h3><span class="n">3</span> Share</h3>
+      <small>The image is exported with your lines, values and grading drawn on it.</small>
       <div class="rowc"><button class="btn primary" id="xcopy" type="button">Copy annotated image</button><button class="btn" id="xdl" type="button">Download PNG</button><button class="btn" id="xtxt" type="button">Copy report text</button></div>
       <small id="xmsg" aria-live="polite"></small>
     </div>
+    <details class="panel" id="scalep"><summary>Scale for millimetres <span id="scalest" class="chip"></span></summary>
+      <small>Lengths need a scale. Enter the pixel spacing, or draw a line over a ruler or marker of known length. Radiographs are magnified about 10–20% at the detector, so calibrate at the level of the anatomy when you can.</small>
+      <div class="field"><label for="mmpx">Pixel spacing</label><div class="ctl"><input id="mmpx" type="number" step="any" placeholder="not set"><span class="unit">mm/px</span></div></div>
+      <button class="btn" id="calbtn" type="button">Draw a line of known length</button>
+      <div class="rowc" id="calrow" hidden><div class="field" style="flex:1"><label for="calmm">Length of that line</label><div class="ctl"><input id="calmm" type="number" step="any" value="10"><span class="unit">mm</span></div></div><button class="btn primary" id="calok" type="button">Apply</button></div>
+    </details>
+    <details class="panel"><summary>All measurements on this image</summary>
+      <ul class="mlist" id="mlist"></ul>
+      <div class="rowc"><button class="btn" id="clear" type="button">Clear all</button></div>
+    </details>
+    <details class="panel"><summary>View and free tools</summary>
+      <div class="rowc"><button class="btn" id="zin" type="button">Zoom in</button><button class="btn" id="zout" type="button">Zoom out</button><button class="btn" id="zfit" type="button">Fit</button><button class="btn" id="inv" type="button" aria-pressed="false">Invert</button></div>
+      <label for="bri"><small>Brightness</small></label><input type="range" id="bri" min="40" max="200" value="100">
+      <label for="con"><small>Contrast</small></label><input type="range" id="con" min="40" max="250" value="100">
+      <small>Free tools measure without grading:</small>
+      <div class="toolrow" id="tools"><button class="btn" data-tool="angle" type="button">Angle</button><button class="btn" data-tool="tilt" type="button">Tilt</button><button class="btn" data-tool="length" type="button">Length</button><button class="btn" data-tool="pan" type="button">Pan</button></div>
+    </details>
   </div>
-</div>`;
+</div>
+<p class="example auto"><b>What is automatic:</b> step-by-step landmark prompts, snapping each point to the nearest bone edge and straightening each line along the edge it follows, the angle and length math, grading against the published cutoffs, and drawing the labeled result for copy or download. <b>What is not:</b> the tool does not find the anatomy by itself, so you still choose where each landmark goes. Check every line before using a value.</p>
+<input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden>`;
 main.appendChild(mv);
 
 const M = (() => {
   const cv = $('#cv', mv), stage = $('#stage', mv), ctx = cv.getContext('2d');
-  const S = { img: null, sample: true, scale: 1, ox: 0, oy: 0, tool: 'angle', shapes: [], pending: [], cursor: null, mmPerPx: null, drag: null, inv: false, bri: 100, con: 100, target: '' };
-  const NEED = { angle: 4, tilt: 4, length: 2, calib: 2 };
-  const TIPS = {
-    angle: 'Click two points along the first line, then two along the second (e.g. two endplates for a Cobb angle).',
-    tilt: 'First line: the reference axis (e.g. radial shaft). Second line: the surface (e.g. articular rim). Result is the angle from the perpendicular to the axis.',
-    length: 'Click the two ends. Calibrate first for millimetres.',
-    calib: 'Draw a line over an object of known length, then enter its length.',
-    pan: 'Drag to move the image. Use the zoom buttons or scroll wheel to zoom.'
-  };
+  const S = { img: null, sample: false, scale: 1, ox: 0, oy: 0, tool: 'angle', shapes: [], pending: [], cursor: null, mmPerPx: null, drag: null, inv: false, bri: 100, con: 100, target: '', touched: new Set() };
+  const NEED = { angle: 4, tilt: 4, length: 2, calib: 2, pan: 0 };
   const targets = [];
-  MODULES.forEach(m => m.calculators.forEach(c => c.inputs.filter(i => i.measure).forEach(i => targets.push({ key: c.id + '.' + i.id, kind: i.measure, label: `${m.tab} › ${c.title} › ${i.label}` }))));
-  $('#target', mv).innerHTML = '<option value="">Choose a field…</option>' + targets.map(t => `<option value="${t.key}">${esc(t.label)}</option>`).join('');
+  MODULES.forEach(m => m.calculators.forEach(c => c.inputs.filter(i => i.measure).forEach(i => targets.push({ key: c.id + '.' + i.id, kind: i.measure, cid: c.id, iid: i.id, label: i.label, unit: i.unit }))));
+  const T = k => targets.find(t => t.key === k);
+  $('#target', mv).innerHTML = '<option value="">Free measurement (not graded)</option>' + MODULES.map(m => `<optgroup label="${esc(m.tab)}">${targets.filter(t => CALCS[t.cid].module === m.id).map(t => `<option value="${t.key}">${esc(CALCS[t.cid].title)}: ${esc(t.label)}</option>`).join('')}</optgroup>`).join('');
+  const fits = (t, type) => t && (t.kind === type || (t.kind === 'tilt' && type === 'angle') || (t.kind === 'angle' && type === 'tilt'));
 
   function makeSample() {
     const w = 560, h = 900, c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -1312,21 +1465,20 @@ const M = (() => {
     const bg = g.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, 520); bg.addColorStop(0, '#2a2f35'); bg.addColorStop(1, '#0b0d10');
     g.fillStyle = bg; g.fillRect(0, 0, w, h);
     const cx = y => 280 + 40 * Math.sin(Math.PI * (y - 80) / 380), slope = y => 40 * Math.PI / 380 * Math.cos(Math.PI * (y - 80) / 380);
-    // ribs
     g.strokeStyle = 'rgba(190,198,206,.22)'; g.lineWidth = 9; g.lineCap = 'round';
     for (let k = 0; k < 11; k++) { const y = 95 + k * 38, x = cx(y); [-1, 1].forEach(s => { g.beginPath(); g.moveTo(x + s * 26, y); g.quadraticCurveTo(x + s * 170, y - 30, x + s * 230, y + 70 + k * 4); g.stroke(); }); }
-    // pelvis hint
     g.fillStyle = 'rgba(200,205,210,.28)'; g.beginPath(); g.ellipse(280, 905, 210, 70, 0, Math.PI, 2 * Math.PI); g.fill();
     const verts = []; let y = 80;
     for (let k = 0; k < 17; k++) { const hgt = 30 + k * 1.1; const yc = y + hgt / 2; verts.push({ y: yc, x: cx(yc), a: -Math.atan(slope(yc)), h: hgt, w: 52 + k * 2.2 }); y += hgt + 11; }
     verts.forEach(v => { g.save(); g.translate(v.x, v.y); g.rotate(v.a); const gr = g.createLinearGradient(-v.w / 2, 0, v.w / 2, 0); gr.addColorStop(0, '#9aa3ab'); gr.addColorStop(.5, '#d9dee2'); gr.addColorStop(1, '#9aa3ab'); g.fillStyle = gr; g.beginPath(); g.roundRect ? g.roundRect(-v.w / 2, -v.h / 2, v.w, v.h, 5) : g.rect(-v.w / 2, -v.h / 2, v.w, v.h); g.fill(); g.fillStyle = 'rgba(120,128,136,.6)'; [-1, 1].forEach(s => { g.beginPath(); g.ellipse(s * v.w * 0.28, -v.h * 0.15, 5, 8, 0, 0, 7); g.fill(); }); g.restore(); });
     const id = g.getImageData(0, 0, w, h), d = id.data; for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - .5) * 18; d[i] += n; d[i + 1] += n; d[i + 2] += n; } g.putImageData(id, 0, 0);
     g.fillStyle = 'rgba(255,255,255,.55)'; g.font = '600 15px system-ui, sans-serif'; g.fillText('SYNTHETIC SAMPLE · NOT PATIENT DATA', 16, 28);
-    // preset Cobb lines on most tilted vertebrae of the upper curve
     const upper = verts.filter(v => v.y < 470), top = upper.reduce((a, b) => b.a > a.a ? b : a), bot = upper.reduce((a, b) => b.a < a.a ? b : a);
-    const edge = (v, s) => { const ex = v.x + Math.sin(-v.a) * 0 - Math.sin(v.a) * (s * v.h / 2) * -1, ey = v.y + Math.cos(v.a) * (s * v.h / 2); const L = v.w * 0.85, dx = Math.cos(v.a) * L, dy = Math.sin(v.a) * L; return [{ x: ex - dx, y: ey - dy }, { x: ex + dx, y: ey + dy }]; };
+    const edge = (v, s) => { const ex = v.x - Math.sin(v.a) * (s * v.h / 2), ey = v.y + Math.cos(v.a) * (s * v.h / 2); const L = v.w * 0.62, dx = Math.cos(v.a) * L, dy = Math.sin(v.a) * L; return [{ x: ex - dx, y: ey - dy }, { x: ex + dx, y: ey + dy }]; };
     return { canvas: c, preset: [...edge(top, -1), ...edge(bot, 1)] };
   }
+
+  /* edge map: squared gradient magnitude of a downsampled grayscale copy */
   function computeGrad() {
     S.grad = null; if (!S.img) return;
     const w = iw(), h = ih(), k = Math.min(1, 1600 / Math.max(w, h)), W = Math.max(2, Math.round(w * k)), H = Math.max(2, Math.round(h * k));
@@ -1337,8 +1489,9 @@ const M = (() => {
     for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = y * W + x; const gx = L[i + 1] - L[i - 1], gy = L[i + W] - L[i - W]; G[i] = gx * gx + gy * gy; }
     S.grad = { G, W, H, k };
   }
+  const auto = () => S.grad && $('#snap', mv).checked;
   function snap(p) {
-    if (!S.grad || !$('#snap', mv).checked) return p;
+    if (!auto()) return p;
     const { G, W, H, k } = S.grad, cx = Math.round(p.x * k), cy = Math.round(p.y * k), r = Math.max(2, Math.round(7 / S.scale * k));
     let best = -1, bx = cx, by = cy;
     for (let y = Math.max(1, cy - r); y <= Math.min(H - 2, cy + r); y++) for (let x = Math.max(1, cx - r); x <= Math.min(W - 2, cx + r); x++) {
@@ -1346,30 +1499,109 @@ const M = (() => {
     }
     return best > 400 ? { x: bx / k, y: by / k } : p;
   }
-  function load(src, isSample, preset) {
-    S.img = src; S.sample = isSample; computeGrad(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
-    if (preset) S.shapes.push({ type: 'angle', pts: preset });
-    fit(); list(); draw();
+  /* straighten a clicked line along the edge it follows: sample the strongest edge
+     across the line at regular steps, fit a line through those points (total least
+     squares) and project the two clicked ends onto it. Rejected if the fit is weak
+     or would turn the line by more than 12 degrees. */
+  function fitLine(a, b) {
+    if (!auto()) return [a, b];
+    const { G, W, H, k } = S.grad, A = { x: a.x * k, y: a.y * k }, B = { x: b.x * k, y: b.y * k };
+    const len = Math.hypot(B.x - A.x, B.y - A.y); if (len < 12) return [a, b];
+    const ux = (B.x - A.x) / len, uy = (B.y - A.y) / len, nx = -uy, ny = ux, r = Math.max(3, Math.round(6 / S.scale * k));
+    const pts = [], N = Math.min(40, Math.max(8, Math.round(len / 4)));
+    for (let s = 1; s < N; s++) {
+      const t = s / N, px = A.x + (B.x - A.x) * t, py = A.y + (B.y - A.y) * t; let best = 0, bp = null;
+      for (let o = -r; o <= r; o++) { const x = Math.round(px + nx * o), y = Math.round(py + ny * o); if (x < 1 || y < 1 || x > W - 2 || y > H - 2) continue; const v = G[y * W + x] / (1 + o * o * 0.04); if (v > best) { best = v; bp = { x, y }; } }
+      if (bp && best > 400) pts.push(bp);
+    }
+    if (pts.length < Math.max(5, N * 0.6)) return [a, b];
+    const mx = pts.reduce((s, p) => s + p.x, 0) / pts.length, my = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+    let sxx = 0, syy = 0, sxy = 0; pts.forEach(p => { sxx += (p.x - mx) ** 2; syy += (p.y - my) ** 2; sxy += (p.x - mx) * (p.y - my); });
+    const th = 0.5 * Math.atan2(2 * sxy, sxx - syy), dx = Math.cos(th), dy = Math.sin(th);
+    const resid = Math.sqrt(pts.reduce((s, p) => s + ((p.x - mx) * -dy + (p.y - my) * dx) ** 2, 0) / pts.length);
+    const turn = Math.acos(Math.min(1, Math.abs(dx * ux + dy * uy))) * 180 / Math.PI;
+    if (turn > 12 || resid > r * 0.6) return [a, b];
+    const proj = P => { const t = (P.x - mx) * dx + (P.y - my) * dy; return { x: (mx + dx * t) / k, y: (my + dy * t) / k }; };
+    return [proj(A), proj(B)];
   }
-  function useSample() { const s = makeSample(); load(s.canvas, true, s.preset); }
+
+  function load(src, isSample) {
+    S.img = src; S.sample = isSample; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
+    S.fitted = false; fit(); refresh();
+  }
+  function useSample() {
+    const s = makeSample(); load(s.canvas, true);
+    setTarget('cobb.cobb');
+    S.shapes.push({ type: 'angle', pts: s.preset, key: 'cobb.cobb' }); send(S.shapes[0]); refresh();
+  }
   const iw = () => S.img ? (S.img.naturalWidth || S.img.width) : 1, ih = () => S.img ? (S.img.naturalHeight || S.img.height) : 1;
   function resize() { const r = stage.getBoundingClientRect(); if (!r.width) return; const dpr = window.devicePixelRatio || 1; cv.width = r.width * dpr; cv.height = r.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (!S.fitted) fit(); draw(); }
-  function fit() { const r = stage.getBoundingClientRect(); if (!r.width) return; S.scale = Math.min(r.width / iw(), r.height / ih()) * 0.96; S.ox = (r.width - iw() * S.scale) / 2; S.oy = (r.height - ih() * S.scale) / 2; S.fitted = true; }
+  function fit() { const r = stage.getBoundingClientRect(); if (!r.width || !S.img) return; S.scale = Math.min(r.width / iw(), r.height / ih()) * 0.96; S.ox = (r.width - iw() * S.scale) / 2; S.oy = (r.height - ih() * S.scale) / 2; S.fitted = true; }
   const toImg = p => ({ x: (p.x - S.ox) / S.scale, y: (p.y - S.oy) / S.scale });
   const toScr = p => ({ x: p.x * S.scale + S.ox, y: p.y * S.scale + S.oy });
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const dirAng = (a, b) => Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-  const lineAngle = (p) => { let d = Math.abs(dirAng(p[0], p[1]) - dirAng(p[2], p[3])) % 180; return Math.min(d, 180 - d); };
+  const lineAngle = p => { let d = Math.abs(dirAng(p[0], p[1]) - dirAng(p[2], p[3])) % 180; return Math.min(d, 180 - d); };
   function value(sh) {
-    if (sh.type === 'angle') return { v: lineAngle(sh.pts), unit: '°', kind: 'angle' };
-    if (sh.type === 'tilt') return { v: 90 - lineAngle(sh.pts), unit: '°', kind: 'tilt' };
+    if (sh.type === 'angle') return { v: lineAngle(sh.pts), unit: '°' };
+    if (sh.type === 'tilt') return { v: 90 - lineAngle(sh.pts), unit: '°' };
     const px = dist(sh.pts[0], sh.pts[1]);
-    if (sh.type === 'calib') return { v: px, unit: 'px', kind: 'calib' };
-    return S.mmPerPx ? { v: px * S.mmPerPx, unit: 'mm', kind: 'length' } : { v: px, unit: 'px', kind: 'length' };
+    if (sh.type === 'calib') return { v: px, unit: 'px' };
+    return S.mmPerPx ? { v: px * S.mmPerPx, unit: 'mm' } : { v: px, unit: 'px' };
   }
-  const NAMES = { angle: 'Angle', tilt: 'Tilt', length: 'Length', calib: 'Calibration' };
+  const NAMES = { angle: 'Angle', tilt: 'Tilt', length: 'Length', calib: 'Scale line' };
   const fmtV = val => `${val.v.toFixed(val.unit === 'px' ? 0 : 1)}${val.unit === '°' ? '°' : ' ' + val.unit}`;
   const shapeText = (sh, n) => `${n + 1}. ${fmtV(value(sh))}${sh.note ? ' · ' + sh.note : ''}`;
+
+  /* send a finished shape to its calculator field and grade it */
+  function send(sh) {
+    const t = T(sh.key); if (!t) return;
+    const val = value(sh);
+    if (t.kind === 'length' && val.unit !== 'mm') { sh.note = 'set the scale to grade'; return; }
+    const el = document.getElementById(`in-${t.cid}-${t.iid}`); if (!el) return;
+    if (!S.touched.has(t.cid)) { /* first measurement for this calculator on this image: drop example values of the other optional image fields */
+      S.touched.add(t.cid); CALCS[t.cid].inputs.forEach(i => { if (i.measure && i.optional && i.id !== t.iid) { const o = document.getElementById(`in-${t.cid}-${i.id}`); if (o) o.value = ''; } });
+    }
+    el.value = val.v.toFixed(1); compute(CALCS[t.cid]);
+    S.shapes.forEach(o => { if (o !== sh && o.key === sh.key) { o.key = null; o.note = null; } });
+    const pill = document.querySelector(`#card-${t.cid} .pill`);
+    sh.note = `${t.label}${pill ? ': ' + pill.textContent : ''}`;
+  }
+  function nextTarget(cid) {
+    const done = new Set(S.shapes.filter(s => s.key && s.note && s.note !== 'set the scale to grade').map(s => s.key));
+    return targets.find(t => t.cid === cid && !done.has(t.key) && !CALCS[cid].inputs.find(i => i.id === t.iid).optional);
+  }
+
+  function promptHTML() {
+    if (!S.img) return '<b>Add an image to start.</b> Drop or paste it into the viewer, or choose a file.';
+    const n = S.pending.length, t = T(S.target), g = t ? GUIDES[t.key] : null;
+    if (S.tool === 'pan') return '<b>Pan.</b> Drag to move the image. Scroll or use the zoom buttons to resize.';
+    if (S.tool === 'calib') return `<b>Scale, point ${n + 1} of 2.</b> Click ${n ? 'the other end' : 'one end'} of a ruler or marker of known length.`;
+    if (!n && t && S.shapes.some(s => s.key === t.key)) return `<b>Done: ${esc(t.label)}.</b> Drag any point to adjust, click again to redo it, or pick the next measurement.`;
+    const head = t ? `${esc(t.label)}, step ${n + 1} of ${NEED[S.tool]}.` : `${NAMES[S.tool]}, step ${n + 1} of ${NEED[S.tool]}.`;
+    if (S.tool === 'length') return `<b>${head}</b> Click ${g ? 'the ' + esc(lc(g[n])) : (n ? 'the other end' : 'one end')}.`;
+    const L = n < 2 ? 0 : 1, names = g || (S.tool === 'tilt' ? ['the reference axis', 'the surface'] : ['the first line', 'the second line']);
+    if (g) return `<b>${head}</b> Line ${L + 1}${S.tool === 'tilt' && !L ? ' (reference axis)' : ''}: ${esc(g[L])}. Click ${n % 2 ? 'its other end' : 'one end'}.`;
+    return `<b>${head}</b> Click ${n % 2 ? 'the other end' : 'one end'} of ${names[L]}.`;
+  }
+  const lc = s => s.charAt(0).toLowerCase() + s.slice(1);
+
+  function resultHTML() {
+    const t = T(S.target);
+    if (!t) return `<p class="muted">Free measurement: values are drawn on the image but not graded. Pick a measurement above to grade it against the literature.</p>`;
+    const c = CALCS[t.cid], card = document.getElementById('card-' + c.id), measured = new Map(S.shapes.filter(s => s.key).map(s => [s.key, s]));
+    const fields = targets.filter(x => x.cid === c.id).map(x => {
+      const sh = measured.get(x.key), inp = c.inputs.find(i => i.id === x.iid), el = document.getElementById(`in-${c.id}-${x.iid}`);
+      const st = sh && sh.note !== 'set the scale to grade' ? `<b>${fmtV(value(sh))}</b> measured` : sh ? '<span class="warn">needs a scale</span>' : el && el.value !== '' ? `${esc(el.value)} ${esc(inp.unit || '')} <em>from the calculator, not measured</em>` : '<em>empty</em>';
+      return `<li class="${x.key === S.target ? 'cur' : ''}"><button type="button" class="lnk" data-pick="${x.key}">${esc(x.label)}${inp.optional ? ' <em>optional</em>' : ''}</button><span>${st}</span></li>`;
+    }).join('');
+    const scaleWarn = t.kind === 'length' && !S.mmPerPx ? `<p class="flagline sev-warn">Lengths are in pixels until you set the scale. <button type="button" class="lnk" data-scale>Set the scale</button></p>` : '';
+    const others = c.inputs.some(i => !i.measure) ? '<p class="muted">Other settings for this calculator, such as modality or checkboxes, are in the full calculator.</p>' : '';
+    return `<p class="rtitle">${esc(c.title)}</p><ul class="fl">${fields}</ul>${scaleWarn}
+      ${S.shapes.some(s => s.key && T(s.key).cid === c.id && s.note === 'set the scale to grade') ? '<p class="muted">The graded result appears once the scale is set.</p>' : !S.shapes.some(s => s.key && T(s.key).cid === c.id) ? '<p class="muted">The graded result appears here as soon as you place the last point.</p>' : `<div class="results">${$('.results', card).innerHTML}</div><ul class="flags">${$('.flags', card).innerHTML}</ul>`}${others}
+      <div class="rowc"><button class="btn" type="button" data-open="${c.id}">Open full calculator</button><button class="btn" type="button" data-copy="${c.id}">Copy summary</button></div>`;
+  }
+
   function exportCanvas() {
     if (!S.img) return null;
     const w = iw(), h = ih(), k = Math.min(1, 2400 / Math.max(w, h)), W = Math.round(w * k), H = Math.round(h * k), foot = Math.round(Math.max(26, W * 0.035));
@@ -1383,23 +1615,31 @@ const M = (() => {
       for (let i = 0; i < sh.pts.length; i += 2) { const A = P(sh.pts[i]), B = P(sh.pts[i + 1]); g.beginPath(); g.moveTo(A.x, A.y); g.lineTo(B.x, B.y); g.stroke(); }
       g.fillStyle = col; sh.pts.forEach(p => { const Q = P(p); g.beginPath(); g.arc(Q.x, Q.y, 3.5 * u, 0, 7); g.fill(); });
       const t = shapeText(sh, n), Q = P(sh.pts[sh.pts.length - 1]); g.font = `600 ${Math.round(13 * u)}px "IBM Plex Mono", monospace`;
-      const tw = g.measureText(t).width, x = Math.min(Q.x + 8 * u, W - tw - 12 * u), y = Math.max(Q.y - 6 * u, 20 * u);
+      const tw = g.measureText(t).width, x = Math.max(4, Math.min(Q.x + 8 * u, W - tw - 12 * u)), y = Math.max(Q.y - 6 * u, 20 * u);
       g.fillStyle = 'rgba(7,10,14,.82)'; g.fillRect(x, y - 16 * u, tw + 10 * u, 21 * u); g.fillStyle = '#fff'; g.fillText(t, x + 5 * u, y);
     });
     g.fillStyle = '#121920'; g.fillRect(0, H, W, foot); g.fillStyle = '#b9c6d2'; g.font = `${Math.round(foot * 0.42)}px system-ui, sans-serif`;
     g.fillText('MSK Measurement Toolkit · research and education only · not for clinical use', 10, H + foot * 0.66);
     return c;
   }
-  function reportText() { return S.shapes.filter(s => s.type !== 'calib').map((sh, n) => shapeText(sh, n)).join('\n') + (S.mmPerPx ? `\nPixel spacing ${S.mmPerPx.toPrecision(4)} mm/px` : ''); }
+  function reportText() {
+    const lines = S.shapes.filter(s => s.type !== 'calib').map((sh, n) => shapeText(sh, n));
+    const cids = [...new Set(S.shapes.filter(s => s.key).map(s => T(s.key).cid))];
+    cids.forEach(cid => lines.push('', (state[cid] || {}).summary || ''));
+    if (S.mmPerPx) lines.push('', `Pixel spacing ${S.mmPerPx.toPrecision(4)} mm/px`);
+    return lines.join('\n').trim();
+  }
   const xmsg = t => { $('#xmsg', mv).textContent = t; };
+  const pmsg = t => $$('.pmsg').forEach(e => e.textContent = t);
+
   function draw() {
     const r = stage.getBoundingClientRect(); ctx.clearRect(0, 0, r.width, r.height);
     ctx.fillStyle = '#070a0e'; ctx.fillRect(0, 0, r.width, r.height);
     if (S.img) { ctx.save(); ctx.filter = `brightness(${S.bri}%) contrast(${S.con}%)${S.inv ? ' invert(1)' : ''}`; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(S.img, S.ox, S.oy, iw() * S.scale, ih() * S.scale); ctx.restore(); }
     const col = '#4fd3be', col2 = '#ffd166';
     const seg = (a, b, c) => { const A = toScr(a), B = toScr(b); ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke(); };
-    const dot = (p, c) => { const P = toScr(p); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(P.x, P.y, 4, 0, 7); ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 1; ctx.stroke(); };
-    const label = (p, t) => { const P = toScr(p); ctx.font = '600 13px "IBM Plex Mono", monospace'; const w = ctx.measureText(t).width; ctx.fillStyle = 'rgba(7,10,14,.8)'; ctx.fillRect(P.x + 8, P.y - 18, w + 10, 20); ctx.fillStyle = '#fff'; ctx.fillText(t, P.x + 13, P.y - 4); };
+    const dot = (p, c) => { const P = toScr(p); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(P.x, P.y, 4.5, 0, 7); ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 1; ctx.stroke(); };
+    const label = (p, t) => { const P = toScr(p); ctx.font = '600 13px "IBM Plex Mono", monospace'; const w = ctx.measureText(t).width, x = Math.max(4, Math.min(P.x + 8, r.width - w - 14)); ctx.fillStyle = 'rgba(7,10,14,.8)'; ctx.fillRect(x, P.y - 18, w + 10, 20); ctx.fillStyle = '#fff'; ctx.fillText(t, x + 5, P.y - 4); };
     S.shapes.forEach((sh, n) => {
       const c = sh.type === 'calib' ? col2 : col;
       for (let i = 0; i < sh.pts.length; i += 2) seg(sh.pts[i], sh.pts[i + 1], c);
@@ -1407,74 +1647,124 @@ const M = (() => {
       label(sh.pts[sh.pts.length - 1], shapeText(sh, n));
     });
     const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); P.forEach(p => dot(p, c)); }
-    $('#hint', mv).textContent = S.pending.length ? `Point ${S.pending.length + 1} of ${NEED[S.tool]} · Esc cancels` : TIPS[S.tool];
+    $('#mempty', mv).hidden = !!S.img;
+    $('#hint', mv).hidden = !S.img || !S.pending.length;
+    $('#hint', mv).textContent = S.pending.length ? `Point ${S.pending.length + 1} of ${NEED[S.tool]} · Esc cancels` : '';
+    $('#prompt', mv).innerHTML = promptHTML();
   }
   function list() {
-    const ul = $('#mlist', mv), tgt = targets.find(t => t.key === S.target);
+    const ul = $('#mlist', mv);
     ul.innerHTML = S.shapes.length ? S.shapes.map((sh, n) => {
-      const val = value(sh), ok = tgt && sh.type !== 'calib' && (tgt.kind === sh.type || (tgt.kind === 'tilt' && sh.type === 'angle'));
-      return `<li><span class="grow">${n + 1}. ${NAMES[sh.type]} <b>${val.v.toFixed(1)} ${val.unit}</b>${sh.note ? `<br><small>${esc(sh.note)}</small>` : ''}</span>${ok ? `<button class="btn primary" data-send="${n}" type="button">Send</button>` : ''}<button class="btn" data-del="${n}" type="button" aria-label="Delete measurement ${n + 1}">Delete</button></li>`;
+      const val = value(sh), t = T(S.target), canSend = sh.type !== 'calib' && fits(t, sh.type) && sh.key !== S.target;
+      return `<li><span class="grow">${n + 1}. ${NAMES[sh.type]} <b>${fmtV(val)}</b>${sh.note ? `<br><small>${esc(sh.note)}</small>` : ''}</span>${canSend ? `<button class="btn" data-send="${n}" type="button">Use for ${esc(t.label)}</button>` : ''}<button class="btn" data-del="${n}" type="button" aria-label="Delete measurement ${n + 1}">Delete</button></li>`;
     }).join('') : '<li><small>No measurements yet.</small></li>';
-    if (tgt && S.shapes.length && !S.shapes.some(sh => sh.type === tgt.kind || (tgt.kind === 'tilt' && sh.type === 'angle'))) ul.insertAdjacentHTML('beforeend', `<li><small>Draw a ${tgt.kind} measurement to send to this field.</small></li>`);
+    $('#scalest', mv).textContent = S.mmPerPx ? S.mmPerPx.toPrecision(3) + ' mm/px' : 'not set';
   }
-  function setTool(t) { S.tool = t; S.pending = []; $$('#tools button', mv).forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t)); $('#tooltip', mv).textContent = TIPS[t]; $('#calrow', mv).hidden = !(t === 'calib' && S.shapes.some(s => s.type === 'calib')); cv.style.cursor = t === 'pan' ? 'grab' : 'crosshair'; draw(); }
-  function setTarget(key) { S.target = key; $('#target', mv).value = key; const t = targets.find(x => x.key === key); if (t) setTool(t.kind === 'length' ? 'length' : t.kind); list(); }
+  function refresh() { list(); $('#mres', mv).innerHTML = resultHTML(); draw(); }
+  function setTool(t) { S.tool = t; S.pending = []; $$('#tools button', mv).forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t && !S.target)); $('#calrow', mv).hidden = !(t === 'calib' && S.shapes.some(s => s.type === 'calib')); cv.style.cursor = t === 'pan' ? 'grab' : 'crosshair'; draw(); }
+  function setTarget(key) {
+    S.target = key; $('#target', mv).value = key; const t = T(key);
+    if (t) { setTool(t.kind); if (t.kind === 'length' && !S.mmPerPx) $('#scalep', mv).open = true; } else setTool(S.tool === 'calib' || S.tool === 'pan' ? 'angle' : S.tool);
+    refresh();
+  }
   const pt = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
   cv.addEventListener('pointerdown', e => {
+    if (!S.img) return;
     cv.setPointerCapture(e.pointerId); const p = pt(e);
     if (S.tool === 'pan' || e.button === 1) { S.drag = { pan: true, x: p.x, y: p.y, ox: S.ox, oy: S.oy }; return; }
-    if (!S.pending.length) for (const sh of S.shapes) for (let i = 0; i < sh.pts.length; i++) if (dist(toScr(sh.pts[i]), p) < 10) { S.drag = { sh, i }; return; }
+    if (!S.pending.length) for (const sh of S.shapes) for (let i = 0; i < sh.pts.length; i++) if (dist(toScr(sh.pts[i]), p) < 12) { S.drag = { sh, i }; return; }
     S.pending.push(snap(toImg(p)));
-    if (S.pending.length === NEED[S.tool]) {
-      if (S.tool === 'calib') { S.shapes = S.shapes.filter(s => s.type !== 'calib'); $('#calrow', mv).hidden = false; $('#calmm', mv).focus(); }
-      S.shapes.push({ type: S.tool, pts: S.pending }); S.pending = []; list();
+    const n = S.pending.length;
+    if (n % 2 === 0 && S.tool !== 'length' && S.tool !== 'calib') { const [a, b] = fitLine(S.pending[n - 2], S.pending[n - 1]); S.pending[n - 2] = a; S.pending[n - 1] = b; }
+    if (n === NEED[S.tool]) {
+      const t = T(S.target), sh = { type: S.tool, pts: S.pending };
+      S.pending = [];
+      if (S.tool === 'calib') { S.shapes = S.shapes.filter(s => s.type !== 'calib'); S.shapes.push(sh); $('#calrow', mv).hidden = false; $('#calmm', mv).focus(); list(); draw(); return; }
+      S.shapes.push(sh);
+      if (fits(t, sh.type)) {
+        S.shapes = S.shapes.filter(s => s === sh || s.key !== t.key);
+        sh.key = t.key; send(sh);
+        const nx = sh.note !== 'set the scale to grade' && nextTarget(t.cid);
+        if (nx) { S.target = nx.key; $('#target', mv).value = nx.key; setTool(nx.kind); }
+      }
+      refresh(); return;
     }
     draw();
   });
   cv.addEventListener('pointermove', e => {
     const p = pt(e); S.cursor = p;
     if (S.drag && S.drag.pan) { S.ox = S.drag.ox + p.x - S.drag.x; S.oy = S.drag.oy + p.y - S.drag.y; }
-    else if (S.drag) { S.drag.sh.pts[S.drag.i] = toImg(p); S.drag.moved = true; list(); }
+    else if (S.drag) { S.drag.sh.pts[S.drag.i] = toImg(p); S.drag.moved = true; }
     draw();
   });
-  cv.addEventListener('pointerup', () => { if (S.drag && S.drag.sh && S.drag.moved) { S.drag.sh.pts[S.drag.i] = snap(S.drag.sh.pts[S.drag.i]); S.drag.sh.note = null; list(); draw(); } S.drag = null; });
-  cv.addEventListener('wheel', e => { e.preventDefault(); zoom(e.deltaY < 0 ? 1.15 : 1 / 1.15, pt(e)); }, { passive: false });
+  cv.addEventListener('pointerup', () => {
+    const d = S.drag; S.drag = null;
+    if (d && d.sh && d.moved) { d.sh.pts[d.i] = snap(d.sh.pts[d.i]); if (d.sh.key) send(d.sh); else if (d.sh.type !== 'calib') d.sh.note = null; refresh(); }
+  });
+  cv.addEventListener('wheel', e => { if (!S.img) return; e.preventDefault(); zoom(e.deltaY < 0 ? 1.15 : 1 / 1.15, pt(e)); }, { passive: false });
   function zoom(f, at) { const r = stage.getBoundingClientRect(); at = at || { x: r.width / 2, y: r.height / 2 }; const ip = toImg(at); S.scale *= f; S.ox = at.x - ip.x * S.scale; S.oy = at.y - ip.y * S.scale; draw(); }
   document.addEventListener('keydown', e => { if (current === 'measure' && e.key === 'Escape') { S.pending = []; draw(); } });
-  $('#tools', mv).addEventListener('click', e => { const b = e.target.closest('[data-tool]'); if (b) setTool(b.dataset.tool); });
+  $('#tools', mv).addEventListener('click', e => { const b = e.target.closest('[data-tool]'); if (!b) return; if (b.dataset.tool !== 'pan') { S.target = ''; $('#target', mv).value = ''; } setTool(b.dataset.tool); refresh(); });
   $('#zin', mv).onclick = () => zoom(1.25); $('#zout', mv).onclick = () => zoom(0.8); $('#zfit', mv).onclick = () => { fit(); draw(); };
   $('#inv', mv).onclick = e => { S.inv = !S.inv; e.target.setAttribute('aria-pressed', S.inv); draw(); };
   $('#bri', mv).oninput = e => { S.bri = +e.target.value; draw(); }; $('#con', mv).oninput = e => { S.con = +e.target.value; draw(); };
-  $('#sample', mv).onclick = useSample;
-  function loadFile(f) { if (!f || !/^image\//.test(f.type)) { xmsg('That file is not an image. Use PNG or JPEG.'); return; } const url = URL.createObjectURL(f); const im = new Image(); im.onload = () => { S.fitted = false; load(im, false); xmsg(''); }; im.onerror = () => xmsg('Could not read that image. DICOM files need to be exported as PNG or JPEG first.'); im.src = url; }
-  $('#file', mv).onchange = e => loadFile(e.target.files[0]);
-  ['dragenter', 'dragover'].forEach(t => document.addEventListener(t, e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); stage.style.outline = '3px dashed var(--accent)'; } }));
-  ['dragleave', 'drop'].forEach(t => document.addEventListener(t, () => { stage.style.outline = ''; }));
-  document.addEventListener('drop', e => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return; e.preventDefault(); if (current !== 'measure') go('measure'); loadFile(f); });
-  document.addEventListener('paste', e => { const it = [...(e.clipboardData ? e.clipboardData.items : [])].find(i => i.type.startsWith('image/')); if (!it) return; e.preventDefault(); if (current !== 'measure') go('measure'); loadFile(it.getAsFile()); });
-  $('#xdl', mv).onclick = () => { const c = exportCanvas(); if (!c) return; c.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'msk-measurement.png'; document.body.appendChild(a); a.click(); a.remove(); xmsg('Download started. If nothing happened, use Copy annotated image.'); }); };
-  $('#xcopy', mv).onclick = () => { const c = exportCanvas(); if (!c) return; try { const p = new Promise(r => c.toBlob(r)); navigator.clipboard.write([new ClipboardItem({ 'image/png': p })]).then(() => xmsg('Annotated image copied. Paste it into a report, email or slide.'), () => xmsg('This browser blocked image copying. Use Download PNG instead.')); } catch (e) { xmsg('This browser cannot copy images. Use Download PNG instead.'); } };
+  $('#newimg', mv).onclick = () => { S.img = null; S.shapes = []; S.pending = []; refresh(); };
+
+  function loadFile(f) {
+    if (!f || !/^image\//.test(f.type)) { pmsg('That file is not an image. Use PNG or JPEG.'); return; }
+    const url = URL.createObjectURL(f), im = new Image();
+    im.onload = () => { if (current !== 'measure') go('measure'); requestAnimationFrame(() => { resize(); load(im, false); pmsg(''); xmsg(''); }); };
+    im.onerror = () => pmsg('Could not read that image. DICOM files need to be exported as PNG or JPEG first.');
+    im.src = url;
+  }
+  async function pasteClip() {
+    try {
+      const items = await navigator.clipboard.read();
+      for (const it of items) { const ty = it.types.find(x => x.startsWith('image/')); if (ty) { const b = await it.getType(ty); loadFile(new File([b], 'pasted', { type: ty })); return; } }
+      pmsg('There is no image on the clipboard. Copy an image first, then try again.');
+    } catch (e) { pmsg('This browser did not allow clipboard access. Press Ctrl/⌘+V instead.'); }
+  }
+  $('#file', mv).onchange = e => { loadFile(e.target.files[0]); e.target.value = ''; };
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-act]');
+    if (a) { e.stopPropagation(); if (a.dataset.act === 'choose') $('#file', mv).click(); else if (a.dataset.act === 'paste') pasteClip(); else { if (current !== 'measure') go('measure'); requestAnimationFrame(() => { resize(); useSample(); }); } return; }
+    const d = e.target.closest('[data-drop]'); if (d) $('#file', mv).click();
+  });
+  document.addEventListener('keydown', e => { const d = e.target.closest && e.target.closest('[data-drop]'); if (d && (e.key === 'Enter' || e.key === ' ') && e.target === d) { e.preventDefault(); $('#file', mv).click(); } });
+  const hl = on => { $$('[data-drop]').forEach(d => d.classList.toggle('over', on)); stage.classList.toggle('over', on); };
+  ['dragenter', 'dragover'].forEach(t => document.addEventListener(t, e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); hl(true); } }));
+  document.addEventListener('dragleave', e => { if (!e.relatedTarget) hl(false); });
+  document.addEventListener('drop', e => { hl(false); const f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return; e.preventDefault(); loadFile(f); });
+  document.addEventListener('paste', e => { if (e.target.closest && e.target.closest('input,textarea')) return; const it = [...(e.clipboardData ? e.clipboardData.items : [])].find(i => i.type.startsWith('image/')); if (!it) return; e.preventDefault(); loadFile(it.getAsFile()); });
+
+  $('#xdl', mv).onclick = () => { const c = exportCanvas(); if (!c) return xmsg('Add an image first.'); c.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'msk-measurement.png'; document.body.appendChild(a); a.click(); a.remove(); xmsg('Download started. If nothing happened, use Copy annotated image.'); }); };
+  $('#xcopy', mv).onclick = () => { const c = exportCanvas(); if (!c) return xmsg('Add an image first.'); try { const p = new Promise(r => c.toBlob(r)); navigator.clipboard.write([new ClipboardItem({ 'image/png': p })]).then(() => xmsg('Annotated image copied. Paste it into a report, email or slide.'), () => xmsg('This browser blocked image copying. Use Download PNG instead.')); } catch (e) { xmsg('This browser cannot copy images. Use Download PNG instead.'); } };
   $('#xtxt', mv).onclick = () => { const t = reportText(); if (!t) { xmsg('No measurements yet.'); return; } try { navigator.clipboard.writeText(t).then(() => xmsg('Report text copied.'), () => xmsg(t)); } catch (e) { xmsg(t); } };
-  $('#mmpx', mv).oninput = e => { const v = parseFloat(e.target.value); S.mmPerPx = v > 0 ? v : null; list(); draw(); };
-  $('#calok', mv).onclick = () => { const c = S.shapes.find(s => s.type === 'calib'), mm = parseFloat($('#calmm', mv).value); if (c && mm > 0) { S.mmPerPx = mm / dist(c.pts[0], c.pts[1]); $('#mmpx', mv).value = S.mmPerPx.toPrecision(4); $('#calrow', mv).hidden = true; list(); draw(); } };
+  const resend = () => S.shapes.filter(s => s.key).forEach(send);
+  $('#mmpx', mv).oninput = e => { const v = parseFloat(e.target.value); S.mmPerPx = v > 0 ? v : null; resend(); refresh(); };
+  $('#calbtn', mv).onclick = () => setTool('calib');
+  $('#calok', mv).onclick = () => {
+    const c = S.shapes.find(s => s.type === 'calib'), mm = parseFloat($('#calmm', mv).value);
+    if (c && mm > 0) { S.mmPerPx = mm / dist(c.pts[0], c.pts[1]); $('#mmpx', mv).value = S.mmPerPx.toPrecision(4); $('#calrow', mv).hidden = true; resend(); const t = T(S.target); setTool(t ? t.kind : 'angle'); refresh(); }
+  };
   $('#target', mv).onchange = e => setTarget(e.target.value);
-  $('#undo', mv).onclick = () => { if (S.pending.length) S.pending = []; else S.shapes.pop(); list(); draw(); };
-  $('#clear', mv).onclick = () => { S.shapes = []; S.pending = []; list(); draw(); };
+  $('#undo', mv).onclick = () => { if (S.pending.length) S.pending.pop(); else S.shapes.pop(); refresh(); };
+  $('#clear', mv).onclick = () => { S.shapes = []; S.pending = []; refresh(); };
   $('#mlist', mv).addEventListener('click', e => {
-    const d = e.target.closest('[data-del]'); if (d) { S.shapes.splice(+d.dataset.del, 1); list(); draw(); return; }
+    const d = e.target.closest('[data-del]'); if (d) { S.shapes.splice(+d.dataset.del, 1); refresh(); return; }
     const s = e.target.closest('[data-send]'); if (!s) return;
-    const sh = S.shapes[+s.dataset.send], val = value(sh), [cid, iid] = S.target.split('.');
-    const el = document.getElementById(`in-${cid}-${iid}`); if (!el) return;
-    el.value = val.v.toFixed(1); compute(CALCS[cid]);
-    const pill = document.querySelector(`#card-${cid} .pill`); sh.note = `${CALCS[cid].title}${pill ? ': ' + pill.textContent : ''}`; list(); draw();
-    go(CALCS[cid].module);
-    const card = document.getElementById('card-' + cid); card.scrollIntoView({ block: 'center' }); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
-    if (val.unit === 'px') { const f = el.closest('.field'); f && f.setAttribute('title', 'Sent in pixels: calibrate for millimetres'); }
+    const sh = S.shapes[+s.dataset.send]; S.shapes.forEach(o => { if (o !== sh && o.key === S.target) { o.key = null; o.note = null; } }); sh.key = S.target; send(sh); refresh();
+  });
+  $('#mres', mv).addEventListener('click', e => {
+    const p = e.target.closest('[data-pick]'); if (p) { setTarget(p.dataset.pick); return; }
+    if (e.target.closest('[data-scale]')) { const sp = $('#scalep', mv); sp.open = true; sp.scrollIntoView({ block: 'nearest' }); return; }
+    const o = e.target.closest('[data-open]'); if (o) { const id = o.dataset.open; go(CALCS[id].module); const card = document.getElementById('card-' + id); card.scrollIntoView({ block: 'start' }); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash'); }
   });
   window.addEventListener('resize', () => { if (current === 'measure') { S.fitted = false; resize(); } });
-  setTool('angle'); useSample();
-  return { resize: () => requestAnimationFrame(resize), setTarget };
+  setTool('angle'); refresh();
+  return { resize: () => requestAnimationFrame(resize), setTarget, refreshResult: () => { if (current === 'measure') $('#mres', mv).innerHTML = resultHTML(); } };
 })();
+
 
 /* ---------- cases ---------- */
 const cv2 = document.createElement('section');
@@ -1540,7 +1830,7 @@ const foot = document.createElement('p'); foot.className = 'disclaimer';
 foot.textContent = 'For research and education only. Not a medical device; not for clinical decision-making. Always interpret measurements with the full imaging and clinical picture.';
 main.after(Object.assign(document.createElement('div'), { className: 'wrap' })); main.nextElementSibling.appendChild(foot);
 
-go(location.hash.slice(1) || MODULES[0].id, { keepScroll: true });
+go(location.hash.slice(1) || 'start', { keepScroll: true });
 })();
 </script>
 
