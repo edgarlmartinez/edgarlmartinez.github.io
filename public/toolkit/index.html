@@ -278,6 +278,8 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
 .bmap-status{font-size:14px;margin:10px 0 0;min-height:1.5em}
 .bmap-status button{margin-left:8px;font:inherit;font-size:13px;color:var(--accent);background:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;cursor:pointer}
 @media (max-width:640px){.bmap-row{grid-template-columns:1fr;gap:12px}.bodymap{max-width:130px}}
+.caselinks{margin:6px 0 0;font-size:14px;color:var(--muted)}
+.caselinks a{color:var(--accent)}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -285,7 +287,7 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
 </defs></svg>
 
 <header class="top"><div class="wrap">
-  <h1>MSK Measurement Toolkit</h1><span class="ruo">Research &amp; education only</span><span class="ver" id="ver"></span><a class="ver" href="../" style="margin-left:12px">← edgarlmartinez.github.io</a>
+  <h1>MSK Measurement Toolkit</h1><span class="ruo">Research &amp; education only</span><span class="ver" id="ver"></span>
   <p class="sub">Literature-based normal ranges, grading and interpretation for common musculoskeletal measurements, with a measure-on-image tool<span id="subcases"> and a teaching case file</span>. Every threshold links to its source.</p>
 </div></header>
 <nav class="tabs" aria-label="Sections"><div class="wrap" id="tabs" role="tablist"></div></nav>
@@ -1917,6 +1919,19 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const CALCS = {}; MODULES.forEach(m => m.calculators.forEach(c => { CALCS[c.id] = c; c.module = m.id; }));
+/* Teaching cases for a section: on the website they come from window.SITE_CASE_LINKS (built from the
+   Cases page data); in the private build, from CASES entries whose link or calculator points at this section. */
+const caseLinksFor = m => {
+  if (window.SITE_CASE_LINKS) return window.SITE_CASE_LINKS[m.id] || [];
+  if (!TOOLKIT_META.showCases) return [];
+  return CASES.filter(c => (c.link && c.link.href === '#' + m.id) || (c.calc && CALCS[c.calc.id] && CALCS[c.calc.id].module === m.id))
+    .map(c => ({ href: '#cases', title: c.title, id: c.id }));
+};
+const caseLinksHTML = m => { const L = caseLinksFor(m); return L.length ? `<p class="caselinks">Teaching case${L.length > 1 ? 's' : ''}: ${L.map(l => `<a href="${esc(l.href)}"${l.id ? ` data-case="${esc(l.id)}"` : ''}>${esc(l.title)}</a>`).join(' · ')}</p>` : ''; };
+document.addEventListener('click', e => {
+  const a = e.target.closest('.caselinks a[data-case]'); if (!a) return;
+  e.preventDefault(); go('cases'); const el = document.getElementById('case-' + a.dataset.case); if (el) el.scrollIntoView({ block: 'start' });
+});
 const main = $('#main');
 if (!TOOLKIT_META.showCases) $('#subcases').remove();
 $('#ver').textContent = `v${TOOLKIT_META.version} · reviewed ${TOOLKIT_META.reviewed}`;
@@ -2013,7 +2028,7 @@ function cardHTML(c) {
 MODULES.forEach(m => {
   const sec = document.createElement('section');
   sec.className = 'view'; sec.dataset.view = m.id; sec.hidden = true;
-  sec.innerHTML = `<div class="view-head"><h2>${esc(m.title)}</h2><p>${esc(m.blurb)}</p></div>
+  sec.innerHTML = `<div class="view-head"><h2>${esc(m.title)}</h2><p>${esc(m.blurb)}</p>${caseLinksHTML(m)}</div>
     <p class="example">Fields start with example values so you can see how each calculator reads. Replace them with your measurements.</p>
     <div class="grid">${m.calculators.map(cardHTML).join('')}</div>`;
   main.appendChild(sec);
