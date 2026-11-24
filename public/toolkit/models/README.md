@@ -1,13 +1,12 @@
 # Automatic landmark models (research and education only)
 
-These small models propose landmarks in the toolkit's "Measure an image" view. They run in the browser with onnxruntime-web (loaded from jsDelivr); the image is never uploaded. Every proposed point is an ordinary, draggable point, and the usual engine computes and grades the result. **Not a medical device. Not for clinical use.**
+This small model proposes landmarks in the toolkit's "Measure an image" view. They run in the browser with onnxruntime-web (loaded from jsDelivr); the image is never uploaded. Every proposed point is an ordinary, draggable point, and the usual engine computes and grades the result. **Not a medical device. Not for clinical use.**
 
 | File | Measurement | Input | Output |
 |---|---|---|---|
 | `infant-hip-v1.onnx` | Acetabular index (right, left) and IHDI grade | Grayscale AP pelvis, letterboxed to 320 × 480 | 8 landmark heatmaps at stride 2 |
-| `lordosis-v1.onnx` | Lumbar lordosis L1–S1 (Cobb method) | Grayscale lateral lumbar radiograph, letterboxed to 384 × 384 | 4 landmark heatmaps at stride 2 |
 
-Both are the same small U-Net (about 1.1M parameters, 4.4 MB) trained from scratch on a CPU with focal heatmap loss and heavy augmentation (scale, rotation, shift, mirroring, gamma, contrast, blur, noise, inversion). At run time the image and its mirror image are both run, and the heatmaps are averaged. A low peak score triggers a "low confidence" note.
+It is a small U-Net (about 1.1M parameters, 4.4 MB) trained from scratch on a CPU with focal heatmap loss and heavy augmentation (scale, rotation, shift, mirroring, gamma, contrast, blur, noise, inversion). At run time the image and its mirror image are both run, and the heatmaps are averaged. A low peak score triggers a "low confidence" note.
 
 ## Infant hip (`infant-hip-v1.onnx`)
 
@@ -28,17 +27,19 @@ IHDI grade by reference grade (without outliers): grade I 1,170 of 1,189 correct
 
 The 5.6% of images with a low peak score (under 0.15) had a mean worst-side acetabular index error of 11.9°, against 3.0° for the rest, so the "low confidence" note is worth heeding.
 
-## Lumbar lordosis (`lordosis-v1.onnx`)
+## Lumbar lordosis: tried, not released
 
-**Data:** "Spondylolisthesis Vertebral Landmark", Mendeley Data, doi:10.17632/5jdfdgp762.1, **CC BY 4.0**. Images originally from BUU-LSPINE (Burapha University, Thailand); credit Burapha University per the BUU-LSPINE terms. Only BUU images with 6 or more labelled bodies were used, because in those the lowest labelled body is S1 and the sixth from the bottom is L1 (checked visually). 4 landmarks: anterior and posterior corners of the L1 and S1 superior endplates. The publisher's split was used: 273 training and 192 test images (different patients).
+A lordosis model was trained on the public "Spondylolisthesis Vertebral Landmark" set (Mendeley Data, doi:10.17632/5jdfdgp762.1, CC BY 4.0; BUU-LSPINE images). It is **not** in the toolkit because it is not accurate enough. On 192 held-out lateral lumbar radiographs:
 
-**Held-out test:** LORDOSIS_RESULTS
+- A direct 4-point model (L1 and S1 superior endplates) found the right L1 only 41% of the time; mean lordosis error 21°.
+- The vertebral corner detector from the vertebral morphometry demo, counting up from S1, picked both levels correctly in 65% of images; mean error 11° overall and 8° even with the right levels, mostly from the S1 endplate (systematic 6° rotation).
+
+Likely causes: only about 270 training images with L1 to S1 labelled, images squashed to 640 × 640 by the publisher, and S1 labelled as a box rather than an endplate. The full-resolution BUU-LSPINE release (access request) is the next step.
 
 ## Limitations
 
-- Trained and tested on two public datasets from single regions; performance on other equipment and populations is unknown.
-- The lumbar images were resized to 640 × 640 by the publisher, which distorts the aspect ratio. Training varied the aspect ratio to compensate, but the reference angles themselves were measured on the distorted images.
-- Neither model knows when it is given the wrong view. Pick the measurement first, then add the image.
+- Trained and tested on one public dataset; performance on other equipment, populations and positioning is unknown.
+- The model does not know when it is given the wrong view. Pick the measurement first, then add the image.
 - No age-specific acetabular index norms are applied; the bands are general guides and are marked as varying in the literature.
 
 ## Rebuilding

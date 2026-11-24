@@ -320,8 +320,7 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
 <script>
 /* accuracy of the automatic-landmark research models on held-out public radiographs (shown next to the button) */
 const AUTO_ACC = {
-  sag: 'TBD',
-  ddh: 'Tested on 679 held-out public infant AP pelvis radiographs: acetabular index mean error 2.0° (94% within 5°), IHDI grade matched 94% of hips'
+  ddh: 'On 679 held-out public radiographs: acetabular index off by 2.0° on average, IHDI grade matched in 94% of hips'
 };
 const TOOLKIT_META = { version: '1.6', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
 
@@ -2200,7 +2199,7 @@ mv.innerHTML = `<div class="view-head"><h2>Measure an image</h2><p>Pick what you
     </details>
   </div>
 </div>
-<p class="example auto"><b>What is automatic:</b> step-by-step landmark prompts, snapping each point to the nearest bone edge and straightening each line along the edge it follows, the angle and length math, grading against the published cutoffs, and drawing the labeled result for copy or download. <b>Automatic landmarks (research):</b> for lumbar lordosis on a lateral lumbar radiograph and the acetabular index and IHDI grade on an infant AP pelvis, small models trained on public radiographs propose the landmarks as soon as the image is added. They run in this browser and the image is not uploaded. <b>What is not automatic:</b> every other measurement, where you still choose each landmark. Check every line, including proposed ones, before using a value.</p>
+<p class="example auto"><b>What is automatic:</b> step-by-step landmark prompts, snapping each point to the nearest bone edge and straightening each line along the edge it follows, the angle and length math, grading against the published cutoffs, and drawing the labeled result for copy or download. <b>Automatic landmarks (research):</b> for the acetabular index and IHDI grade on an infant AP pelvis, a small model trained on public radiographs proposes the landmarks as soon as the image is added. They run in this browser and the image is not uploaded. <b>What is not automatic:</b> every other measurement so far, where you still choose each landmark. Check every line, including proposed ones, before using a value.</p>
 <input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden>`;
 main.appendChild(mv);
 
@@ -2286,7 +2285,7 @@ const M = (() => {
   }
 
   function load(src, isSample) {
-    S.img = src; S.sample = isSample; S.keys = null; S.showKey = false; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
+    S.img = src; S.sample = isSample; S.keys = null; S.autoOv = null; S.showKey = false; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
     S.fitted = false; fit(); amsg(''); refresh();
     const t = T(S.target); if (!isSample && t && AUTOLM[t.cid] && $('#autorun', mv).checked) runAuto();
   }
@@ -2483,6 +2482,7 @@ const M = (() => {
       Object.entries(S.keys.keys).forEach(([iid, pts]) => { const t = T(S.keys.cid + '.' + iid); if (!t) return; const sg = segsFor(t.kind, pts); sg.forEach(([a, b]) => seg(a, b, '#ffb020')); ctx.setLineDash([]); const [a, b] = sg[sg.length - 1]; label({ x: a.x + (b.x - a.x) * 0.6, y: a.y + (b.y - a.y) * 0.6 }, `key ${fmtV(keyVal(t, pts))}`); ctx.setLineDash([7, 5]); });
       ctx.restore();
     }
+    if (S.autoOv) { ctx.save(); ctx.setLineDash([6, 5]); S.autoOv.lines.forEach(([a, b]) => seg(a, b, '#ffb020')); ctx.setLineDash([]); S.autoOv.dots.forEach(([q, t]) => { dot(q, '#ffb020'); const Q = toScr(q); ctx.font = '600 12px "IBM Plex Mono", monospace'; ctx.fillStyle = '#ffb020'; ctx.fillText(t, Q.x + 7, Q.y + 4); }); ctx.restore(); }
     const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; if (PERPT.has(S.tool) && S.tool !== 'length') segsFor(S.tool, P, S.cursor && (S.tool === 'vangle' || P.length === 1) ? toImg(S.cursor) : null).forEach(([a, b]) => seg(a, b, c)); else { for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); } P.forEach(p => dot(p, c)); }
     $('#mempty', mv).hidden = !!S.img;
     $('#hint', mv).hidden = !S.img || !S.pending.length;
@@ -2506,17 +2506,19 @@ const M = (() => {
     refresh();
   }
   /* ---------- automatic landmarks (research models, run in the browser) ----------
-     Each entry maps a calculator to a small landmark model (ONNX, in models/ next to this file).
+     Each entry maps a calculator id to a small landmark model (ONNX, in models/ next to this file):
+     input size, number of points, which channel each point swaps with in a mirrored image, and
+     build(), which turns the predicted points into the calculator's measurements.
      The model proposes points; they become ordinary editable measurements. Nothing is uploaded. */
   const ORT = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
   const AUTOLM = {
-    sag: { model: 'models/lordosis-v1.onnx', H: 384, W: 384, n: 4, flip: [0, 1, 2, 3], view: 'lateral lumbar spine radiograph',
-      acc: AUTO_ACC.sag,
-      build: p => [{ iid: 'll', pts: [p[0], p[1], p[2], p[3]] }] },
     ddh: { model: 'models/infant-hip-v1.onnx', H: 320, W: 480, n: 8, flip: [4, 5, 6, 7, 0, 1, 2, 3], view: 'AP pelvis radiograph of an infant or toddler',
       acc: AUTO_ACC.ddh,
       build: p => [{ iid: 'r', pts: [p[1], p[5], p[1], p[0]] }, { iid: 'l', pts: [p[5], p[1], p[5], p[4]] }],
-      extra: p => ({ gr: ihdiGrade(p, 0), gl: ihdiGrade(p, 4) }) }
+      extra: p => ({ gr: ihdiGrade(p, 0), gl: ihdiGrade(p, 4) }),
+      overlay: p => { const h = { x: p[5].x - p[1].x, y: p[5].y - p[1].y }, L = Math.hypot(h.x, h.y); let n = { x: -h.y / L, y: h.x / L }; if (n.y < 0) n = { x: -n.x, y: -n.y };
+        const P = b => [p[b], { x: p[b].x + n.x * L * 0.45, y: p[b].y + n.y * L * 0.45 }];
+        return { lines: [P(0), P(4)], dots: [[p[3], 'H'], [p[7], 'H']], label: 'Dashed: Perkin lines and H-points used for the IHDI grade' }; } }
   };
   /* IHDI grade from H-line (triradiate points 1, 5), lateral acetabular edge (b) and H-point (b + 3) */
   function ihdiGrade(p, b) {
@@ -2567,8 +2569,9 @@ const M = (() => {
       S.pending = [];
       cfg.build(r.pts).forEach(b => { const key = t.cid + '.' + b.iid, sh = { type: T(key).kind, pts: b.pts, key, auto: true }; S.shapes = S.shapes.filter(o => o.key !== key); S.shapes.push(sh); send(sh); });
       if (cfg.extra) { const ex = cfg.extra(r.pts); Object.entries(ex).forEach(([iid, v]) => { const el = document.getElementById(`in-${t.cid}-${iid}`); if (el) el.value = String(v); }); compute(CALCS[t.cid]); S.shapes.filter(o => o.key && T(o.key).cid === t.cid).forEach(send); }
+      S.autoOv = cfg.overlay ? cfg.overlay(r.pts) : null;
       const nx = nextTarget(t.cid); if (nx) { S.target = nx.key; $('#target', mv).value = nx.key; setTool(nx.kind); }
-      amsg(`${low ? '<b class="warn">Low confidence.</b> This model expects this view: ' + esc(cfg.view) + '. ' : ''}Proposed by a research model. ${esc(cfg.acc)}. Check every point and drag any that are off.`);
+      amsg(`${low ? '<b class="warn">Low confidence.</b> This model expects this view: ' + esc(cfg.view) + '. ' : ''}Proposed by a research model. ${esc(cfg.acc)}. Check every point and drag any that are off.${S.autoOv ? ' ' + esc(S.autoOv.label) + '; if an H-point is off, set the IHDI grade by hand in the full calculator.' : ''}`);
       refresh();
     } catch (e) { amsg(esc(e.message || String(e))); }
     btn.disabled = false;
@@ -2627,7 +2630,7 @@ const M = (() => {
   $('#zin', mv).onclick = () => zoom(1.25); $('#zout', mv).onclick = () => zoom(0.8); $('#zfit', mv).onclick = () => { fit(); draw(); };
   $('#inv', mv).onclick = e => { S.inv = !S.inv; e.target.setAttribute('aria-pressed', S.inv); draw(); };
   $('#bri', mv).oninput = e => { S.bri = +e.target.value; draw(); }; $('#con', mv).oninput = e => { S.con = +e.target.value; draw(); };
-  $('#newimg', mv).onclick = () => { S.img = null; S.shapes = []; S.pending = []; refresh(); };
+  $('#newimg', mv).onclick = () => { S.img = null; S.autoOv = null; S.shapes = []; S.pending = []; refresh(); };
 
   function loadFile(f) {
     if (!f || !/^image\//.test(f.type)) { pmsg('That file is not an image. Use PNG or JPEG.'); return; }
@@ -2671,7 +2674,7 @@ const M = (() => {
   $('#target', mv).onchange = e => setTarget(e.target.value);
   $('#ldsample', mv).onclick = () => { const t = T(S.target); if (t && hasSample(t.cid)) useSampleFor(t.cid); };
   $('#undo', mv).onclick = () => { if (S.pending.length) S.pending.pop(); else S.shapes.pop(); refresh(); };
-  $('#clear', mv).onclick = () => { S.shapes = []; S.pending = []; refresh(); };
+  $('#clear', mv).onclick = () => { S.autoOv = null; S.shapes = []; S.pending = []; refresh(); };
   $('#mlist', mv).addEventListener('click', e => {
     const d = e.target.closest('[data-del]'); if (d) { S.shapes.splice(+d.dataset.del, 1); refresh(); return; }
     const s = e.target.closest('[data-send]'); if (!s) return;
