@@ -1,9 +1,9 @@
 ---
 number: 1
-title: The radiograph and the "do not touch" lesion
-subtitle: Two tasks, every day. Is it benign, or is it aggressive?
+title: "Benign or malignant? The \"do not touch\" lesion"
+subtitle: "Bone and soft-tissue lesions: the two tasks of every day"
 status: draft
-summary: How to sort every bone lesion on a radiograph into the benign "do not touch" bin or the aggressive bin, using ACR Bone-RADS scoring, with the commonest do-not-touch lesions.
+summary: "Part A: bone lesions on radiographs, benign do-not-touch versus aggressive, with ACR Bone-RADS scoring, the classic benign and malignant tumors. Part B: soft-tissue masses on radiographs, ultrasound and MRI."
 updated: 2026-11
 ---
 
@@ -15,12 +15,38 @@ Most bone lesions you will see as a resident are found by accident: a knee radio
 
 A "do not touch" lesion is one whose radiographic appearance is so characteristic that biopsy would add risk and nothing else. Biopsy of some of these lesions is not just unnecessary: myositis ossificans and a healing stress fracture can look like sarcoma under the microscope, and a needle can turn a benign finding into a surgical case. The phrase is old teaching folklore in skeletal radiology; this chapter gives it a structure by mapping it to the American College of Radiology Bone Reporting and Data System (Bone-RADS).
 
+This chapter is written for the first-year resident and has two parts:
+
+- **Part A. Bone lesions.** The features that separate benign from malignant, how to score them, the classic benign lesions you will see every week (non-ossifying fibroma, enchondroma, bone island and others), and the classic malignant tumors you must recognize (osteosarcoma, chondrosarcoma, Ewing sarcoma, lymphoma).
+- **Part B. Soft-tissue masses.** The same benign-versus-malignant question for a lump in the soft tissues, and what radiographs, ultrasound and MRI each add.
+
 <figure>
   <img src="/book/figures/two-task.svg" alt="Flow chart: Task 1, can I name it and leave it, leads to the benign bin (Bone-RADS 1). Otherwise Task 2 scores aggressiveness into Bone-RADS 2, 3 or 4. Lesions that cannot be assessed are Bone-RADS 0." />
   <figcaption>Figure 1.1. The two tasks of daily bone-lesion reading, mapped to ACR Bone-RADS categories.</figcaption>
 </figure>
 
-## 1.1 Reading a lesion on the radiograph
+# Part A. Bone lesions
+
+## 1.1 The core concept: benign or malignant?
+
+Start with one comparison. A benign bone lesion grows slowly, so the bone has time to wall it off. A malignant lesion grows fast, so the bone cannot keep up and the tumor breaks out.
+
+| Feature | Benign ("do not touch") | Malignant (aggressive) |
+| --- | --- | --- |
+| **Margin** | Well circumscribed, narrow zone of transition, often a thin sclerotic rim | Ill-defined, wide zone of transition, moth-eaten or permeative |
+| **Endosteal scalloping** | None or mild | Deep (more than two thirds of the cortex) |
+| **Periosteal reaction** | None, or solid and smooth | Interrupted: lamellated, spiculated, Codman triangle |
+| **Cortex** | Intact | Destroyed, with breakthrough |
+| **Beyond the bone** | Nothing | Soft-tissue mass |
+
+If a lesion has every feature in the left column, it is very likely benign. Any feature from the right column moves it toward Task 2. The rest of Part A puts numbers and names on this table.
+
+<figure>
+  <img src="/book/figures/bone-benign-vs-malignant.svg" alt="Side-by-side schematic: a benign lesion with sclerotic rim and intact cortex; a malignant lesion with permeative marrow, Codman triangle, spiculated periosteal reaction, cortical breakthrough and soft-tissue mass." />
+  <figcaption>Figure 1.2. The benign and the malignant bone lesion, side by side. Schematic.</figcaption>
+</figure>
+
+## 1.2 Reading a lesion on the radiograph
 
 Before you sort a lesion, describe it the same way every time. The radiograph is still the best test for how fast a bone lesion is growing, because the bone's response (the margin, the periosteum, the cortex) is a record of the lesion's speed (Miller 2008).
 
@@ -49,15 +75,15 @@ ACR Bone-RADS uses a modified Lodwick–Madewell grading of the lesion margin (C
 
 <figure>
   <img src="/book/figures/margins.svg" alt="Four schematic long bones showing a geographic lesion with sclerotic rim (IA), a sharp geographic lesion without rim (IB), an ill-defined geographic lesion (II) and moth-eaten permeative destruction (IIIB)." />
-  <figcaption>Figure 1.2. Margins, from slowest (left) to fastest (right), with their Bone-RADS margin points.</figcaption>
+  <figcaption>Figure 1.3. Margins, from slowest (left) to fastest (right), with their Bone-RADS margin points.</figcaption>
 </figure>
 
 <figure>
   <img src="/book/figures/periosteal.svg" alt="Four schematic periosteal reactions: solid smooth (non-aggressive), lamellated onion skin, spiculated sunburst and Codman triangle (aggressive)." />
-  <figcaption>Figure 1.3. Periosteal reaction. Solid new bone means the lesion is slow enough for the periosteum to keep up.</figcaption>
+  <figcaption>Figure 1.4. Periosteal reaction. Solid new bone means the lesion is slow enough for the periosteum to keep up.</figcaption>
 </figure>
 
-## 1.2 Bone-RADS: turning the two tasks into a score
+## 1.3 Bone-RADS: turning the two tasks into a score
 
 In 2023 the ACR Bone-RADS Committee, with the Musculoskeletal Tumor Society, published a radiograph-based risk stratification and management system for any newly found, potentially neoplastic bone lesion (Caracciolo et al. 2023). You add points for six features and the total gives the category.
 
@@ -91,9 +117,9 @@ Notice how the arithmetic is built: **a sclerotic rim alone gives 1 point, and a
 
 A different document, the Society of Skeletal Radiology Bone-RADS white paper (Chang et al. 2022), covers **incidental solitary bone lesions on CT and MRI in adults**. You will meet it in the tumor chapter; the logic (benign, follow, biopsy) is the same.
 
-## 1.3 The "do not touch" gallery
+## 1.4 The classic benign lesions: the "do not touch" gallery
 
-For each lesion: what you see, why you can leave it alone, and what would make you touch it. The red flags are the bridge to Task 2.
+The three you will see most often come first: non-ossifying fibroma, enchondroma and bone island. For each lesion: what you see, why you can leave it alone, and what would make you touch it. The red flags are the bridge to Task 2.
 
 <div class="lesion">
 
@@ -115,22 +141,6 @@ For each lesion: what you see, why you can leave it alone, and what would make y
 
 <div class="lesion">
 
-### Bone island (enostosis)
-
-<div class="ex-slot" data-topic="bone-island"></div>
-
-**What you see.** A dense, homogeneous focus of compact bone in the medulla, round or oval, usually under 2 cm, with **brush-like, spiculated margins (thorny radiations)** that blend with the surrounding trabeculae. Common in the pelvis, proximal femur and spine.
-
-**Why you can leave it.** Bone islands are normal cortical bone in the wrong place. The brush border is the key: it shows the lesion is integrated with the trabeculae, unlike the smoother margin of many blastic metastases.
-
-**When to touch it.** A known primary cancer (prostate, breast) with a new sclerotic lesion, a lesion that grows quickly, a size over 2 cm (a "giant" bone island is still usually benign, but needs care), or pain. Bone islands are usually not avid on bone scan; marked uptake should make you think again. On CT, attenuation helps: in untreated patients, a mean below **885 HU** or a maximum below **1060 HU** favors metastasis over bone island (sensitivity and specificity about 95% each; Ulano et al. 2016).
-
-**Report as.** "Bone island (enostosis). Benign."
-
-</div>
-
-<div class="lesion">
-
 ### Enchondroma
 
 <div class="ex-slot" data-topic="enchondroma"></div>
@@ -144,6 +154,22 @@ For each lesion: what you see, why you can leave it alone, and what would make y
 **Do not forget.** An enchondroma and a bone infarct can look alike. Chondroid calcification is central, in rings and arcs; an infarct has a **serpiginous sclerotic border** and no endosteal scalloping.
 
 **Report as.** "Chondroid lesion, most consistent with enchondroma. No features of aggressive behavior." Then give the follow-up you recommend.
+
+</div>
+
+<div class="lesion">
+
+### Bone island (enostosis)
+
+<div class="ex-slot" data-topic="bone-island"></div>
+
+**What you see.** A dense, homogeneous focus of compact bone in the medulla, round or oval, usually under 2 cm, with **brush-like, spiculated margins (thorny radiations)** that blend with the surrounding trabeculae. Common in the pelvis, proximal femur and spine.
+
+**Why you can leave it.** Bone islands are normal cortical bone in the wrong place. The brush border is the key: it shows the lesion is integrated with the trabeculae, unlike the smoother margin of many blastic metastases.
+
+**When to touch it.** A known primary cancer (prostate, breast) with a new sclerotic lesion, a lesion that grows quickly, a size over 2 cm (a "giant" bone island is still usually benign, but needs care), or pain. Bone islands are usually not avid on bone scan; marked uptake should make you think again. On CT, attenuation helps: in untreated patients, a mean below **885 HU** or a maximum below **1060 HU** favors metastasis over bone island (sensitivity and specificity about 95% each; Ulano et al. 2016).
+
+**Report as.** "Bone island (enostosis). Benign."
 
 </div>
 
@@ -269,18 +295,75 @@ For each lesion: what you see, why you can leave it alone, and what would make y
 
 </div>
 
-## 1.4 Task 2: when the lesion is not a do-not-touch lesion
+## 1.5 The classic malignant bone tumors
 
-A lesion that you cannot name with confidence goes to Task 2. Score it, then use the category to decide how fast to act. Some practical rules:
+A lesion you cannot name with confidence goes to Task 2. Score it, then think about who the patient is. Four primary malignant tumors are classically described on radiographs, and an R1 should recognize each one.
 
-- **Age over 40, single lytic lesion**: metastasis and myeloma first, then primary bone tumors. A known primary adds 2 points.
+<figure>
+  <img src="/book/figures/malignant-bone.svg" alt="Four schematic panels: osteosarcoma of the metaphysis with cloud-like osteoid and sunburst periosteal reaction; chondrosarcoma with rings-and-arcs matrix and deep endosteal scalloping; Ewing sarcoma of the diaphysis with permeative bone, onion-skin periosteal reaction and large soft-tissue mass; lymphoma with subtle permeative change and large soft-tissue mass." />
+  <figcaption>Figure 1.5. The four classic malignant primary bone tumors. Schematic.</figcaption>
+</figure>
+
+<div class="lesion">
+
+### Osteosarcoma
+
+<div class="ex-slot" data-topic="osteosarcoma"></div>
+
+**Who and where.** Adolescents and young adults, with a second peak in older adults (after Paget disease or radiation). The metaphysis around the knee (distal femur, proximal tibia) and the proximal humerus.
+
+**What you see.** A mixed lytic and sclerotic lesion that **makes bone: cloud-like, fluffy osteoid matrix**, in the bone and in the soft-tissue mass. Aggressive periosteal reaction: **sunburst** spicules and a **Codman triangle**. Wide zone of transition.
+
+**What the next step is.** MRI of the **entire bone** (tumor extent, joint and physis involvement, skip lesions) and chest CT for lung metastases, with referral to orthopedic oncology before biopsy.
+
+</div>
+
+<div class="lesion">
+
+### Chondrosarcoma
+
+<div class="ex-slot" data-topic="chondrosarcoma"></div>
+
+**Who and where.** Adults, usually over 40. Pelvis, proximal femur, proximal humerus, ribs and shoulder girdle.
+
+**What you see.** **Chondroid matrix (rings and arcs)** like an enchondroma, plus the features of aggression: **deep endosteal scalloping (more than two thirds of the cortex)**, cortical thickening or destruction, periosteal reaction, a soft-tissue mass, a large lesion, and **pain coming from the lesion** (Murphey et al. 1998). The radiologist's daily challenge is the line between enchondroma and low-grade chondrosarcoma (see Enchondroma above).
+
+</div>
+
+<div class="lesion">
+
+### Ewing sarcoma
+
+<div class="ex-slot" data-topic="ewing"></div>
+
+**Who and where.** Children and young adults, roughly 5 to 25 years. The **diaphysis** or metadiaphysis of long bones, and the **flat bones** (pelvis, scapula, ribs), more so with increasing age.
+
+**What you see.** **Permeative or moth-eaten** destruction, **lamellated ("onion skin")** or spiculated ("hair-on-end") periosteal reaction, and a **large soft-tissue mass** that is often bigger than the bone change suggests (Murphey et al. 2013). Fever and raised inflammatory markers can mimic osteomyelitis. In a flat bone the radiograph can look almost normal: see the [Ewing sarcoma of the scapula](/cases/#ewing-scapula).
+
+</div>
+
+<div class="lesion">
+
+### Lymphoma of bone
+
+<div class="ex-slot" data-topic="lymphoma"></div>
+
+**Who and where.** Adults. Long bones (often the femur) and the pelvis.
+
+**What you see.** Permeative or moth-eaten change that can be **subtle on radiographs**, with a **large soft-tissue mass while the cortex looks relatively preserved**: the tumor spreads through the small channels of the cortex rather than destroying it. MRI shows marrow replacement that is far more extensive than the radiograph suggests (Krishnan et al. 2003).
+
+</div>
+
+### Practical rules for Task 2
+
+- **Age over 40, single lytic lesion**: metastasis and myeloma first, then primary bone tumors. A known primary adds 2 Bone-RADS points.
 - **Permeative or moth-eaten destruction (IIIB)** in a child or young adult: Ewing sarcoma, lymphoma, osteomyelitis and Langerhans cell histiocytosis are the main differential. In an older adult: myeloma, lymphoma and metastasis.
-- **Flat bones** (pelvis, scapula, ribs) are where aggressive lesions hide. Many lucent axial lesions are Bone-RADS 0 on radiographs: get CT or MRI. See the Ewing sarcoma of the scapula in the [educational cases](/cases/#ewing-scapula).
+- **Flat bones** (pelvis, scapula, ribs) are where aggressive lesions hide. Many lucent axial lesions are Bone-RADS 0 on radiographs: get CT or MRI.
 - **Do not order the biopsy yourself, or let it be done anywhere, before the patient is seen by the team that will operate.** The biopsy tract may have to be removed with the tumor, and poorly planned biopsies of malignant bone tumors lead to changed treatment, including amputation that would otherwise not have been needed (Mankin et al. 1982). Your report should say: "Referral to orthopedic oncology is recommended before biopsy."
 
 <div class="ex-slot" data-topic="aggressive"></div>
 
-## 1.5 How to say it in the report
+## 1.6 How to say it in the report
 
 | Situation | Words that help the clinician |
 | --- | --- |
@@ -291,9 +374,70 @@ A lesion that you cannot name with confidence goes to Task 2. Score it, then use
 
 Name the category, name the next step, and say how soon. A vague "clinical correlation recommended" is not a plan.
 
+# Part B. Soft-tissue masses
+
+## 1.7 The core concept: benign or malignant?
+
+The question is the same as in bone: **is this a lesion I can name and leave, or could it be a sarcoma?** Most soft-tissue lumps are benign (lipomas and cysts above all), but a sarcoma treated as a "lump" and shelled out without imaging is a disaster for the patient. Your job is to spot the red flags.
+
+| Feature | Usually benign | Red flag for malignancy |
+| --- | --- | --- |
+| **Depth** | Superficial: in the subcutaneous fat, above the fascia | Deep: below the fascia, in or between muscles |
+| **Size** | Under 5 cm | 5 cm or more, or growing |
+| **Margin** | Well circumscribed | Infiltrative; crosses fascial planes |
+| **Neighbors** | Respects fascia, muscle, vessels, nerves and bone | Invades muscle, encases the neurovascular bundle, touches or erodes bone |
+| **Internal structure** | Homogeneous | Heterogeneous, with necrosis or hemorrhage |
+| **Vascularity** | None or little | Internal vascularity on Doppler, solid enhancement on MRI |
+
+<figure>
+  <img src="/book/figures/soft-tissue-compartments.svg" alt="Two schematic thigh cross-sections. Left: a small oval mass in the subcutaneous fat above the fascia. Right: a large heterogeneous deep mass inside the muscle that breaks through the fascia, contains necrosis and vessels, encases the neurovascular bundle and touches the bone." />
+  <figcaption>Figure 1.6. Where the mass sits matters. Learn the layers: skin, subcutaneous fat, fascia, muscle, neurovascular bundle, bone.</figcaption>
+</figure>
+
+**These are red flags, not rules.** In a series of 266 extremity soft-tissue tumors with pathology, 43% of the benign tumors were larger than 5 cm and 57% were deep, and about a quarter of the sarcomas were superficial. On MRI, heterogeneous signal and size were stronger predictors than depth (Chung et al. 2012). So a small superficial mass is not automatically benign, and a deep lipoma is not automatically a sarcoma. The practical rule: **a mass you cannot confidently name as benign needs imaging, and an indeterminate mass is treated as a possible sarcoma until proven otherwise.** The ACR puts it simply: imaging should be performed in a patient with a suspected soft-tissue mass that cannot be clinically confirmed as benign (Garner et al. 2023).
+
+<div class="ex-slot" data-topic="soft-tissue-core"></div>
+
+## 1.8 What each modality adds
+
+<figure>
+  <img src="/book/figures/soft-tissue-modalities.svg" alt="Three panels. Radiograph: phleboliths, ossification, fat lucency, bone involvement. Ultrasound: cyst or solid, above or below the fascia, Doppler vascularity, compressibility, needle guidance. MRI: fat, fluid or blood, heterogeneity and necrosis, enhancement, relation to fascia, vessels, nerves and bone, staging." />
+  <figcaption>Figure 1.7. Radiograph, ultrasound and MRI each answer a different question about a soft-tissue mass.</figcaption>
+</figure>
+
+- **Radiograph: always worth a look.** It shows what ultrasound and MRI can miss: **phleboliths** (small round calcifications with a lucent center) in a vascular malformation; **ossification**, which must be mature at the periphery in myositis ossificans (Part A); a **fat lucency** in a lipoma; and **bone involvement**, from smooth pressure erosion (slow, usually benign) to destruction (aggressive).
+- **Ultrasound: the first test for a superficial lump.** Is it a **cyst** (anechoic, posterior acoustic enhancement) or **solid**? Is it **above or below the fascia**? Does **Doppler** show internal vessels? Is it **compressible** (lipoma, vascular malformation) or does it **move with a tendon** (ganglion, giant cell tumor of tendon sheath)? A typical superficial lipoma is oval, parallel to the skin, and iso- or slightly hyperechoic to fat with thin echogenic lines.
+- **MRI: the test for a deep, large or indeterminate mass.** T1 tells you whether the mass is **fat** (Chapter 2); fluid-sensitive images and contrast tell you **cyst versus solid tissue**, **necrosis** and **heterogeneity**; and MRI maps the mass against the **fascia, muscles, neurovascular bundle and bone** for the surgeon.
+
+## 1.9 Soft-tissue masses you can name
+
+Like the do-not-touch bone lesions, some soft-tissue masses can be named on imaging. They will each get their own section later in the book; for now, know their names and their single best clue.
+
+| Mass | The clue |
+| --- | --- |
+| **Lipoma** | Follows fat on every sequence, with at most thin septa. Thick or nodular septa, or non-fatty nodules, raise atypical lipomatous tumor or liposarcoma. |
+| **Ganglion and synovial cysts** | Anechoic or fluid signal, near a joint or tendon sheath, often with a neck to the joint. |
+| **Vascular malformation** | Phleboliths on radiographs; lobulated fluid-bright channels with fat on MRI. |
+| **Peripheral nerve sheath tumor** | Fusiform mass along a nerve, the nerve entering and leaving it, split-fat sign, target sign on T2. |
+| **Giant cell tumor of tendon sheath** | Mass on a finger tendon sheath, low signal on T2 and blooming on gradient echo (hemosiderin). |
+| **Elastofibroma** | Between the chest wall and the inferior tip of the scapula in an older adult, often both sides, fat streaks inside. |
+
+<div class="ex-slot" data-topic="soft-tissue-named"></div>
+
+## 1.10 How to say it in the report
+
+| Situation | Words that help the clinician |
+| --- | --- |
+| Benign, named | "3 cm superficial lipoma in the subcutaneous fat of the posterior shoulder. No further imaging is needed." |
+| Indeterminate | "6 cm heterogeneous solid mass deep to the fascia of the anterior thigh, abutting the femoral neurovascular bundle. A soft-tissue sarcoma cannot be excluded. Recommend referral to a sarcoma center before biopsy or excision." |
+
+Say where it is (above or below the fascia), how big it is, whether it is solid or cystic, and what it touches. Never recommend "excision" for a mass you cannot name.
+
 <div class="never">
 
 ### Never forget
+
+**Bone**
 
 - The margin is the lesion's speedometer. Look at it first.
 - A lesion earns the benign bin only with positive, classic features. "Nothing scary" is not a diagnosis.
@@ -302,6 +446,14 @@ Name the category, name the next step, and say how soon. A vague "clinical corre
 - A cartilage lesion that hurts, scallops more than two thirds of the cortex, or breaks out is chondrosarcoma until proven otherwise.
 - Over 40 with a single lytic lesion: metastasis and myeloma first.
 - The biopsy belongs to the surgeon who will do the resection.
+
+**Soft tissue**
+
+- Know your layers: above the fascia or below it is the first question.
+- Deep, 5 cm or more, growing, heterogeneous or vascular: think sarcoma.
+- Red flags, not rules: benign masses can be deep and large, and sarcomas can be superficial.
+- Get a radiograph. Phleboliths, ossification and bone involvement are easy to miss on MRI.
+- A mass you cannot name is not "shelled out". It goes to the sarcoma team first.
 
 </div>
 
@@ -316,3 +468,7 @@ Name the category, name the next step, and say how soon. A vague "clinical corre
 7. Kransdorf MJ, Moser RP Jr, Gilkey FW. Fibrous dysplasia. *RadioGraphics.* 1990;10(3):519–537. [doi:10.1148/radiographics.10.3.2188311](https://doi.org/10.1148/radiographics.10.3.2188311).
 8. Chai JW, Hong SH, Choi JY, et al. Radiologic diagnosis of osteoid osteoma: from simple to challenging findings. *RadioGraphics.* 2010;30(3):737–749. [doi:10.1148/rg.303095120](https://doi.org/10.1148/rg.303095120). PMID [20462991](https://pubmed.ncbi.nlm.nih.gov/20462991/).
 9. Mankin HJ, Lange TA, Spanier SS. The hazards of biopsy in patients with malignant primary bone and soft-tissue tumors. *J Bone Joint Surg Am.* 1982;64(8):1121–1127. PMID [7130225](https://pubmed.ncbi.nlm.nih.gov/7130225/).
+10. Murphey MD, Senchak LT, Mambalam PK, Logie CI, Klassen-Fischer MK, Kransdorf MJ. From the radiologic pathology archives: Ewing sarcoma family of tumors: radiologic-pathologic correlation. *RadioGraphics.* 2013;33(3):803–831. [PubMed](https://pubmed.ncbi.nlm.nih.gov/?term=From%20the%20radiologic%20pathology%20archives%3A%20Ewing%20sarcoma%20family%20of%20tumors%3A%20radiologic-pathologic%20correlation.).
+11. Krishnan A, Shirkhoda A, Tehranzadeh J, Armin AR, Irwin R, Les K. Primary bone lymphoma: radiographic-MR imaging correlation. *RadioGraphics.* 2003;23(6):1371–1383. [doi:10.1148/rg.236025056](https://doi.org/10.1148/rg.236025056). PMID [14615550](https://pubmed.ncbi.nlm.nih.gov/14615550/).
+12. Chung WJ, Chung HW, Shin MJ, Lee SH, Lee MH, Lee JS, Kim MJ, Lee WK. MRI to differentiate benign from malignant soft-tissue tumours of the extremities: a simplified systematic imaging approach using depth, size and heterogeneity of signal intensity. *Br J Radiol.* 2012;85(1018):e831–e836. [doi:10.1259/bjr/27487871](https://doi.org/10.1259/bjr/27487871). PMID [22553293](https://pubmed.ncbi.nlm.nih.gov/22553293/).
+13. Garner HW, Wessell DE, Lenchik L, et al. (Expert Panel on Musculoskeletal Imaging). ACR Appropriateness Criteria® Soft Tissue Masses: 2022 update. *J Am Coll Radiol.* 2023;20(5S):S234–S245. [doi:10.1016/j.jacr.2023.02.009](https://doi.org/10.1016/j.jacr.2023.02.009). PMID [37236746](https://pubmed.ncbi.nlm.nih.gov/37236746/).

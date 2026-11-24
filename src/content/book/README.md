@@ -28,7 +28,8 @@ public/book/
 
 | Chapter | Topics |
 | --- | --- |
-| 1 | `nof`, `bone-island`, `enchondroma`, `osteochondroma`, `simple-bone-cyst`, `fibrous-dysplasia`, `intraosseous-lipoma`, `bone-infarct`, `myositis-ossificans`, `stress-fracture`, `variants`, `others`, `aggressive` |
+| 1, bone | `nof`, `enchondroma`, `bone-island`, `osteochondroma`, `simple-bone-cyst`, `fibrous-dysplasia`, `intraosseous-lipoma`, `bone-infarct`, `myositis-ossificans`, `stress-fracture`, `variants`, `others`, `osteosarcoma`, `chondrosarcoma`, `ewing`, `lymphoma`, `aggressive` |
+| 1, soft tissue | `soft-tissue-core`, `soft-tissue-named` |
 | 2 | `marrow-replacement`, `chemical-shift`, `osteomyelitis`, `meniscus`, `ligament`, `tendon` |
 
 To add a new topic, put `<div class="ex-slot" data-topic="your-topic"></div>` in the chapter where the example should appear. An example whose topic has no slot still shows in the "Reading-room examples" section at the end of the chapter.

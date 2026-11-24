@@ -1,6 +1,6 @@
 ---
 chapter: 1
-topic: aggressive
+topic: ewing
 title: "Task 2 in a flat bone: Ewing sarcoma of the scapula"
 added: 2026-11
 modality: Radiograph, MRI
