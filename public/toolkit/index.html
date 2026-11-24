@@ -239,6 +239,7 @@ kbd{font-family:var(--f-mono);font-size:11.5px;border:1px solid var(--line);bord
 .panel h3 .n{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:12px;font-family:var(--f-body)}
 details.panel>summary{cursor:pointer;font-weight:600;font-family:var(--f-head);font-size:14px;display:flex;gap:8px;align-items:center}
 details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weight:400}
+.autobox{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.autobox>*{margin-top:8px}.autobox>:first-child{margin-top:0}.autobox small{display:block}
 .chk{font-size:13px}.chk input{accent-color:var(--accent);width:16px;height:16px}
 .rtitle{margin:0;font-family:var(--f-head);font-weight:600;font-size:15px}
 .muted{color:var(--muted);font-size:12.5px;margin:0}
@@ -317,7 +318,11 @@ details.panel>summary .chip{margin-left:auto;font-family:var(--f-mono);font-weig
      REGIONS), put its images in the cases/ folder next to this file.
      ===================================================================== -->
 <script>
-const TOOLKIT_META = { version: '1.5', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
+/* accuracy of the automatic-landmark research models on held-out public radiographs (shown next to the button) */
+const AUTO_ACC = {
+  ddh: 'On 679 held-out public radiographs: acetabular index off by 2.0° on average, IHDI grade matched in 94% of hips'
+};
+const TOOLKIT_META = { version: '1.6', reviewed: '2026-11-23', author: 'Edgar L. Martinez, MD', showCases: false };
 
 const has = x => x !== null && x !== undefined && !(typeof x === 'number' && isNaN(x));
 const sum = (...a) => a.reduce((s, x) => s + (x || 0), 0);
@@ -1282,6 +1287,37 @@ const MODULES = [
     refs: ['younger2005'] }
   ] },
 
+{ id: 'pedhip', tab: 'Pediatric hip', title: 'Developmental dysplasia of the hip (infant AP pelvis)',
+  blurb: 'AP pelvis in infants and toddlers, once the femoral head ossific nucleus or metaphysis can be seen (usually from about 3–4 months; ultrasound is used before that). Keep the pelvis level and unrotated: rotation and tilt change the acetabular index by several degrees.',
+  calculators: [
+  { id: 'ddh', title: 'Acetabular index & IHDI grade', vary: true,
+    howTo: 'Hilgenreiner (H) line: through the triradiate cartilages, at the superolateral edge of each ischial ossification centre. Acetabular index: angle between the H-line and a line from the triradiate point to the lateral edge of the ossified acetabular roof. IHDI grade: draw the Perkin (P) line down from the lateral acetabular edge, perpendicular to the H-line, and a diagonal (D) line at 45° from where they cross. The H-point is the midpoint of the top of the proximal femoral metaphysis. Grade I: H-point medial to the P-line. II: lateral to the P-line, at or medial to the D-line. III: lateral to the D-line, still below the H-line. IV: above the H-line.',
+    diagram: `
+      <path d="M18,40 Q40,22 70,50 L88,58" class="bs" stroke-width="7"/><path d="M182,40 Q160,22 130,50 L112,58" class="bs" stroke-width="7"/>
+      <rect x="36" y="80" width="24" height="44" rx="6" class="bn"/><rect x="140" y="80" width="24" height="44" rx="6" class="bn"/>
+      <line x1="6" y1="62" x2="194" y2="62" class="rf"/><line x1="26" y1="34" x2="26" y2="136" class="rf"/>
+      <line x1="88" y1="62" x2="26" y2="36" class="ms"/><line x1="26" y1="62" x2="6" y2="82" class="rf"/>
+      <circle cx="88" cy="62" r="2.5" class="pt"/><circle cx="26" cy="36" r="2.5" class="pt"/><circle cx="48" cy="80" r="2.5" class="pt"/>
+      <text x="44" y="56" class="m">AI</text><text x="150" y="58" class="s">H-line</text><text x="30" y="134" class="s">P-line</text><text x="54" y="96" class="s">H-pt</text>`,
+    inputs: [
+      { id: 'r', label: 'Acetabular index, right', unit: '°', value: 24, measure: 'angle' },
+      { id: 'l', label: 'Acetabular index, left', unit: '°', value: 33, measure: 'angle' },
+      { id: 'gr', label: 'IHDI grade, right', type: 'select', optional: true, value: '', options: [['', 'Not graded'], ['1', 'I'], ['2', 'II'], ['3', 'III'], ['4', 'IV']] },
+      { id: 'gl', label: 'IHDI grade, left', type: 'select', optional: true, value: '', options: [['', 'Not graded'], ['1', 'I'], ['2', 'II'], ['3', 'III'], ['4', 'IV']] }
+    ],
+    results: [
+      ...[['r', 'right'], ['l', 'left']].map(([k, side]) => ({ id: k, label: `Acetabular index, ${side}`, unit: '°', calc: v => v[k], scale: [5, 45], bands: [
+        { upTo: 25, incl: true, label: 'Within the usual range (25° or less)', sev: 'ok', note: 'The index falls with age, to about 20° by 2 years.' },
+        { upTo: 30, incl: true, label: 'Borderline (over 25° to 30°)', sev: 'warn', note: 'Can be normal in the first months; abnormal if it persists past about 1 year. Compare with age-specific norms.' },
+        { label: 'Increased (over 30°)', sev: 'alert', note: 'Acetabular dysplasia is likely beyond early infancy.' } ] })),
+      { id: 'd', label: 'Side-to-side difference', unit: '°', decimals: 1, calc: v => has(v.r) && has(v.l) ? Math.abs(v.r - v.l) : null },
+      ...[['gr', 'right'], ['gl', 'left']].map(([k, side]) => ({ id: k, label: `IHDI grade, ${side}`, calc: v => v[k], decimals: 0,
+        classify: g => g <= 1 ? { label: 'Grade I: located', sev: 'ok' } : g === 2 ? { label: 'Grade II: subluxated', sev: 'warn' } : { label: g === 3 ? 'Grade III: dislocated' : 'Grade IV: high dislocation', sev: 'alert' } }))
+    ],
+    flags: [{ when: v => has(v.r) && has(v.l) && Math.abs(v.r - v.l) >= 5, sev: 'info', text: 'Asymmetry of 5° or more between sides: check for pelvic rotation before calling unilateral dysplasia.', refs: ['tonnis1976'] }],
+    refs: ['kleinberg1936', 'tonnis1976', 'narayanan2015'] }
+  ] },
+
 { id: 'pedfoot', tab: 'Pediatric foot', title: 'Pediatric foot alignment & terminology',
   blurb: 'Weight-bearing (or simulated weight-bearing) AP and lateral views, with the ankle as close to neutral dorsiflexion as possible. Normal angles change with age, and values outside ±2 SD are not necessarily abnormal; read the angles together with the clinical findings.',
   calculators: [
@@ -1459,6 +1495,8 @@ const GUIDES = {
   'flamingo.r': ['Top of the right pubic body at the symphysis', 'Top of the left pubic body (vertical offset)'],
   'flamingo.l': ['Top of the right pubic body at the symphysis', 'Top of the left pubic body (vertical offset)'],
   'flamingo.w': ['Right symphyseal margin', 'Left symphyseal margin'],
+  'ddh.r': ['Hilgenreiner line: right triradiate point to left triradiate point', 'Right acetabular roof: triradiate point to lateral acetabular edge'],
+  'ddh.l': ['Hilgenreiner line: left triradiate point to right triradiate point', 'Left acetabular roof: triradiate point to lateral acetabular edge'],
   'lcea.a': ['Inter-teardrop line (horizontal reference)', 'Line from the femoral head center to the lateral sourcil edge'],
   'cover.t': ['Horizontal reference through the medial sourcil', 'Line from the medial to the lateral sourcil edge'],
   'cover.a': ['Lateral acetabular edge', 'Lateral femoral head margin, straight across'],
@@ -1597,6 +1635,8 @@ const REFERENCES = {
   garras2008: { s: 'Garras 2008', a: 'Garras DN, Carothers JT, Olson SA.', t: 'Single-leg-stance (flamingo) radiographs to assess pelvic instability: how much motion is normal?', j: 'J Bone Joint Surg Am. 2008;90(10):2114-2118.' },
   vix1971: { s: 'Vix & Ryu 1971', a: 'Vix VA, Ryu CY.', t: 'The adult symphysis pubis: normal and abnormal.', j: 'Am J Roentgenol Radium Ther Nucl Med. 1971;112(3):517-525.' },
   wiberg1939: { s: 'Wiberg 1939', a: 'Wiberg G.', t: 'Studies on dysplastic acetabula and congenital subluxation of the hip joint.', j: 'Acta Chir Scand. 1939;83(Suppl 58):1-135.' },
+  kleinberg1936: { s: 'Kleinberg & Lieberman 1936', a: 'Kleinberg S, Lieberman HS.', t: 'The acetabular index in infants in relation to congenital dislocation of the hip.', j: 'Arch Surg. 1936;32(6):1049-1054.' },
+  narayanan2015: { s: 'Narayanan 2015', a: 'Narayanan U, Mulpuri K, Sankar WN, Clarke NM, Hosalkar H, Price CT; International Hip Dysplasia Institute.', t: 'Reliability of a new radiographic classification for developmental dysplasia of the hip.', j: 'J Pediatr Orthop. 2015;35(5):478-484.' },
   tonnis1976: { s: 'Tönnis 1976', a: 'Tönnis D.', t: 'Normal values of the hip joint for the evaluation of X-rays in children and adults.', j: 'Clin Orthop Relat Res. 1976;(119):39-47.' },
   heyman1950: { s: 'Heyman 1950', a: 'Heyman CH, Herndon CH.', t: 'Legg-Perthes disease; a method for the measurement of the roentgenographic result.', j: 'J Bone Joint Surg Am. 1950;32(4):767-778.' },
   lequesne1961: { s: 'Lequesne 1961', a: 'Lequesne M, de Seze S.', t: 'Le faux profil du bassin. Nouvelle incidence radiographique pour l\'étude de la hanche.', j: 'Rev Rhum Mal Osteoartic. 1961;28:643-652.' },
@@ -2060,7 +2100,7 @@ const dropHTML = big => `<div class="drop${big ? '' : ' dark'}" data-drop tabind
   <small class="pmsg" aria-live="polite"></small>
 </div>`;
 /* ---------- body map (Start page): tap a region to filter the measurement tiles ---------- */
-const BODY_MODS = { 'Cervical spine': ['ccj'], 'Thoracic spine': ['spine'], 'Lumbar spine': ['spine'], 'Shoulder': ['shoulder'], 'Pelvis': ['hip'], 'Hip': ['hip'], 'Knee': ['knee'], 'Wrist': ['wrist'], 'Ankle': ['foot', 'pedfoot'], 'Foot': ['foot', 'pedfoot'] };
+const BODY_MODS = { 'Cervical spine': ['ccj'], 'Thoracic spine': ['spine'], 'Lumbar spine': ['spine'], 'Shoulder': ['shoulder'], 'Pelvis': ['hip', 'pedhip'], 'Hip': ['hip', 'pedhip'], 'Knee': ['knee'], 'Wrist': ['wrist'], 'Ankle': ['foot', 'pedfoot'], 'Foot': ['foot', 'pedfoot'] };
 const bodyMapSVG = () => {
   const E = (cx, cy, rx, ry, rot = 0) => ({ t: 'e', cx, cy, rx, ry, rot }), R = (x, y, w, h, rx = 8, rot = 0) => ({ t: 'r', x, y, w, h, rx, rot });
   const mir = sh => sh.t === 'e' ? { ...sh, cx: 200 - sh.cx, rot: -sh.rot } : { ...sh, x: 200 - sh.x - sh.w, rot: -sh.rot };
@@ -2128,6 +2168,11 @@ mv.innerHTML = `<div class="view-head"><h2>Measure an image</h2><p>Pick what you
       <div class="ctl"><select id="target" aria-label="Measurement"></select></div>
       <label class="rowc chk" for="snap"><input type="checkbox" id="snap" checked> Auto-align points and lines to bone edges</label>
       <button class="btn" type="button" id="ldsample">Load a synthetic practice image for this measurement</button>
+      <div class="autobox" id="autobox" hidden>
+        <button class="btn primary" type="button" id="autobtn">Auto-place landmarks</button>
+        <label class="rowc chk" for="autorun"><input type="checkbox" id="autorun" checked> Run automatically when an image is added</label>
+        <small id="automsg" aria-live="polite"></small>
+      </div>
     </div>
     <div class="panel"><h3><span class="n">2</span> Result</h3><div id="mres"></div></div>
     <div class="panel"><h3><span class="n">3</span> Share</h3>
@@ -2154,7 +2199,7 @@ mv.innerHTML = `<div class="view-head"><h2>Measure an image</h2><p>Pick what you
     </details>
   </div>
 </div>
-<p class="example auto"><b>What is automatic:</b> step-by-step landmark prompts, snapping each point to the nearest bone edge and straightening each line along the edge it follows, the angle and length math, grading against the published cutoffs, and drawing the labeled result for copy or download. <b>What is not:</b> the tool does not find the anatomy by itself, so you still choose where each landmark goes. Check every line before using a value.</p>
+<p class="example auto"><b>What is automatic:</b> step-by-step landmark prompts, snapping each point to the nearest bone edge and straightening each line along the edge it follows, the angle and length math, grading against the published cutoffs, and drawing the labeled result for copy or download. <b>Automatic landmarks (research):</b> for the acetabular index and IHDI grade on an infant AP pelvis, a small model trained on public radiographs proposes the landmarks as soon as the image is added. They run in this browser and the image is not uploaded. <b>What is not automatic:</b> every other measurement so far, where you still choose each landmark. Check every line, including proposed ones, before using a value.</p>
 <input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden>`;
 main.appendChild(mv);
 
@@ -2240,8 +2285,9 @@ const M = (() => {
   }
 
   function load(src, isSample) {
-    S.img = src; S.sample = isSample; S.keys = null; S.showKey = false; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
-    S.fitted = false; fit(); refresh();
+    S.img = src; S.sample = isSample; S.keys = null; S.autoOv = null; S.showKey = false; computeGrad(); S.touched = new Set(); S.shapes = []; S.pending = []; S.mmPerPx = null; $('#mmpx', mv).value = '';
+    S.fitted = false; fit(); amsg(''); refresh();
+    const t = T(S.target); if (!isSample && t && AUTOLM[t.cid] && $('#autorun', mv).checked) runAuto();
   }
   function useSample() {
     const s = makeSample(); load(s.canvas, true);
@@ -2436,6 +2482,7 @@ const M = (() => {
       Object.entries(S.keys.keys).forEach(([iid, pts]) => { const t = T(S.keys.cid + '.' + iid); if (!t) return; const sg = segsFor(t.kind, pts); sg.forEach(([a, b]) => seg(a, b, '#ffb020')); ctx.setLineDash([]); const [a, b] = sg[sg.length - 1]; label({ x: a.x + (b.x - a.x) * 0.6, y: a.y + (b.y - a.y) * 0.6 }, `key ${fmtV(keyVal(t, pts))}`); ctx.setLineDash([7, 5]); });
       ctx.restore();
     }
+    if (S.autoOv) { ctx.save(); ctx.setLineDash([6, 5]); S.autoOv.lines.forEach(([a, b]) => seg(a, b, '#ffb020')); ctx.setLineDash([]); S.autoOv.dots.forEach(([q, t]) => { dot(q, '#ffb020'); const Q = toScr(q); ctx.font = '600 12px "IBM Plex Mono", monospace'; ctx.fillStyle = '#ffb020'; ctx.fillText(t, Q.x + 7, Q.y + 4); }); ctx.restore(); }
     const P = S.pending; if (P.length) { const c = S.tool === 'calib' ? col2 : col; if (PERPT.has(S.tool) && S.tool !== 'length') segsFor(S.tool, P, S.cursor && (S.tool === 'vangle' || P.length === 1) ? toImg(S.cursor) : null).forEach(([a, b]) => seg(a, b, c)); else { for (let i = 0; i + 1 < P.length; i += 2) seg(P[i], P[i + 1], c); if (P.length % 2 === 1 && S.cursor) seg(P[P.length - 1], toImg(S.cursor), c); } P.forEach(p => dot(p, c)); }
     $('#mempty', mv).hidden = !!S.img;
     $('#hint', mv).hidden = !S.img || !S.pending.length;
@@ -2450,13 +2497,87 @@ const M = (() => {
     }).join('') : '<li><small>No measurements yet.</small></li>';
     $('#scalest', mv).textContent = S.mmPerPx ? S.mmPerPx.toPrecision(3) + ' mm/px' : 'not set';
   }
-  function refresh() { list(); $('#mres', mv).innerHTML = resultHTML(); const t = T(S.target); $('#ldsample', mv).hidden = !(t && hasSample(t.cid)); draw(); }
+  function refresh() { list(); $('#mres', mv).innerHTML = resultHTML(); const t = T(S.target); $('#ldsample', mv).hidden = !(t && hasSample(t.cid)); autoUI(); draw(); }
   function setTool(t) { S.tool = t; S.pending = []; $$('#tools button', mv).forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t && !S.target)); $('#calrow', mv).hidden = !(t === 'calib' && S.shapes.some(s => s.type === 'calib')); cv.style.cursor = t === 'pan' ? 'grab' : 'crosshair'; draw(); }
   function setTarget(key) {
+    if (T(key) && T(S.target) && T(key).cid !== T(S.target).cid) amsg('');
     S.target = key; $('#target', mv).value = key; const t = T(key);
     if (t) { setTool(t.kind); if (LENK.has(t.kind) && !S.mmPerPx) $('#scalep', mv).open = true; } else setTool(S.tool === 'calib' || S.tool === 'pan' ? 'angle' : S.tool);
     refresh();
   }
+  /* ---------- automatic landmarks (research models, run in the browser) ----------
+     Each entry maps a calculator id to a small landmark model (ONNX, in models/ next to this file):
+     input size, number of points, which channel each point swaps with in a mirrored image, and
+     build(), which turns the predicted points into the calculator's measurements.
+     The model proposes points; they become ordinary editable measurements. Nothing is uploaded. */
+  const ORT = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
+  const AUTOLM = {
+    ddh: { model: 'models/infant-hip-v1.onnx', H: 320, W: 480, n: 8, flip: [4, 5, 6, 7, 0, 1, 2, 3], view: 'AP pelvis radiograph of an infant or toddler',
+      acc: AUTO_ACC.ddh,
+      build: p => [{ iid: 'r', pts: [p[1], p[5], p[1], p[0]] }, { iid: 'l', pts: [p[5], p[1], p[5], p[4]] }],
+      extra: p => ({ gr: ihdiGrade(p, 0), gl: ihdiGrade(p, 4) }),
+      overlay: p => { const h = { x: p[5].x - p[1].x, y: p[5].y - p[1].y }, L = Math.hypot(h.x, h.y); let n = { x: -h.y / L, y: h.x / L }; if (n.y < 0) n = { x: -n.x, y: -n.y };
+        const P = b => [p[b], { x: p[b].x + n.x * L * 0.45, y: p[b].y + n.y * L * 0.45 }];
+        return { lines: [P(0), P(4)], dots: [[p[3], 'H'], [p[7], 'H']], label: 'Dashed: Perkin lines and H-points used for the IHDI grade' }; } }
+  };
+  /* IHDI grade from H-line (triradiate points 1, 5), lateral acetabular edge (b) and H-point (b + 3) */
+  function ihdiGrade(p, b) {
+    const hx = p[5].x - p[1].x, hy = p[5].y - p[1].y, L = Math.hypot(hx, hy), h = { x: hx / L, y: hy / L };
+    let dn = { x: -h.y, y: h.x }; if (dn.y < 0) dn = { x: -dn.x, y: -dn.y };
+    const lat = b === 0 ? { x: -h.x, y: -h.y } : h, t = (p[b].x - p[1].x) * h.x + (p[b].y - p[1].y) * h.y;
+    const O = { x: p[1].x + h.x * t, y: p[1].y + h.y * t }, q = { x: p[b + 3].x - O.x, y: p[b + 3].y - O.y };
+    const x = q.x * lat.x + q.y * lat.y, y = q.x * dn.x + q.y * dn.y;
+    return y < 0 ? 4 : x <= 0 ? 1 : x <= y ? 2 : 3;
+  }
+  const autoState = { ort: null, sess: {} };
+  const amsg = t => { $('#automsg', mv).innerHTML = t; };
+  function loadOrt() {
+    if (autoState.ort) return autoState.ort;
+    autoState.ort = new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = ORT + 'ort.wasm.min.js'; sc.crossOrigin = 'anonymous'; sc.onload = () => { ort.env.wasm.wasmPaths = ORT; ort.env.wasm.numThreads = 1; res(ort); }; sc.onerror = () => { autoState.ort = null; rej(new Error('Could not load the model runtime. Check the internet connection.')); }; document.head.appendChild(sc); });
+    return autoState.ort;
+  }
+  async function session(cfg) {
+    if (!autoState.sess[cfg.model]) autoState.sess[cfg.model] = (async () => { const o = await loadOrt(); const r = await fetch(cfg.model); if (!r.ok) throw new Error('Model file not found. Auto-placement works on the published site, not when this file is opened directly.'); return o.InferenceSession.create(new Uint8Array(await r.arrayBuffer()), { executionProviders: ['wasm'] }); })().catch(e => { delete autoState.sess[cfg.model]; throw e; });
+    return autoState.sess[cfg.model];
+  }
+  /* letterbox the image into the model input (grayscale, 0–1), run it with a mirrored copy, decode heatmap peaks */
+  async function predict(cfg) {
+    const { H, W, n } = cfg, w = iw(), h = ih(), k = Math.min(W / w, H / h), ox = (W - w * k) / 2, oy = (H - h * k) / 2;
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d', { willReadFrequently: true });
+    g.fillStyle = '#000'; g.fillRect(0, 0, W, H); g.imageSmoothingQuality = 'high'; g.drawImage(S.img, ox, oy, w * k, h * k);
+    const d = g.getImageData(0, 0, W, H).data, x = new Float32Array(2 * H * W);
+    for (let y = 0; y < H; y++) for (let i = 0; i < W; i++) { const j = (y * W + i) * 4, v = (d[j] * 0.299 + d[j + 1] * 0.587 + d[j + 2] * 0.114) / 255; x[y * W + i] = v; x[H * W + y * W + (W - 1 - i)] = v; }
+    const sess = await session(cfg), o = await loadOrt();
+    const out = await sess.run({ [sess.inputNames[0]]: new o.Tensor('float32', x, [2, 1, H, W]) }), hm = out[sess.outputNames[0]], [, , h2, w2] = hm.dims, a = hm.data, plane = h2 * w2;
+    const pts = [], score = [];
+    for (let c0 = 0; c0 < n; c0++) {
+      const A = c0 * plane, B = (n + cfg.flip[c0]) * plane, P = new Float32Array(plane);  /* average with the mirrored prediction */
+      for (let yy = 0; yy < h2; yy++) for (let xx = 0; xx < w2; xx++) P[yy * w2 + xx] = (1 / (1 + Math.exp(-a[A + yy * w2 + xx])) + 1 / (1 + Math.exp(-a[B + yy * w2 + (w2 - 1 - xx)]))) / 2;
+      let m = 0; for (let i = 1; i < plane; i++) if (P[i] > P[m]) m = i;
+      const my = Math.floor(m / w2), mx = m % w2; let sw = 0, sx = 0, sy = 0;
+      for (let yy = Math.max(0, my - 2); yy <= Math.min(h2 - 1, my + 2); yy++) for (let xx = Math.max(0, mx - 2); xx <= Math.min(w2 - 1, mx + 2); xx++) { const v = P[yy * w2 + xx]; sw += v; sx += v * xx; sy += v * yy; }
+      const s2 = W / w2, px = (sx / sw) * s2 + (s2 - 1) / 2, py = (sy / sw) * s2 + (s2 - 1) / 2;
+      pts.push({ x: (px - ox) / k, y: (py - oy) / k }); score.push(P[m]);
+    }
+    return { pts, score };
+  }
+  async function runAuto() {
+    const t = T(S.target), cfg = t && AUTOLM[t.cid]; if (!cfg || !S.img) return;
+    const btn = $('#autobtn', mv); btn.disabled = true; amsg('Finding landmarks…');
+    try {
+      const r = await predict(cfg), low = Math.min(...r.score) < (cfg.minScore || 0.15);
+      S.pending = [];
+      cfg.build(r.pts).forEach(b => { const key = t.cid + '.' + b.iid, sh = { type: T(key).kind, pts: b.pts, key, auto: true }; S.shapes = S.shapes.filter(o => o.key !== key); S.shapes.push(sh); send(sh); });
+      if (cfg.extra) { const ex = cfg.extra(r.pts); Object.entries(ex).forEach(([iid, v]) => { const el = document.getElementById(`in-${t.cid}-${iid}`); if (el) el.value = String(v); }); compute(CALCS[t.cid]); S.shapes.filter(o => o.key && T(o.key).cid === t.cid).forEach(send); }
+      S.autoOv = cfg.overlay ? cfg.overlay(r.pts) : null;
+      const nx = nextTarget(t.cid); if (nx) { S.target = nx.key; $('#target', mv).value = nx.key; setTool(nx.kind); }
+      amsg(`${low ? '<b class="warn">Low confidence.</b> This model expects this view: ' + esc(cfg.view) + '. ' : ''}Proposed by a research model. ${esc(cfg.acc)}. Check every point and drag any that are off.${S.autoOv ? ' ' + esc(S.autoOv.label) + '; if an H-point is off, set the IHDI grade by hand in the full calculator.' : ''}`);
+      refresh();
+    } catch (e) { amsg(esc(e.message || String(e))); }
+    btn.disabled = false;
+  }
+  function autoUI() { const t = T(S.target), cfg = t && AUTOLM[t.cid]; $('#autobox', mv).hidden = !cfg; if (cfg && !$('#automsg', mv).textContent) amsg(`Research model for this view: ${esc(cfg.view)}. ${esc(cfg.acc)}. It runs in this browser and the image is not uploaded.`); }
+  $('#autobtn', mv).onclick = runAuto;
   const pt = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
   cv.addEventListener('pointerdown', e => {
     if (!S.img) return;
@@ -2509,7 +2630,7 @@ const M = (() => {
   $('#zin', mv).onclick = () => zoom(1.25); $('#zout', mv).onclick = () => zoom(0.8); $('#zfit', mv).onclick = () => { fit(); draw(); };
   $('#inv', mv).onclick = e => { S.inv = !S.inv; e.target.setAttribute('aria-pressed', S.inv); draw(); };
   $('#bri', mv).oninput = e => { S.bri = +e.target.value; draw(); }; $('#con', mv).oninput = e => { S.con = +e.target.value; draw(); };
-  $('#newimg', mv).onclick = () => { S.img = null; S.shapes = []; S.pending = []; refresh(); };
+  $('#newimg', mv).onclick = () => { S.img = null; S.autoOv = null; S.shapes = []; S.pending = []; refresh(); };
 
   function loadFile(f) {
     if (!f || !/^image\//.test(f.type)) { pmsg('That file is not an image. Use PNG or JPEG.'); return; }
@@ -2553,7 +2674,7 @@ const M = (() => {
   $('#target', mv).onchange = e => setTarget(e.target.value);
   $('#ldsample', mv).onclick = () => { const t = T(S.target); if (t && hasSample(t.cid)) useSampleFor(t.cid); };
   $('#undo', mv).onclick = () => { if (S.pending.length) S.pending.pop(); else S.shapes.pop(); refresh(); };
-  $('#clear', mv).onclick = () => { S.shapes = []; S.pending = []; refresh(); };
+  $('#clear', mv).onclick = () => { S.autoOv = null; S.shapes = []; S.pending = []; refresh(); };
   $('#mlist', mv).addEventListener('click', e => {
     const d = e.target.closest('[data-del]'); if (d) { S.shapes.splice(+d.dataset.del, 1); refresh(); return; }
     const s = e.target.closest('[data-send]'); if (!s) return;
