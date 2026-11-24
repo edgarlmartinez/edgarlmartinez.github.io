@@ -280,6 +280,8 @@ editorial_activities:
   ad_hoc_reviewer:
     - journal: Journal of Computer Assisted Tomography (JCAT)
       start: 06/2024
+      notes:
+        - "03/2026: Manuscript peer review certified by the Lippincott Continuing Medical Education Institute (Wolters Kluwer); awarded 3 AMA PRA Category 1 Credits™"
     - journal: Skeletal Radiology
       start: 07/2024
   other_roles: []

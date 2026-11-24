@@ -109,7 +109,7 @@ const dp = (() => {
       <h3>Editorial Activities:</h3>
       {has(cv.editorial_activities.ad_hoc_reviewer) && <>
         <h4>Ad hoc Reviewer</h4>
-        <table>{chrono(cv.editorial_activities.ad_hoc_reviewer).map((e) => <tr><td class="d">{range(e)}</td><td>{e.journal}</td></tr>)}</table>
+        <table>{chrono(cv.editorial_activities.ad_hoc_reviewer).map((e) => <tr><td class="d">{range(e)}</td><td>{e.journal}{e.notes?.map((n) => <div class="note">{n}</div>)}</td></tr>)}</table>
       </>}
       {has(cv.editorial_activities.other_roles) && <>
         <h4>Other Editorial Roles</h4>
