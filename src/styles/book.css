@@ -69,3 +69,18 @@
 .prose h1 ~ h1 { font-size: 1.15rem; font-family: var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 3em 0 0; padding: 10px 0; border-top: 2px solid var(--accent); scroll-margin-top: 80px; }
 .chapter-side li.d1 a { color: var(--accent); font-weight: 600; text-transform: uppercase; font-size: .78rem; letter-spacing: .06em; padding-top: 10px; }
 .prose h1 ~ h1 + h2 { border-top: 0; margin-top: .6em; padding-top: 0; }
+/* Image rows inside chapters: <div class="img-row"><figure>...</figure>...</div> */
+.prose .img-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 1.2em 0 .4em; }
+.prose .img-row figure { margin: 0; }
+.prose .img-row img { height: 210px; object-fit: contain; background: #000; }
+.prose .img-row figcaption { font-size: .8rem; margin-top: 4px; }
+.prose .img-cap { color: var(--muted); font-size: .9rem; margin: 0 0 1.4em; }
+/* Image atlas */
+.atlas-case { border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 16px 18px; margin: 18px 0; }
+.atlas-case h3 { margin: 0 0 4px; font-size: 1.1rem; }
+.atlas-case p { margin: 4px 0 10px; color: var(--ink); max-width: 80ch; }
+.atlas-case .tags { margin: 0 0 10px; }
+.atlas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.atlas-grid a { display: flex; flex-direction: column; background: #000; border-radius: 8px; overflow: hidden; text-decoration: none; }
+.atlas-grid img { width: 100%; height: 200px; object-fit: contain; display: block; }
+.atlas-grid span { color: #d6dde4; font-size: .78rem; padding: 5px 8px; background: #121920; }

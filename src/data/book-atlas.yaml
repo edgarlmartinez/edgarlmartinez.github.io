@@ -1,0 +1,113 @@
+# Image atlas for the Core MSK Radiology book (/book/atlas/).
+# Images live in public/book/images/<set>/ and must be de-identified first
+# (scripts/deid-slide-panels.py for lecture slides, scripts/deid-image.py for single images).
+# Use age ranges and general descriptions only: no names, dates, ages or sides that identify a patient.
+# Add a case: copy an entry under the right set, list its images, write 1-3 sentences.
+sets:
+  - id: lisfranc
+    title: Lisfranc injuries
+    chapter: 3
+    source: >-
+      From the author's educational exhibit "Lisfranc Fracture-Dislocation: Comprehensive Review"
+      (Martinez-Salazar EL, Oliveira A, Regmi N, Khubchandani M), MSK 2023 Global Musculoskeletal
+      Societies Joint Meeting.
+    cases:
+      - id: lisfranc-anatomy
+        title: The Lisfranc ligament complex
+        tags: [Anatomy, MRI]
+        text: >-
+          Schematic of the ligament complex between the medial cuneiform (C1) and the bases of M2 and M3:
+          dorsal (brown), interosseous (red) and plantar (magenta) components. Coronal fat-suppressed T2 MR
+          images at the tarsometatarsal joint show the same components (arrowheads in matching colors).
+        images:
+          - { src: anatomy-ligament-schematic.png, caption: Ligament complex (schematic) }
+          - { src: anatomy-ligaments-mri-1.png, caption: "Coronal T2 FS: dorsal and interosseous" }
+          - { src: anatomy-ligaments-mri-2.png, caption: "Coronal T2 FS: interosseous and plantar" }
+      - id: lisfranc-divergent
+        title: Divergent fracture-dislocation after a crush injury
+        tags: [Divergent, Radiograph, CT]
+        text: >-
+          Comminuted, displaced intra-articular fractures at the bases of M1, M2 and M3, with lateral
+          dislocation of M2 and M3 and medial dislocation of M1: a divergent Lisfranc fracture-dislocation.
+          CT the same day confirms the pattern.
+        images:
+          - { src: divergent-ap.png, caption: AP radiograph }
+          - { src: divergent-oblique.png, caption: Oblique radiograph }
+          - { src: divergent-ct.png, caption: Axial CT }
+      - id: lisfranc-homolateral-orif
+        title: Homolateral fracture-dislocation treated with ORIF
+        tags: [Homolateral, Radiograph, CT, Postoperative]
+        text: >-
+          After missing steps on a staircase: comminuted intra-articular fractures with lateral dislocation
+          of the metatarsal bases, a homolateral pattern. Coronal CT shows plantar comminution and
+          inferolateral dislocation of M1. After open reduction and internal fixation, near-anatomic
+          alignment of the tarsometatarsal joint.
+        images:
+          - { src: homolateral-orif-ap.png, caption: AP radiograph }
+          - { src: homolateral-orif-ct.png, caption: Coronal CT }
+          - { src: homolateral-orif-postop.png, caption: AP radiograph after ORIF }
+      - id: lisfranc-homolateral-fall
+        title: Homolateral dislocation after a fall, from reduction to healing
+        tags: [Homolateral, Radiograph, CT, Postoperative]
+        text: >-
+          Lateral dislocation of all five metatarsals relative to the tarsus (homolateral). After closed
+          reduction, CT shows improved alignment with comminuted fractures of the medial M2 base and the
+          lateral C1. Transfixing screws were placed across the first and second tarsometatarsal joints;
+          six months later, after hardware removal, there is osseous bridging of both joints.
+        images:
+          - { src: homolateral-ap.png, caption: AP radiograph }
+          - { src: homolateral-oblique.png, caption: Oblique radiograph }
+          - { src: homolateral-reduced-oblique.png, caption: Oblique radiograph after closed reduction }
+          - { src: homolateral-reduced-ct-1.png, caption: "Axial CT: medial M2 base fracture" }
+          - { src: homolateral-reduced-ct-2.png, caption: "Axial CT: lateral C1 fracture" }
+          - { src: homolateral-fixation.png, caption: After fixation }
+          - { src: homolateral-healed.png, caption: Six months, hardware removed }
+      - id: lisfranc-subtle-sprain
+        title: Minimal offset on radiographs, ligament sprain on MRI
+        tags: [Subtle, Radiograph, MRI]
+        text: >-
+          Minimal offset of the second tarsometatarsal joint on AP and oblique radiographs (green
+          arrowheads). MRI shows cortical irregularity of the M1 base with marrow edema (black arrowhead)
+          and mild thickening of the interosseous Lisfranc ligament without a tear (red arrowheads): a
+          sprain or partial-thickness tear, treated without surgery in a non-weight-bearing boot.
+        images:
+          - { src: subtle-sprain-ap.png, caption: AP radiograph }
+          - { src: subtle-sprain-oblique.png, caption: Oblique radiograph }
+          - { src: subtle-sprain-mri-axial.png, caption: Axial T2 FS }
+          - { src: subtle-sprain-mri-coronal.png, caption: Coronal T2 FS }
+      - id: lisfranc-avulsion-m2
+        title: Avulsion at the M2 insertion without dislocation
+        tags: [Subtle, Radiograph, MRI]
+        text: >-
+          Midfoot pain after trauma in an older adult. A nondisplaced fracture of the medial M2 base on the
+          radiograph, and MRI edema at the Lisfranc ligament attachment on M2 with edema of C1, M2 and M3:
+          an avulsion fracture of the interosseous ligament at its M2 insertion, without dislocation.
+        images:
+          - { src: avulsion-m2-xr.png, caption: Radiograph }
+          - { src: avulsion-m2-mri-1.png, caption: Fluid-sensitive MRI }
+          - { src: avulsion-m2-mri-2.png, caption: Fluid-sensitive MRI }
+      - id: lisfranc-fleck
+        title: The fleck sign after low-impact trauma
+        tags: [Subtle, Radiograph, CT]
+        text: >-
+          Dorsal bruising after a low-impact injury. Minimally displaced fractures of the medial M2 base (red
+          arrowhead) and medial M3 (yellow arrowhead) on radiographs; CT shows small comminuted fragments at
+          the medial M2 and the medial-dorsal M3: an avulsion of the interosseous ligament at M2, without
+          dislocation.
+        images:
+          - { src: fleck-ap.png, caption: AP radiograph }
+          - { src: fleck-oblique.png, caption: Oblique radiograph }
+          - { src: fleck-ct-axial.png, caption: Axial CT }
+          - { src: fleck-ct-sagittal.png, caption: Sagittal CT }
+      - id: lisfranc-partial-tear
+        title: Avulsion fracture and partial tear in a young athlete
+        tags: [Subtle, Radiograph, MRI]
+        text: >-
+          A bad landing on a bicycle jump. A small, minimally displaced fracture of the medial M2 on the AP
+          radiograph (orange arrowhead); MRI shows marrow edema of the medial M2 and C2 (yellow arrowheads)
+          and edema around an irregular interosseous Lisfranc ligament (red arrowhead): avulsion fracture
+          and partial-thickness tear.
+        images:
+          - { src: partial-tear-ap.png, caption: AP radiograph }
+          - { src: partial-tear-mri-axial.png, caption: Axial T2 FS }
+          - { src: partial-tear-mri-coronal.png, caption: Coronal STIR }

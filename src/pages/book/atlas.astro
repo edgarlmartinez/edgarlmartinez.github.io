@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/book.css';
+import fs from 'node:fs';
+import yaml from 'js-yaml';
+import { site } from '../../lib/cv.js';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const atlas = yaml.load(fs.readFileSync('src/data/book-atlas.yaml', 'utf8'));
+const sets = atlas.sets || [];
+---
+<Base title={`Image atlas · Core MSK Radiology`} description="De-identified teaching images that accompany the Core MSK Radiology book.">
+  <section class="wrap book-hero">
+    <p class="kicker"><a href={`${base}/book/`} style="text-decoration:none">← Core MSK Radiology</a></p>
+    <h1>Image atlas</h1>
+    <p class="sub">Every teaching image behind the book, case by case</p>
+    <p class="draft-note"><b>For education only.</b> Images are de-identified: only the image panels are kept, then they are intensity-normalized, resampled and re-encoded with no metadata. Ages, dates and other identifiers are omitted. Not for clinical decision-making.</p>
+    <nav class="case-nav" aria-label="Image sets" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+      {sets.map((s) => <a class="btn btn-outline" href={`#${s.id}`}>{s.title} ({s.cases.length})</a>)}
+    </nav>
+    {sets.map((s) => (
+      <div id={s.id} style="scroll-margin-top:80px">
+        <h2 style="margin-top:36px">{s.title}</h2>
+        <p class="pub-meta">{s.chapter && <>Taught in <a href={`${base}/book/`}>Chapter {s.chapter}</a>. </>}{s.source}</p>
+        {s.cases.map((c) => (
+          <article class="atlas-case" id={c.id} style="scroll-margin-top:80px">
+            <h3>{c.title}</h3>
+            {c.tags && <ul class="tags">{c.tags.map((t) => <li>{t}</li>)}</ul>}
+            <p>{c.text}</p>
+            <div class="atlas-grid">
+              {c.images.map((im) => <a href={`${base}/book/images/${s.id}/${im.src}`} target="_blank" rel="noopener"><img src={`${base}/book/images/${s.id}/${im.src}`} alt={im.caption} loading="lazy" /><span>{im.caption}</span></a>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    ))}
+  </section>
+</Base>

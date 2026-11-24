@@ -30,6 +30,7 @@ public/book/
 | --- | --- |
 | 1, bone | `nof`, `enchondroma`, `bone-island`, `osteochondroma`, `simple-bone-cyst`, `fibrous-dysplasia`, `intraosseous-lipoma`, `bone-infarct`, `myositis-ossificans`, `stress-fracture`, `variants`, `others`, `osteosarcoma`, `chondrosarcoma`, `ewing`, `lymphoma`, `aggressive` |
 | 1, soft tissue | `soft-tissue-core`, `soft-tissue-named` |
+| 3 | `lisfranc-obvious`, `lisfranc-subtle` |
 | 2 | `marrow-replacement`, `chemical-shift`, `osteomyelitis`, `meniscus`, `ligament`, `tendon` |
 
 To add a new topic, put `<div class="ex-slot" data-topic="your-topic"></div>` in the chapter where the example should appear. An example whose topic has no slot still shows in the "Reading-room examples" section at the end of the chapter.
@@ -43,6 +44,10 @@ To add a new topic, put `<div class="ex-slot" data-topic="your-topic"></div>` in
 - Figures: `<figure><img src="/book/figures/name.svg" alt="..." /><figcaption>...</figcaption></figure>`.
 - Boxes: wrap text in `<div class="lesion">` ... `</div>` for a lesion card, or `<div class="never">` for the "Never forget" box. Leave a blank line after the opening tag and before the closing tag so the Markdown inside still works.
 - References: cite peer-reviewed sources with a DOI or PubMed link.
+
+## The image atlas (/book/atlas/)
+
+Teaching images that go with the book, grouped by topic, live in `src/data/book-atlas.yaml` and `public/book/images/<set>/`. To cut images out of lecture slides and de-identify them in one step, list the panels in a small JSON file and run `python3 scripts/deid-slide-panels.py SPEC.json SLIDES_DIR public/book/images/<set>` (instructions at the top of the script). Only the image panels are kept; titles with ages, captions and slide chrome are dropped.
 
 ## Images: what is allowed
 
