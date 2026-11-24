@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { cv, site, newest, isCurrent, lectures, cases } from '../lib/cv.js';
+import { cv, site, newest, isCurrent, lectures } from '../lib/cv.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentRoles = newest(cv.faculty_academic_appointments).filter(isCurrent).map((a) => a.title);
@@ -10,9 +10,6 @@ const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst
 // Toolkit sections (kept in sync by hand with /toolkit/ tabs).
 const toolkitSections = ['Spine and scoliosis', 'Craniocervical junction', 'Chemical shift', 'Shoulder', 'Pelvis and hip', 'Knee', 'Wrist', 'Foot and ankle', 'Pediatric foot'];
 
-// Cases: newest first, with the first image as a thumbnail.
-const caseList = [...(cases.cases || [])].sort((a, b) => String(b.added || '').localeCompare(String(a.added || '')));
-const caseRegions = [...new Set(caseList.map((c) => c.region))];
 
 const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: l.date })));
 ---
@@ -46,25 +43,18 @@ const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: 
         <p class="meta" style="margin-top:12px">Works offline in the browser. Images you load never leave your computer. For research and education only.</p>
       </section>
 
-      <section class="feature">
-        <div class="feature-head">
-          <div>
-            <p class="eyebrow">Educational cases</p>
-            <h2>Teaching case library</h2>
+      {site.residents?.url && (
+        <section class="feature">
+          <div class="feature-head">
+            <div>
+              <p class="eyebrow">For BIDMC residents</p>
+              <h2>Teaching cases and the Core MSK book</h2>
+            </div>
+            <a class="btn btn-primary" href={site.residents.url}>Residents sign in →</a>
           </div>
-          <a class="btn btn-primary" href={`${base}/cases/`}>Browse all {caseList.length} cases →</a>
-        </div>
-        <p>De-identified musculoskeletal cases organized by body region, each with key images, teaching points and references. Regions so far: {caseRegions.join(', ')}.</p>
-        <div class="case-grid">
-          {caseList.slice(0, 8).map((c) => (
-            <a class="case-tile" href={`${base}/cases/#${c.id}`}>
-              {c.images?.[0] && <img src={`${base}/cases/${c.images[0].src}`} alt={c.images[0].caption || c.title} loading="lazy" />}
-              <span class="case-region">{c.region}{c.modality && ` · ${c.modality}`}</span>
-              <span class="case-title">{c.title}</span>
-            </a>
-          ))}
-        </div>
-      </section>
+          <p>De-identified musculoskeletal teaching cases, organized by body region, and the Core MSK Radiology book are available to BIDMC radiology trainees. Sign in with your @bidmc.harvard.edu email; you'll get a one-time code by email.</p>
+        </section>
+      )}
 
       <section class="feature">
         <div class="feature-head">
@@ -109,12 +99,6 @@ const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: 
   .feature h2 { margin: 0; font-size: 1.5rem; }
   .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; color: var(--accent); margin: 0 0 4px; font-weight: 600; }
   .feature > p { color: #c9d3de; margin: 8px 0 14px; max-width: 760px; }
-  .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-  .case-tile { display: flex; flex-direction: column; background: #05080b; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; text-decoration: none; color: var(--ink); }
-  .case-tile:hover { border-color: var(--accent); color: #fff; }
-  .case-tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #000; display: block; }
-  .case-region { font-size: .72rem; color: var(--accent); padding: 8px 10px 0; text-transform: uppercase; letter-spacing: .06em; }
-  .case-title { font-size: .88rem; padding: 2px 10px 10px; line-height: 1.35; }
   .lecture-list { list-style: none; padding: 0; margin: 0; }
   .lecture-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
   .lecture-title { display: block; font-weight: 500; }

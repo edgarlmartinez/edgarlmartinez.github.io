@@ -5,7 +5,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yaml from 'js-yaml';
 
 const CHROME_CSS = `
 /* Site chrome (header, nav, footer) and site palette, injected at build by scripts/toolkit-chrome.mjs */
@@ -48,13 +47,8 @@ export function wrapToolkit(distDir, root, base) {
   // Mark the toolkit link as the current page, and clear the Home marker copied from the home page.
   header = header.replace(/ aria-current="page"/g, '').replace(/(<a href="[^"]*\/toolkit\/")/, '$1 aria-current="page"');
 
-  // Teaching cases that link to a toolkit section (toolkit_link: toolkit/#<section>) get a link back.
-  const cases = yaml.load(fs.readFileSync(path.join(root, 'src', 'data', 'cases.yaml'), 'utf8'));
+  // Teaching cases now live on the members-only residents site, so the toolkit shows no case links.
   const links = {};
-  for (const c of cases.cases || []) {
-    const m = (c.toolkit_link?.href || '').match(/toolkit\/#([\w-]+)/);
-    if (m) (links[m[1]] ||= []).push({ href: `${base}/cases/#${c.id}`, title: c.title });
-  }
 
   let s = fs.readFileSync(page, 'utf8');
   if (s.includes('class="site-header')) return; // already wrapped

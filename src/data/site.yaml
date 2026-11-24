@@ -57,3 +57,9 @@ teaching_blurb: >-
 consulting:
   enabled: false
   form_url: ""        # link to your Google Form (or other inquiry form)
+
+# Members-only area for BIDMC residents (teaching cases, Core MSK book), hosted on
+# Cloudflare Pages behind Cloudflare Access (@bidmc.harvard.edu email sign-in).
+# The header and home page show a "Residents sign in" link to it. Leave url empty to hide.
+residents:
+  url: https://bidmc-msk.pages.dev
