@@ -376,40 +376,110 @@ Name the category, name the next step, and say how soon. A vague "clinical corre
 
 # Part B. Soft-tissue masses
 
-## 1.7 The core concept: benign or malignant?
+**Goals of this part.** By the end you should know which imaging technique to use for a soft-tissue mass, which imaging features suggest a benign lesion and which suggest high malignant potential, and what to recommend: no further action, follow-up, biopsy, or surgical referral.
 
-The question is the same as in bone: **is this a lesion I can name and leave, or could it be a sarcoma?** Most soft-tissue lumps are benign (lipomas and cysts above all), but a sarcoma treated as a "lump" and shelled out without imaging is a disaster for the patient. Your job is to spot the red flags.
+## 1.7 Why soft-tissue masses matter
 
-| Feature | Usually benign | Red flag for malignancy |
+Soft-tissue masses are a heterogeneous group of benign and malignant lesions arising from the mesenchymal, non-epithelial, extraskeletal tissues (fat, fibrous tissue, vessels, muscle, nerve sheath). In daily practice you will also meet many **non-neoplastic** masses that look like tumors, so a clear separation between benign and malignant causes is paramount.
+
+Three numbers frame the problem:
+
+- **Benign tumors vastly outnumber sarcomas.** Benign soft-tissue tumors occur in roughly 300 per 100,000 people a year; soft-tissue sarcomas are uncommon, about 1% of all malignant tumors.
+- **Imaging gives the exact histologic diagnosis in only about a quarter to a third of cases.** Your realistic goal is not always a name; it is a safe category: benign, malignant, or indeterminate.
+- **Size matters:** only about 5% of benign soft-tissue tumors exceed 5 cm in diameter in population series.
+
+<figure>
+  <img src="/book/figures/soft-tissue-incidence.svg" alt="Sixty green squares for benign soft-tissue tumors next to one red square for soft-tissue sarcoma: about 3,000 versus 50 new tumors per million people per year." />
+  <figcaption>Figure 1.6. Most lumps are benign. The skill is finding the one that is not.</figcaption>
+</figure>
+
+## 1.8 What can a soft-tissue mass be?
+
+| Type | Category | Examples |
 | --- | --- | --- |
-| **Depth** | Superficial: in the subcutaneous fat, above the fascia | Deep: below the fascia, in or between muscles |
-| **Size** | Under 5 cm | 5 cm or more, or growing |
-| **Margin** | Well circumscribed | Infiltrative; crosses fascial planes |
-| **Neighbors** | Respects fascia, muscle, vessels, nerves and bone | Invades muscle, encases the neurovascular bundle, touches or erodes bone |
-| **Internal structure** | Homogeneous | Heterogeneous, with necrosis or hemorrhage |
-| **Vascularity** | None or little | Internal vascularity on Doppler, solid enhancement on MRI |
+| **Neoplastic** | Benign neoplasms | Lipoma, neurofibroma and schwannoma, tenosynovial giant cell tumor, hemangioma |
+| | Malignant neoplasms | Soft-tissue sarcoma, metastasis, lymphoma |
+| **Non-neoplastic** | Inflammatory | Gouty tophus, rheumatoid nodule, epidermal inclusion cyst |
+| | Infection | Abscess, tuberculosis, hydatid cyst |
+| | Traumatic | Hematoma, Morel-Lavallée lesion, myositis ossificans |
+| | Vascular | Aneurysm, pseudoaneurysm, arteriovenous malformation |
+| | Congenital | Accessory muscle |
+
+The World Health Organization classifies soft-tissue tumors by the tissue they resemble, and grades each family as **benign**, **intermediate** (locally aggressive, or rarely metastasizing) or **malignant** (WHO 2020). You do not need the whole table as an R1. Learn the pattern with the commonest families:
+
+| Family | Benign | Intermediate | Malignant |
+| --- | --- | --- | --- |
+| **Adipocytic** | Lipoma, angiolipoma, hibernoma | Atypical lipomatous tumor | Liposarcoma (well-differentiated, dedifferentiated, myxoid, pleomorphic) |
+| **Fibroblastic** | Nodular fasciitis, elastofibroma, fibroma of tendon sheath | Desmoid-type and palmar/plantar fibromatosis, dermatofibrosarcoma protuberans | Fibrosarcoma, myxofibrosarcoma |
+| **Fibrohistiocytic** | Tenosynovial giant cell tumor | Plexiform fibrohistiocytic tumor | Malignant tenosynovial giant cell tumor |
+| **Vascular** | Hemangioma, venous and arteriovenous malformations, lymphangioma | Kaposiform and retiform hemangioendothelioma, Kaposi sarcoma | Epithelioid hemangioendothelioma, angiosarcoma |
+| **Smooth and skeletal muscle** | Leiomyoma, rhabdomyoma | | Leiomyosarcoma, rhabdomyosarcoma |
+| **Peripheral nerve sheath** | Schwannoma, neurofibroma | | Malignant peripheral nerve sheath tumor |
+| **Uncertain differentiation** | Myxoma | | Synovial sarcoma, undifferentiated sarcoma |
+
+## 1.9 Benign or malignant: the red flags
+
+<figure>
+  <img src="/book/figures/soft-tissue-icons.svg" alt="Icons: reassuring features above a dashed line (vascular channels with phleboliths, fluid-like content, fibrous matrix, fat-like content, blood products, peripheral calcification), an indeterminate question mark on the line, and worrying features below (a spiky infiltrative mass with dystrophic calcification, and a solid highly vascular mass)." />
+  <figcaption>Figure 1.7. Reassuring features you can name, the indeterminate middle, and the two faces of a worrying mass.</figcaption>
+</figure>
+
+| Benign | Indeterminate | Malignant |
+| --- | --- | --- |
+| Well circumscribed | Cannot be named, and not clearly aggressive | Irregular, infiltrative borders |
+| Non-vascular | Short-interval follow-up to look for growth | Avidly enhancing, vascular |
+| Homogeneous signal or echogenicity | If it grows or symptoms worsen: MRI or biopsy | Heterogeneous signal or echogenicity |
+| Superficial | | Deep |
+| No surrounding inflammation | | Surrounding edema-like signal |
+| No muscle or bone invasion | | Invades muscle or bone |
+| Small, stable | | Large, growing |
+| Mobile | | Fixed |
 
 <figure>
   <img src="/book/figures/soft-tissue-compartments.svg" alt="Two schematic thigh cross-sections. Left: a small oval mass in the subcutaneous fat above the fascia. Right: a large heterogeneous deep mass inside the muscle that breaks through the fascia, contains necrosis and vessels, encases the neurovascular bundle and touches the bone." />
-  <figcaption>Figure 1.6. Where the mass sits matters. Learn the layers: skin, subcutaneous fat, fascia, muscle, neurovascular bundle, bone.</figcaption>
+  <figcaption>Figure 1.8. Where the mass sits matters. Learn the layers: skin, subcutaneous fat, fascia, muscle, neurovascular bundle, bone.</figcaption>
 </figure>
 
-**These are red flags, not rules.** In a series of 266 extremity soft-tissue tumors with pathology, 43% of the benign tumors were larger than 5 cm and 57% were deep, and about a quarter of the sarcomas were superficial. On MRI, heterogeneous signal and size were stronger predictors than depth (Chung et al. 2012). So a small superficial mass is not automatically benign, and a deep lipoma is not automatically a sarcoma. The practical rule: **a mass you cannot confidently name as benign needs imaging, and an indeterminate mass is treated as a possible sarcoma until proven otherwise.** The ACR puts it simply: imaging should be performed in a patient with a suspected soft-tissue mass that cannot be clinically confirmed as benign (Garner et al. 2023).
+**These are red flags, not rules.** In a referral-center series of 266 extremity soft-tissue tumors with pathology, 43% of the benign tumors were larger than 5 cm and 57% were deep, and about a quarter of the sarcomas were superficial. On MRI, heterogeneous signal and size were stronger predictors than depth (Chung et al. 2012). So a small superficial mass is not automatically benign, and a deep lipoma is not automatically a sarcoma. The practical rule: **a mass you cannot confidently name as benign needs imaging, and an indeterminate mass is treated as a possible sarcoma until proven otherwise.** The ACR puts it simply: imaging should be performed in a patient with a suspected soft-tissue mass that cannot be clinically confirmed as benign (Garner et al. 2023).
 
 <div class="ex-slot" data-topic="soft-tissue-core"></div>
 
-## 1.8 What each modality adds
+## 1.10 What each technique adds
 
 <figure>
   <img src="/book/figures/soft-tissue-modalities.svg" alt="Three panels. Radiograph: phleboliths, ossification, fat lucency, bone involvement. Ultrasound: cyst or solid, above or below the fascia, Doppler vascularity, compressibility, needle guidance. MRI: fat, fluid or blood, heterogeneity and necrosis, enhancement, relation to fascia, vessels, nerves and bone, staging." />
-  <figcaption>Figure 1.7. Radiograph, ultrasound and MRI each answer a different question about a soft-tissue mass.</figcaption>
+  <figcaption>Figure 1.9. Radiograph, ultrasound and MRI each answer a different question about a soft-tissue mass.</figcaption>
 </figure>
 
-- **Radiograph: always worth a look.** It shows what ultrasound and MRI can miss: **phleboliths** (small round calcifications with a lucent center) in a vascular malformation; **ossification**, which must be mature at the periphery in myositis ossificans (Part A); a **fat lucency** in a lipoma; and **bone involvement**, from smooth pressure erosion (slow, usually benign) to destruction (aggressive).
-- **Ultrasound: the first test for a superficial lump.** Is it a **cyst** (anechoic, posterior acoustic enhancement) or **solid**? Is it **above or below the fascia**? Does **Doppler** show internal vessels? Is it **compressible** (lipoma, vascular malformation) or does it **move with a tendon** (ganglion, giant cell tumor of tendon sheath)? A typical superficial lipoma is oval, parallel to the skin, and iso- or slightly hyperechoic to fat with thin echogenic lines.
-- **MRI: the test for a deep, large or indeterminate mass.** T1 tells you whether the mass is **fat** (Chapter 2); fluid-sensitive images and contrast tell you **cyst versus solid tissue**, **necrosis** and **heterogeneity**; and MRI maps the mass against the **fascia, muscles, neurovascular bundle and bone** for the surgeon.
+- **Radiographs and CT.** Characterize **calcification**: **phleboliths** (small round calcifications with a lucent center) in a vascular malformation, peripheral mature ossification in myositis ossificans (Part A), dystrophic calcification in some sarcomas. They are better than MRI for **bone involvement**: smooth pressure erosion (slow, usually benign), osteolysis, periosteal reaction.
+- **Ultrasound.** The first test for a superficial lump. **Cystic or solid?** **Vascular** on Doppler? Any **invasion** of the neighboring soft tissues? Ultrasound also lets you examine the mass and the skin directly, which helps with some diagnoses (an epidermal inclusion cyst connects to the skin) and shows whether the mass is **adherent** to its neighbors or **mobile**, compressible, or moves with a tendon.
+- **MRI.** The test for a deep, large or indeterminate mass. **Cystic or solid**, **vascularity** (enhancement after gadolinium), **invasion** of fascia, muscle, the neurovascular bundle and bone, and the internal content that can name the lesion:
 
-## 1.9 Soft-tissue masses you can name
+| Family | The MRI clue |
+| --- | --- |
+| Adipocytic | Fat signal: bright on T1, suppresses with fat saturation (Chapter 2) |
+| Fibroblastic, fibrohistiocytic | Fibrous matrix: dark on T1 and T2 |
+| Vascular | Enhancement pattern, phleboliths, serpiginous channels |
+| Chondro-osseous | Chondroid matrix: very bright on T2 |
+| Peripheral nerve sheath | Relationship to a nerve: the nerve enters and leaves the mass |
+| Muscle, pericytic, uncertain differentiation | Non-specific features: these are usually indeterminate |
+| Non-neoplastic | Variable: fluid signal in cysts, methemoglobin (bright T1) in blood products, blooming on gradient echo from hemosiderin |
+
+## 1.11 The general approach: history, imaging, conclusion
+
+<figure>
+  <img src="/book/figures/soft-tissue-approach.svg" alt="Three arrows from left to right: history (previous lesion or cancer, surgery or radiation, pain, trauma or anticoagulation, growth, number), imaging (calcification, invasion, fat signal, edema-like signal, blood products, vascularity, size and margins), and conclusion and advice (reliably benign, malignant or non-specific, leading to no further intervention, follow-up, biopsy, or surgical consultation)." />
+  <figcaption>Figure 1.10. Every soft-tissue mass report follows the same three steps.</figcaption>
+</figure>
+
+1. **History.** A previous lesion or known cancer? Surgery or radiation to the area? Painful (inflammation) or painless? Trauma or anticoagulation (hematoma)? Stable, slow-growing or rapidly growing? One lesion or many?
+2. **Imaging.** Calcification; invasion of neighbors; fat signal (T1 and fat-suppressed T1); edema-like signal (fat-suppressed T2, STIR); blood and hemosiderin (gradient echo); vascularity (gadolinium, Doppler); size, growth and margins.
+3. **Conclusion and advice.** Put the mass in one of three bins, and give the matching advice:
+   - **Reliably benign:** no further intervention.
+   - **Non-specific (indeterminate):** short-interval follow-up (about 6–12 weeks) to look for growth, or MRI or biopsy to characterize it, depending on the setting.
+   - **Malignant or suspicious:** referral to a sarcoma surgeon, with the biopsy planned by the team that will operate.
+
+## 1.12 Soft-tissue masses you can name
 
 Like the do-not-touch bone lesions, some soft-tissue masses can be named on imaging. They will each get their own section later in the book; for now, know their names and their single best clue.
 
@@ -417,21 +487,24 @@ Like the do-not-touch bone lesions, some soft-tissue masses can be named on imag
 | --- | --- |
 | **Lipoma** | Follows fat on every sequence, with at most thin septa. Thick or nodular septa, or non-fatty nodules, raise atypical lipomatous tumor or liposarcoma. |
 | **Ganglion and synovial cysts** | Anechoic or fluid signal, near a joint or tendon sheath, often with a neck to the joint. |
+| **Epidermal inclusion cyst** | Superficial, in contact with the skin, with internal echoes (keratin). |
 | **Vascular malformation** | Phleboliths on radiographs; lobulated fluid-bright channels with fat on MRI. |
 | **Peripheral nerve sheath tumor** | Fusiform mass along a nerve, the nerve entering and leaving it, split-fat sign, target sign on T2. |
-| **Giant cell tumor of tendon sheath** | Mass on a finger tendon sheath, low signal on T2 and blooming on gradient echo (hemosiderin). |
+| **Tenosynovial giant cell tumor** | Mass on a tendon sheath or in a joint, low signal on T2 and blooming on gradient echo (hemosiderin). |
 | **Elastofibroma** | Between the chest wall and the inferior tip of the scapula in an older adult, often both sides, fat streaks inside. |
+| **Hematoma, Morel-Lavallée lesion** | History of trauma or anticoagulation; blood products; Morel-Lavallée sits between the subcutaneous fat and the fascia, classically over the greater trochanter. |
 
 <div class="ex-slot" data-topic="soft-tissue-named"></div>
 
-## 1.10 How to say it in the report
+## 1.13 How to say it in the report
 
 | Situation | Words that help the clinician |
 | --- | --- |
 | Benign, named | "3 cm superficial lipoma in the subcutaneous fat of the posterior shoulder. No further imaging is needed." |
-| Indeterminate | "6 cm heterogeneous solid mass deep to the fascia of the anterior thigh, abutting the femoral neurovascular bundle. A soft-tissue sarcoma cannot be excluded. Recommend referral to a sarcoma center before biopsy or excision." |
+| Indeterminate | "2 cm superficial solid mass of the forearm without aggressive features, not specific. Recommend follow-up ultrasound in 6–12 weeks, or MRI if it grows or symptoms worsen." |
+| Suspicious | "6 cm heterogeneous solid mass deep to the fascia of the anterior thigh, abutting the femoral neurovascular bundle. A soft-tissue sarcoma cannot be excluded. Recommend referral to a sarcoma center before biopsy or excision." |
 
-Say where it is (above or below the fascia), how big it is, whether it is solid or cystic, and what it touches. Never recommend "excision" for a mass you cannot name.
+Say where it is (above or below the fascia), how big it is, whether it is solid or cystic, what it touches, and which bin it is in. Never recommend "excision" for a mass you cannot name.
 
 <div class="never">
 
@@ -472,3 +545,6 @@ Say where it is (above or below the fascia), how big it is, whether it is solid 
 11. Krishnan A, Shirkhoda A, Tehranzadeh J, Armin AR, Irwin R, Les K. Primary bone lymphoma: radiographic-MR imaging correlation. *RadioGraphics.* 2003;23(6):1371–1383. [doi:10.1148/rg.236025056](https://doi.org/10.1148/rg.236025056). PMID [14615550](https://pubmed.ncbi.nlm.nih.gov/14615550/).
 12. Chung WJ, Chung HW, Shin MJ, Lee SH, Lee MH, Lee JS, Kim MJ, Lee WK. MRI to differentiate benign from malignant soft-tissue tumours of the extremities: a simplified systematic imaging approach using depth, size and heterogeneity of signal intensity. *Br J Radiol.* 2012;85(1018):e831–e836. [doi:10.1259/bjr/27487871](https://doi.org/10.1259/bjr/27487871). PMID [22553293](https://pubmed.ncbi.nlm.nih.gov/22553293/).
 13. Garner HW, Wessell DE, Lenchik L, et al. (Expert Panel on Musculoskeletal Imaging). ACR Appropriateness Criteria® Soft Tissue Masses: 2022 update. *J Am Coll Radiol.* 2023;20(5S):S234–S245. [doi:10.1016/j.jacr.2023.02.009](https://doi.org/10.1016/j.jacr.2023.02.009). PMID [37236746](https://pubmed.ncbi.nlm.nih.gov/37236746/).
+14. WHO Classification of Tumours Editorial Board. *Soft Tissue and Bone Tumours.* WHO Classification of Tumours, 5th ed., vol. 3. Lyon: International Agency for Research on Cancer; 2020.
+
+Part B draws on the author's lecture on soft-tissue masses for residents (goals, incidence, categories, the benign/indeterminate/malignant table, schematic icons and the general approach).
