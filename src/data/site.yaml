@@ -62,4 +62,4 @@ consulting:
 # Cloudflare Pages behind Cloudflare Access (@bidmc.harvard.edu email sign-in).
 # The header and home page show a "Residents sign in" link to it. Leave url empty to hide.
 residents:
-  url: https://bidmc-msk.pages.dev
+  url: https://core-msk-book.pages.dev
