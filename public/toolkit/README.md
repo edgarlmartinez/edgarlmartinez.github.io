@@ -1,4 +1,4 @@
-# MSK Measurement Toolkit (v1.5)
+# MSK Measurement Toolkit (v1.6)
 
 Offline, single-file toolkit (now at /toolkit/) of literature-based musculoskeletal measurement calculators with how-to diagrams and a measure-on-image tool. Research and education use only; not a medical device.
 
