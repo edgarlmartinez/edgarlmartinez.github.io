@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site, aiProjects } from '../lib/cv.js';
+import { Content as Methods } from '../data/ai-methods.md';
 const list = [...aiProjects].sort((a, b) => (b.year || 0) - (a.year || 0));
 ---
 <Base title={`AI projects · ${site.display_name}`} description="Open musculoskeletal imaging AI model builds trained on publicly available datasets.">
@@ -9,6 +10,11 @@ const list = [...aiProjects].sort((a, b) => (b.year || 0) - (a.year || 0));
     <h1>AI projects</h1>
     <p style="max-width:720px">Open, early-stage musculoskeletal imaging AI models built and trained on publicly available datasets. Code for each project is available on GitHub.</p>
     <p class="card" style="max-width:720px;background:var(--bg-soft)"><b>Research use only.</b> These models are not cleared by the FDA or validated for clinical use and must not be used for patient care. They are trained only on public datasets under their respective licenses and contain no institutional or patient data.</p>
+    <p style="max-width:720px"><a href="#methods">Introduction and methods</a> · <a href="#models">Trained models</a></p>
+    <article id="methods" class="methods card">
+      <Methods />
+    </article>
+    <h2 id="models" style="margin-top:40px">Trained models</h2>
     {list.length === 0 && <p class="meta">Projects will be listed here soon.</p>}
     <div class="cards" style="margin-top:24px">
       {list.map((p) => (
