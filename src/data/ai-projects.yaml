@@ -42,6 +42,7 @@ projects:
     author_url: https://github.com/rightawayileft
     repo: https://github.com/rightawayileft/lisfranc-measurement
     demo_url: https://github.com/rightawayileft/lisfranc-measurement/tree/main/demo
+    paper: ai/papers/lisfranc-measurement/
     dataset: UNIFESP X-ray body part (foot AP/lateral pairs) and HVAngleEst
     dataset_url: https://www.kaggle.com/datasets/felipekitamura/unifesp-xray-bodypart-classification
     license: CC BY-NC-SA 4.0 and CC BY 4.0
