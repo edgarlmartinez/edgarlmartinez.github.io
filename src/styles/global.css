@@ -144,3 +144,19 @@ nav a[aria-current='page'] { color: var(--navy); background: var(--accent-soft);
   .hms h3, .hms h4 { break-after: avoid; }
   .hms tr, .hms li { break-inside: avoid; }
 }
+
+/* AI projects: research-style methods introduction */
+.methods { max-width: 860px; margin-top: 24px; }
+.methods h2 { margin-top: 0; }
+.methods h3 { margin-top: 24px; }
+.methods h4 { font-family: var(--serif); color: var(--navy); font-size: 1.08rem; margin: 22px 0 6px; }
+.methods details { border-top: 1px solid var(--line); padding: 10px 0; }
+.methods details:last-of-type { border-bottom: 1px solid var(--line); }
+.methods summary { cursor: pointer; color: var(--navy); font-size: 1.02rem; }
+.methods summary:hover { color: var(--accent); }
+.methods details[open] summary { margin-bottom: 8px; }
+.methods table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: .9rem; display: block; overflow-x: auto; }
+.methods th, .methods td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.methods th { background: var(--bg-soft); color: var(--navy); }
+.methods code { font-size: .85em; background: var(--bg-soft); padding: 1px 5px; border-radius: 4px; }
+.methods li { margin: 4px 0; }
