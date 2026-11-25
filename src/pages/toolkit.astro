@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/cv.js';
+const residents = site.residents?.url;
+---
+<Base title={`Measurement toolkit · ${site.display_name}`} description="The MSK measurement toolkit has moved to the members-only BIDMC residents site.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <section class="section wrap">
+    <h1>Measurement toolkit</h1>
+    <p style="max-width:720px">The MSK measurement toolkit, including the infant hip AI model, has moved to the members-only site for BIDMC radiology residents and research fellows. Sign in with a BIDMC email to use it.</p>
+    {residents && <div class="btns" style="margin-top:20px"><a class="btn btn-primary" href={`${residents}/toolkit/`}>Residents sign in</a></div>}
+  </section>
+</Base>
