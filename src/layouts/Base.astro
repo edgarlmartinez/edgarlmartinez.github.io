@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { site, aiProjects } from '../lib/cv.js';
+import { site } from '../lib/cv.js';
 const { title = site.display_name, description = `${site.display_name}, ${site.headline}. ${site.affiliation}.`, bodyClass = '' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname.replace(base, '') || '/';
@@ -29,8 +29,7 @@ const path = Astro.url.pathname.replace(base, '') || '/';
           <a href={`${base}/`} aria-current={path === '/' ? 'page' : undefined}>Home</a>
           <a href={`${base}/publications/`} aria-current={path.startsWith('/publications') ? 'page' : undefined}>Publications</a>
           <a href={`${base}/toolkit/`}>Measurement toolkit</a>
-          {aiProjects.length > 0 && <a href={`${base}/ai/`} aria-current={path.startsWith('/ai') ? 'page' : undefined}>AI projects</a>}
-          <a href={`${base}/lectures/`} aria-current={path.startsWith('/lectures') ? 'page' : undefined}>Lectures</a>
+                    <a href={`${base}/lectures/`} aria-current={path.startsWith('/lectures') ? 'page' : undefined}>Lectures</a>
           {site.consulting?.enabled && <a href={`${base}/consulting/`} aria-current={path.startsWith('/consulting') ? 'page' : undefined}>Consulting</a>}
           <a href={`${base}/cv/`} aria-current={path.startsWith('/cv') ? 'page' : undefined}>CV</a>
           {site.residents?.url && <a class="nav-signin" href={site.residents.url}>Residents sign in</a>}

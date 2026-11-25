@@ -1,47 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, aiProjects } from '../lib/cv.js';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const papers = [
-  { slug: 'msk-tumor-radiomics', title: 'Soft-tissue sarcoma segmentation and radiomic robustness on MRI and CT', note: 'nnU-Net v2, TCIA Soft-tissue-Sarcoma' },
-  { slug: 'vertebral-morphometry', title: 'Vertebral morphometry and retropulsion on lateral spine radiographs', note: 'landmark network, VerSe CT-simulated and public radiographs' },
-  { slug: 'infant-hip', title: 'Acetabular index and IHDI grade on infant pelvic radiographs', note: 'landmark network, MTDDH, runs in the toolkit' },
-  { slug: 'lumbar-lordosis', title: 'Automated L1–S1 lumbar lordosis: a negative-result technical note', note: 'not released' },
-  { slug: 'lisfranc-measurement', title: 'Lisfranc measurement review tool for AP and lateral foot radiographs', note: 'Ibraheem Shaikh, offline demo and OHIF extension' },
-];
-const list = [...aiProjects].sort((a, b) => (b.year || 0) - (a.year || 0));
+import { site } from '../lib/cv.js';
+const residents = site.residents?.url;
 ---
-<Base title={`AI projects · ${site.display_name}`} description="Open musculoskeletal imaging AI model builds trained on publicly available datasets.">
-  {list.length === 0 && <meta slot="head" name="robots" content="noindex, nofollow" />}
+<Base title={`AI projects · ${site.display_name}`} description="The AI projects have moved to the members-only BIDMC residents site.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
   <section class="section wrap">
     <h1>AI projects</h1>
-    <p style="max-width:720px">Open, early-stage musculoskeletal imaging AI models built and trained on publicly available datasets. Code for each project is available on GitHub.</p>
-    <p class="card" style="max-width:720px;background:var(--bg-soft)"><b>Research use only.</b> These models are not cleared by the FDA or validated for clinical use and must not be used for patient care. They are trained only on public datasets under their respective licenses and contain no institutional or patient data.</p>
-    <p style="max-width:720px">Musculoskeletal imaging relies on many manual measurements and contours, such as tumor volumes, vertebral body heights and acetabular angles, which take time and vary between readers. These projects are open, reproducible baselines that test how far small models, trained only on public datasets on an ordinary 4-core CPU with no GPU or pretrained foundation model, can automate these tasks. Each returns editable output (a contour or draggable landmarks), so the radiologist stays in control. The full methods, results and limitations of each model are in the papers below.</p>
-    <h2 id="papers" style="margin-top:32px">Research papers (preprint drafts)</h2>
-    <p style="max-width:720px">One full paper for each model: abstract, introduction, methods, results, discussion, limitations and references. These are drafts for open review and have not been peer reviewed.</p>
-    <ol class="paper-list">
-      {papers.map((x) => <li><a href={`${base}/ai/papers/${x.slug}/`}>{x.title}</a> <span class="meta">· {x.note}</span></li>)}
-    </ol>
-    <h2 id="models" style="margin-top:40px">Trained models</h2>
-    {list.length === 0 && <p class="meta">Projects will be listed here soon.</p>}
-    <div class="cards" style="margin-top:24px">
-      {list.map((p) => (
-        <div class="card">
-          <div class="meta">{p.year}{p.model && ` · ${p.model}`}</div>
-          <h3 style="margin-top:6px">{p.title}</h3>
-          {p.author && <p class="meta" style="margin:0 0 8px">Built by {p.author_url ? <a href={p.author_url} target="_blank" rel="noopener">{p.author}</a> : p.author}</p>}
-          {p.status && <p class="meta" style="margin:0 0 8px">{p.status}</p>}
-          {p.dataset && <p class="meta" style="margin:0 0 10px">Dataset: {p.dataset_url ? <a href={p.dataset_url} target="_blank" rel="noopener">{p.dataset}</a> : p.dataset}{p.license && ` (${p.license})`}</p>}
-          {p.tags && <ul class="tags" style="margin-bottom:14px">{p.tags.map((t) => <li>{t}</li>)}</ul>}
-          <div class="btns">
-            {p.demo && <a class="btn btn-outline" style="background:var(--solid);border-color:var(--solid);color:#fff" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/${p.demo}`}>Open demo</a>}
-            {p.demo_url && <a class="btn btn-outline" style="background:var(--solid);border-color:var(--solid);color:#fff" href={p.demo_url} target="_blank" rel="noopener">Get the offline demo ↗</a>}
-            {p.paper && <a class="btn btn-outline" href={`${base}/${p.paper}`}>Read the paper</a>}
-            {p.repo && <a class="btn btn-outline" href={p.repo} target="_blank" rel="noopener">Code and README ↗</a>}
-          </div>
-        </div>
-      ))}
-    </div>
+    <p style="max-width:720px">The AI projects, their demos and research papers have moved to the members-only site for BIDMC radiology residents and research fellows. Sign in with a BIDMC email to see them.</p>
+    {residents && <div class="btns" style="margin-top:20px"><a class="btn btn-primary" href={`${residents}/ai/`}>Residents sign in</a></div>}
   </section>
 </Base>
