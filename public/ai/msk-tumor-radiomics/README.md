@@ -55,7 +55,7 @@ nnUNetv2_predict_from_modelfolder -i <folder of *_0000.nii.gz> -o <out> -m sourc
 Then run `radiomics_pipeline.py` (`prepare`, `extract`, `volumetrics`) on the image and mask.
 
 ## Training here vs. the full recipe
-This build was trained on a 4-core CPU with no GPU, so it uses a **shortened schedule** (`nnUNetTrainerCPU`: 40 epochs × 100 iterations, about 4,000 iterations, versus nnU-Net's default 1,000 × 250 = 250,000) and a **lighter network** (16–192 features per stage, smaller patches, at 1.4 × 1.4 × 5.2 mm for MRI and 2 × 2 × 4 mm for CT). The held-out Dice is therefore a floor, not what the framework can reach.
+This build was trained on a 4-core CPU with no GPU, so it uses a **shortened schedule** (`nnUNetTrainerCPU`: 40 epochs × 100 iterations for MRI, about 4,000 iterations; `nnUNetTrainerCPU30`: 30 × 100 for CT; versus nnU-Net's default 1,000 × 250 = 250,000) and a **lighter network** (16–192 features per stage, smaller patches, at 1.4 × 1.4 × 5.2 mm for MRI and 2 × 2 × 4 mm for CT). The held-out Dice is therefore a floor, not what the framework can reach.
 
 To train the full recipe on a GPU (about a day per model on one modern GPU):
 ```bash
