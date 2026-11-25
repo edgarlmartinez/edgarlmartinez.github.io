@@ -7,8 +7,6 @@ const currentRoles = newest(cv.faculty_academic_appointments).filter(isCurrent).
 const links = Object.entries(site.links || {}).filter(([k, v]) => v && k !== 'email');
 const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst', pubmed: 'PubMed', google_scholar: 'Google Scholar', orcid: 'ORCID', linkedin: 'LinkedIn', x: 'X' };
 
-// Toolkit sections (kept in sync by hand with /toolkit/ tabs).
-const toolkitSections = ['Spine and scoliosis', 'Craniocervical junction', 'Chemical shift', 'Shoulder', 'Pelvis and hip', 'Knee', 'Wrist', 'Foot and ankle', 'Pediatric foot'];
 
 
 const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: l.date })));
@@ -30,29 +28,16 @@ const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: 
     </aside>
 
     <div class="main">
-      <section class="feature">
-        <div class="feature-head">
-          <div>
-            <p class="eyebrow">Measurement toolkit</p>
-            <h2>MSK Measurement Toolkit</h2>
-          </div>
-          <a class="btn btn-primary" href={`${base}/toolkit/`}>Open the toolkit →</a>
-        </div>
-        <p>Literature-based normal values, grading and interpretation for common musculoskeletal measurements. Measure directly on your own image with guided landmarks, then check yourself against practice cases with answer keys. Every threshold links to its source.</p>
-        <ul class="tags">{toolkitSections.map((s) => <li>{s}</li>)}</ul>
-        <p class="meta" style="margin-top:12px">Works offline in the browser. Images you load never leave your computer. For research and education only.</p>
-      </section>
-
       {site.residents?.url && (
         <section class="feature">
           <div class="feature-head">
             <div>
               <p class="eyebrow">For BIDMC residents</p>
-              <h2>Teaching cases and the Core MSK book</h2>
+              <h2>Teaching cases, toolkit and AI projects</h2>
             </div>
             <a class="btn btn-primary" href={site.residents.url}>Residents sign in →</a>
           </div>
-          <p>De-identified musculoskeletal teaching cases, organized by body region, and the Core MSK Radiology book are available to BIDMC radiology trainees. Residents sign in with the email address they registered with me and get a one-time code by email. To be added, email me from your BIDMC account.</p>
+          <p>De-identified musculoskeletal teaching cases, the Core MSK Radiology book, MRI protocols, the MSK measurement toolkit and the AI projects with their research papers are available to BIDMC radiology trainees. Residents sign in with the email address they registered with me and get a one-time code by email. To be added, email me from your BIDMC account.</p>
         </section>
       )}
 
