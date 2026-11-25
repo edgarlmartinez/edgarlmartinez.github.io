@@ -5,6 +5,7 @@
 projects:
   - title: Vertebral morphometry on lateral spine radiographs (v0.1)
     demo: ai/vertebral-morphometry/
+    paper: ai/papers/vertebral-morphometry/
     repo: https://github.com/edgarlmartinez/edgarlmartinez.github.io/tree/main/public/ai/vertebral-morphometry
     dataset: VerSe 2019 spine CT (simulated lateral radiographs)
     dataset_url: https://github.com/anjany/verse
@@ -21,6 +22,7 @@ projects:
     tags: [Spine, Radiographs, Fractures, Morphometry]
   - title: MSK tumor segmentation and radiomics on CT and MRI (v0.1)
     demo: ai/msk-tumor-radiomics/
+    paper: ai/papers/msk-tumor-radiomics/
     repo: https://github.com/edgarlmartinez/edgarlmartinez.github.io/tree/main/public/ai/msk-tumor-radiomics
     dataset: TCIA Soft-tissue-Sarcoma (51 patients, T1, T2FS/STIR, CT)
     dataset_url: https://www.cancerimagingarchive.net/collection/soft-tissue-sarcoma/
