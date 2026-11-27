@@ -36,13 +36,55 @@ const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst
             </div>
             <a class="btn btn-primary" href={site.residents.url}>Residents sign in →</a>
           </div>
-          <p>De-identified musculoskeletal teaching cases, the lecture library, the Core MSK Radiology book, MRI protocols, the MSK measurement toolkit and the AI projects with their research papers are available to BIDMC radiology trainees. Residents sign in with the email address they registered with me and get a one-time code by email. To be added, email me from your BIDMC account.</p>
+          <p>De-identified musculoskeletal teaching cases, the lecture library, the Core MSK Radiology book, MRI protocols, the MSK measurement toolkit and the AI projects with their research papers are available to BIDMC radiology trainees. Residents sign in with the email address they registered with me and get a one-time code by email. BIDMC addresses can sign in directly; anyone else can ask for access below.</p>
+          {site.residents.request_access && (
+            <details class="request" id="request-access">
+              <summary class="btn btn-outline">Request access</summary>
+              <form class="request-form" method="post" action={`${site.residents.url}/api/request-access`}>
+                <label>Name<input name="name" required maxlength="120" autocomplete="name" /></label>
+                <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email" /></label>
+                <label>Role<select name="role">
+                  <option>Radiology resident</option><option>MSK fellow</option><option>Medical student</option>
+                  <option>Faculty</option><option>Other</option>
+                </select></label>
+                <label class="wide">Message (optional)<textarea name="message" rows="3" maxlength="1500" placeholder="Program, rotation dates, anything that helps"></textarea></label>
+                <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+                <div class="wide"><button class="btn btn-primary" type="submit">Send request</button> <span class="request-status" role="status"></span></div>
+              </form>
+            </details>
+          )}
         </section>
       )}
 
     </div>
   </div>
 </Base>
+
+<script>
+  // Sends the access request without leaving the page; falls back to a normal form post.
+  const form = document.querySelector('.request-form');
+  if (form) {
+    const status = form.querySelector('.request-status');
+    if (location.hash === '#request-sent') {
+      const d = document.getElementById('request-access');
+      if (d) { d.open = true; form.replaceChildren(Object.assign(document.createElement('p'), { className: 'wide', textContent: 'Thanks, your request was sent. I will email you once you are added.' })); }
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button');
+      btn.disabled = true; status.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.error || 'failed');
+        form.replaceChildren(Object.assign(document.createElement('p'), { className: 'wide', textContent: 'Thanks, your request was sent. I will email you once you are added.' }));
+      } catch (err) {
+        btn.disabled = false;
+        status.textContent = err.message && err.message !== 'failed' && !err.message.includes('fetch') ? err.message : 'Could not send right now. Please email me instead.';
+      }
+    });
+  }
+</script>
 
 <style>
   .home { display: grid; grid-template-columns: minmax(240px, 1fr) 3fr; gap: 40px; align-items: start; padding-top: 40px; max-width: 1280px; }
@@ -62,6 +104,15 @@ const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst
   .feature h2 { margin: 0; font-size: 1.5rem; }
   .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; color: var(--accent); margin: 0 0 4px; font-weight: 600; }
   .feature > p { color: #c9d3de; margin: 8px 0 14px; max-width: 760px; }
+  .request summary { list-style: none; display: inline-block; }
+  .request summary::-webkit-details-marker { display: none; }
+  .request-form { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; max-width: 760px; }
+  .request-form label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; color: #c9d3de; }
+  .request-form input, .request-form select, .request-form textarea { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid #3a4450; background: var(--bg-soft); color: var(--navy); }
+  .request-form .wide { grid-column: 1 / -1; }
+  .request-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; }
+  .request-status { margin-left: 10px; font-size: .9rem; color: #c9d3de; }
+  @media (max-width: 700px) { .request-form { grid-template-columns: 1fr; } }
   @media (max-width: 900px) {
     .home { grid-template-columns: 1fr; gap: 28px; }
     .side { position: static; text-align: center; }

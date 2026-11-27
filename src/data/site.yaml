@@ -63,3 +63,6 @@ consulting:
 # The header and home page show a "Residents sign in" link to it. Leave url empty to hide.
 residents:
   url: https://core-msk-book.pages.dev
+  # Shows a "Request access" form on the home page. Requests are emailed to you and listed
+  # in the owner-only access log at https://core-msk-book.pages.dev/admin/
+  request_access: true
