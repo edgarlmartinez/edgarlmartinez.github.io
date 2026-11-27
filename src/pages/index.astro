@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { cv, site, newest, isCurrent, lectures } from '../lib/cv.js';
+import { cv, site, newest, isCurrent } from '../lib/cv.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentRoles = newest(cv.faculty_academic_appointments).filter(isCurrent).map((a) => a.title);
@@ -9,7 +9,6 @@ const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst
 
 
 
-const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: l.date })));
 ---
 <Base>
   <div class="home wrap">
@@ -33,35 +32,14 @@ const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: 
           <div class="feature-head">
             <div>
               <p class="eyebrow">For BIDMC residents</p>
-              <h2>Teaching cases, toolkit and AI projects</h2>
+              <h2>Teaching cases, lectures, toolkit and AI projects</h2>
             </div>
             <a class="btn btn-primary" href={site.residents.url}>Residents sign in →</a>
           </div>
-          <p>De-identified musculoskeletal teaching cases, the Core MSK Radiology book, MRI protocols, the MSK measurement toolkit and the AI projects with their research papers are available to BIDMC radiology trainees. Residents sign in with the email address they registered with me and get a one-time code by email. To be added, email me from your BIDMC account.</p>
+          <p>De-identified musculoskeletal teaching cases, the lecture library, the Core MSK Radiology book, MRI protocols, the MSK measurement toolkit and the AI projects with their research papers are available to BIDMC radiology trainees. Residents sign in with the email address they registered with me and get a one-time code by email. To be added, email me from your BIDMC account.</p>
         </section>
       )}
 
-      <section class="feature">
-        <div class="feature-head">
-          <div>
-            <p class="eyebrow">Lectures</p>
-            <h2>Lecture library</h2>
-          </div>
-          <a class="btn btn-primary" href={`${base}/lectures/`}>All lectures →</a>
-        </div>
-        <p>For residents and fellows. Slides are shared only with invited trainees.</p>
-        <ul class="lecture-list">
-          {lectureList.map((l) => (
-            <li>
-              <div>
-                <span class="lecture-title">{l.title}</span>
-                <span class="meta">{l.date} · {l.audience}</span>
-              </div>
-              {(l.link || lectures.folder_link) && <a class="btn btn-outline" href={l.link || lectures.folder_link} target="_blank" rel="noopener">Slides ↗</a>}
-            </li>
-          ))}
-        </ul>
-      </section>
     </div>
   </div>
 </Base>
@@ -84,9 +62,6 @@ const lectureList = newest((lectures.lectures || []).map((l) => ({ ...l, start: 
   .feature h2 { margin: 0; font-size: 1.5rem; }
   .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; color: var(--accent); margin: 0 0 4px; font-weight: 600; }
   .feature > p { color: #c9d3de; margin: 8px 0 14px; max-width: 760px; }
-  .lecture-list { list-style: none; padding: 0; margin: 0; }
-  .lecture-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
-  .lecture-title { display: block; font-weight: 500; }
   @media (max-width: 900px) {
     .home { grid-template-columns: 1fr; gap: 28px; }
     .side { position: static; text-align: center; }
