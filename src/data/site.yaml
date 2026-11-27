@@ -63,3 +63,9 @@ consulting:
 # The header and home page show a "Residents sign in" link to it. Leave url empty to hide.
 residents:
   url: https://core-msk-book.pages.dev
+
+# Private MSK Section Scorecard (a sign-in gated Claude page). The home page
+# shows only a link to it; no scorecard data lives on this public site.
+# Leave url empty to hide.
+section_scorecard:
+  url: https://claude.ai/artifact/LP5Z7qxNformynT59LWgrv
