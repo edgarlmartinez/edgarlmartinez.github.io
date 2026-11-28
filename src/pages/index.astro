@@ -40,6 +40,19 @@ const linkLabels = { bidmc_profile: 'BIDMC', harvard_catalyst: 'Harvard Catalyst
         </section>
       )}
 
+      {site.section_scorecard?.url && (
+        <section class="feature">
+          <div class="feature-head">
+            <div>
+              <p class="eyebrow">For the BIDMC MSK section</p>
+              <h2>MSK Section Scorecard (private)</h2>
+            </div>
+            <a class="btn btn-primary" href={site.section_scorecard.url} target="_blank" rel="noopener">Open scorecard (sign in) →</a>
+          </div>
+          <p>The section's workflow and productivity scorecard is private and requires sign-in. Only authorized section members can open it.</p>
+        </section>
+      )}
+
     </div>
   </div>
 </Base>
